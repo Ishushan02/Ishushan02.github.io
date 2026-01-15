@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishan Kumar Anand - AI Video & Image Generation Specialist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0000, #1a0000, #2d0000, #0d0d0d);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(139, 0, 0, 0.3));
+            border-radius: 50%;
+            animation: float 25s infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            25% { transform: translate(80px, -80px) scale(1.3); opacity: 0.7; }
+            50% { transform: translate(-60px, 60px) scale(0.9); opacity: 0.5; }
+            75% { transform: translate(100px, 40px) scale(1.2); opacity: 0.6; }
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            animation: scan 8s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        header {
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff0000 0%, #ff4444 25%, #cc0000 50%, #ff0000 75%, #8b0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: titlePulse 3s ease-in-out infinite;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(255, 0, 0, 0.6)); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 40px rgba(255, 0, 0, 0.9)); }
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 400;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .highlight {
+            color: #ff0000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: glowText 2s ease-in-out infinite;
+        }
+
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ff6666;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            background: rgba(255, 0, 0, 0.1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .contact-links a:hover::before {
+            left: 100%;
+        }
+
+        .contact-links a:hover {
+            color: #ff0000;
+            border-color: #ff0000;
+            background: rgba(255, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.05), rgba(0, 0, 0, 0.8));
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #8b0000, #ff0000);
+            background-size: 400% 400%;
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: borderGlow 3s ease infinite;
+        }
+
+        .section:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .section:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #ff0000;
+            position: relative;
+            padding-bottom: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #8b0000);
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .expertise-card {
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.15), rgba(0, 0, 0, 0.6));
+            border: 2px solid rgba(255, 0, 0, 0.4);
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .expertise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
+            transition: 0.6s;
+        }
+
+        .expertise-card:hover::before {
+            left: 100%;
+        }
+
+        .expertise-card:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.25), rgba(0, 0, 0, 0.8));
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.5);
+            border-color: #ff0000;
+        }
+
+        .expertise-card h3 {
+            color: #ff4444;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .expertise-card p {
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        .experience-item, .project-item {
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: rgba(255, 0, 0, 0.05);
+            border-left: 4px solid #ff0000;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .experience-item:hover, .project-item:hover {
+            background: rgba(255, 0, 0, 0.1);
+            border-left-width: 8px;
+            transform: translateX(10px);
+        }
+
+        .experience-item h3, .project-item h3 {
+            color: #ffffff;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .company, .tech-stack {
+            color: #ff4444;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .date {
+            color: #999999;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .experience-item ul, .project-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .experience-item li, .project-item li {
+            color: #d0d0d0;
+            margin-bottom: 0.8rem;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .experience-item li::before, .project-item li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #ff0000;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-tag {
+            padding: 0.7rem 1.3rem;
+            background: rgba(255, 0, 0, 0.15);
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            border-radius: 25px;
+            color: #ff4444;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: #888888;
+            margin-top: 4rem;
+            border-top: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .tagline { font-size: 1.4rem; }
+            .expertise-grid { grid-template-columns: 1fr; }
+            h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    <div class="scan-line"></div>
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <h1>ISHAN KUMAR ANAND</h1>
+        <p class="tagline">Pushing the boundaries of <span class="highlight">Image Generation</span> & <span class="highlight">Video Synthesis</span></p>
+        <p class="subtitle">AI Engineer • Diffusion Models Expert • Visual AI Pioneer</p>
+        <div class="contact-links">
+            <a href="mailto:isanand@ucsd.edu">✉️ EMAIL</a>
+            <a href="https://linkedin.com/in/ishushan" target="_blank">💼 LINKEDIN</a>
+            <a href="https://github.com/Ishushan02" target="_blank">💻 GITHUB</a>
+            <a href="tel:+18584054838">📱 CALL</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2>🎬 Core Expertise</h2>
+            <div class="expertise-grid">
+                <div class="expertise-card">
+                    <h3>🎥 Text-to-Video Generation</h3>
+                    <p>Controllable video synthesis with multimodal conditioning on depth maps and human pose. Expert in maintaining temporal coherence and motion dynamics across extended sequences.</p>
+                </div>
+                <div class="expertise-card">
+                    <h3>🔥 Diffusion Models</h3>
+                    <p>Character and scene-specific diffusion architectures for identity preservation and background consistency. Specialized in mitigating temporal drift in video generation.</p>
+                </div>
+                <div class="expertise-card">
+                    <h3>🖼️ Text-to-Image Synthesis</h3>
+                    <p>Parameter-efficient multimodal architectures using recursive latent refinement. Building the next generation of efficient image generation models.</p>
+                </div>
+                <div class="expertise-card">
+                    <h3>🎨 VFX Pipeline Integration</h3>
+                    <p>Production-scale deployment of AI models for super-resolution and segmentation. Proven track record reducing manual intervention by 40% in Hollywood productions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💼 Professional Experience</h2>
+            
+            <div class="experience-item">
+                <h3>AI Engineer - Visual Generation</h3>
+                <p class="company">Viga Entertainment Technology</p>
+                <p class="date">Jan 2024 - June 2024 | Hollywood Production & Google AI Research</p>
+                <ul>
+                    <li>Architected controllable text-to-video framework with explicit multimodal conditioning for Hollywood production, enabling precise control over motion dynamics and temporal coherence</li>
+                    <li>Developed character and scene-specific diffusion models maintaining identity, appearance, and background consistency across extended video sequences</li>
+                    <li>Integrated diffusion-based super-resolution and segmentation into production VFX pipeline, reducing manual artist intervention by 40%</li>
+                    <li>Project successfully deployed in Hollywood production and transitioned to Google AI research team</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>NLP Engineer - Conversational AI</h3>
+                <p class="company">Gnani.ai</p>
+                <p class="date">Sep 2022 - Sep 2023</p>
+                <ul>
+                    <li>Built production-grade dialogue state tracking system with multi-turn context management for voice bot automation</li>
+                    <li>Implemented dynamic multilingual language switching across 16+ languages using ASR confidence scoring</li>
+                    <li>Optimized inference pipelines reducing latency by 55% and contributing to 75% reduction in operational costs</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>Associate Software Development Engineer</h3>
+                <p class="company">Syncron</p>
+                <p class="date">Jan 2022 - Sep 2022</p>
+                <ul>
+                    <li>Architected scalable, fault-tolerant AWS infrastructure using Terraform and Golang microservices</li>
+                    <li>Optimized cloud architecture improving throughput by 37% and cutting costs by 11%</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🚀 Featured Projects</h2>
+            
+            <div class="project-item">
+                <h3>Tiny Recursive Model for Text-to-Image Generation</h3>
+                <p class="tech-stack">Python | Multimodal Architecture | Recursive Transformers | Latent Diffusion</p>
+                <p class="date">Oct 2025 - Jan 2026</p>
+                <ul>
+                    <li>Researched parameter-efficient architecture with recursive latent refinement iteratively fusing text embeddings with image latents</li>
+                    <li>Achieved extreme efficiency with 27M-parameter footprint by replacing large Diffusion Transformer backbones with shared-weight recursive blocks</li>
+                    <li>Implemented end-to-end training and inference pipeline with pretrained text encoders and latent autoencoding</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <h3>Diffusion Transformer for Text-to-Image Generation</h3>
+                <p class="tech-stack">GPT NEO | T5 | CLIP | QWEN | Deep Compression Autoencoder</p>
+                <p class="date">May 2025 - Sep 2025</p>
+                <ul>
+                    <li>Built multimodal diffusion model combining multiple text encoders (GPT NEO, T5, CLIP) for rich text representations</li>
+                    <li>Designed time-conditioning pipeline with FiLM-style modulation reducing compute cost by 70% vs cross-attention</li>
+                    <li>Trained end-to-end using hybrid loss function combining denoising, perceptual, and Inception losses for high-fidelity generation</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🛠️ Technical Arsenal</h2>
+            <div class="skills-container">
+                <span class="skill-tag">Diffusion Models</span>
+                <span class="skill-tag">Video Generation</span>
+                <span class="skill-tag">Image Synthesis</span>
+                <span class="skill-tag">Vision Transformers</span>
+                <span class="skill-tag">VLM / LLM</span>
+                <span class="skill-tag">PyTorch</span>
+                <span class="skill-tag">TensorFlow</span>
+                <span class="skill-tag">HuggingFace Diffusers</span>
+                <span class="skill-tag">Computer Vision</span>
+                <span class="skill-tag">Deep Learning</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">Golang</span>
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">OpenCV</span>
+                <span class="skill-tag">Latent Diffusion</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎓 Education</h2>
+            <div class="experience-item">
+                <h3>Master of Science in Computer Science and Engineering</h3>
+                <p class="company">University of California, San Diego</p>
+                <p class="date">Sep 2024 - Mar 2026 | GPA: 3.7/4.0</p>
+                <p style="color: #d0d0d0; font-weight: 600;">Specialization: Artificial Intelligence</p>
+            </div>
+            <div class="experience-item">
+                <h3>Bachelor of Technology in Computer Science and Engineering</h3>
+                <p class="company">Christ University, India</p>
+                <p class="date">Aug 2018 - May 2022 | GPA: 3.87/4.0</p>
+                <p style="color: #d0d0d0; font-weight: 600;">AI Honors Program</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2026 ISHAN KUMAR ANAND | REDEFINING VISUAL AI • IMAGE & VIDEO GENERATION SPECIALIST</p>
+    </footer>
+
+    <script>
+        // Create floating particles with red glow
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 30;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 80 + 30;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 25 + 's';
+            particle.style.animationDuration = (Math.random() * 15 + 20) + 's';
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add parallax effect to sections
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.05;
+                particle.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
