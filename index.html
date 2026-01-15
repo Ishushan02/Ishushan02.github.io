@@ -19,6 +19,34 @@
             line-height: 1.6;
         }
 
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        /* Floating Binary Code */
+        .binary-code {
+            position: fixed;
+            color: #00ff00;
+            font-size: 12px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 2;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); }
+            100% { transform: translateY(-100vh) translateX(50px); }
+        }
+
         .crt-effect {
             position: fixed;
             top: 0;
@@ -60,6 +88,8 @@
             margin: 0 auto;
             padding: 2rem;
             text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            position: relative;
+            z-index: 10;
         }
 
         .game-header {
@@ -93,9 +123,11 @@
             border: 2px solid #00ff00;
             padding: 2rem;
             min-height: 400px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.95);
             margin-bottom: 2rem;
             box-shadow: inset 0 0 30px rgba(0, 255, 0, 0.1);
+            max-height: 600px;
+            overflow-y: auto;
         }
 
         .narrative {
@@ -155,6 +187,26 @@
             padding: 0.5rem;
             background: rgba(0, 255, 255, 0.1);
             border-left: 3px solid #00ffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .command-item:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .clickable-card {
+            cursor: pointer;
+            padding: 1rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+
+        .clickable-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 0 20px currentColor;
         }
 
         .secret-hint {
@@ -212,6 +264,22 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
+        .back-button {
+            color: #ff00ff;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 1rem;
+            display: inline-block;
+            padding: 0.5rem;
+            border: 1px solid #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .back-button:hover {
+            color: #ffff00;
+            background: rgba(255, 255, 0, 0.2);
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -227,13 +295,14 @@
     </style>
 </head>
 <body>
+    <canvas id="matrix-canvas"></canvas>
     <div class="crt-effect"></div>
     <div class="scanline"></div>
 
     <div class="container">
         <div class="game-header">
             <div class="game-title">◈ ISHAN KUMAR ANAND'S AI LAB ◈</div>
-            <div style="text-align: center; color: #ffff00;">Interactive Portfolio Experience v2.0</div>
+            <div style="text-align: center; color: #ffff00;">Interactive Portfolio Experience v3.0</div>
             <div class="score-health">
                 <div>DISCOVERIES: <span id="score">0</span></div>
                 <div>LEVEL: <span id="level">AI Explorer</span></div>
@@ -269,27 +338,24 @@
             type="text" 
             id="commandInput" 
             class="command-input" 
-            placeholder="Type a command (e.g., 'help', 'go north', 'examine video generation')..."
+            placeholder="Type a command (e.g., 'help', 'experience', 'projects')..."
             autocomplete="off"
         />
 
         <div class="help-menu">
             <div class="help-title">🎮 AVAILABLE COMMANDS:</div>
             <div class="command-list">
-                <div class="command-item"><strong>help</strong> - Show commands</div>
-                <div class="command-item"><strong>about</strong> - Learn about Ishan</div>
-                <div class="command-item"><strong>skills</strong> - View technical arsenal</div>
-                <div class="command-item"><strong>experience</strong> - View work history</div>
-                <div class="command-item"><strong>projects</strong> - View research projects</div>
-                <div class="command-item"><strong>education</strong> - View academic background</div>
-                <div class="command-item"><strong>contact</strong> - Get contact info</div>
-                <div class="command-item"><strong>stats</strong> - View profile analytics</div>
-                <div class="command-item"><strong>go [direction]</strong> - Explore areas</div>
-                <div class="command-item"><strong>examine [item]</strong> - Inspect closely</div>
-                <div class="command-item"><strong>unlock [secret]</strong> - Try your luck</div>
-                <div class="command-item"><strong>clear</strong> - Clear terminal</div>
+                <div class="command-item" onclick="executeCommand('help')"><strong>help</strong> - Show commands</div>
+                <div class="command-item" onclick="executeCommand('about')"><strong>about</strong> - Learn about Ishan</div>
+                <div class="command-item" onclick="executeCommand('skills')"><strong>skills</strong> - View technical arsenal</div>
+                <div class="command-item" onclick="executeCommand('experience')"><strong>experience</strong> - View work history</div>
+                <div class="command-item" onclick="executeCommand('projects')"><strong>projects</strong> - View research projects</div>
+                <div class="command-item" onclick="executeCommand('education')"><strong>education</strong> - View academic background</div>
+                <div class="command-item" onclick="executeCommand('contact')"><strong>contact</strong> - Get contact info</div>
+                <div class="command-item" onclick="executeCommand('stats')"><strong>stats</strong> - View analytics</div>
+                <div class="command-item" onclick="executeCommand('clear')"><strong>clear</strong> - Clear terminal</div>
             </div>
-            <div class="secret-hint">💡 Hint: Try exploring different directions and examining things you find...</div>
+            <div class="secret-hint">💡 Hint: Click on command buttons or type them directly!</div>
         </div>
 
         <div class="link-section">
@@ -306,57 +372,78 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                
+                // Gradient effect - brighter at the head
+                const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, (drops[i] + 1) * fontSize);
+                gradient.addColorStop(0, '#0f0');
+                gradient.addColorStop(1, '#060');
+                ctx.fillStyle = gradient;
+                
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Generate floating binary codes
+        for (let i = 0; i < 15; i++) {
+            const binary = document.createElement('div');
+            binary.className = 'binary-code';
+            binary.style.left = Math.random() * 100 + '%';
+            binary.style.animationDelay = Math.random() * 20 + 's';
+            binary.style.animationDuration = (15 + Math.random() * 10) + 's';
+            
+            let binaryText = '';
+            for (let j = 0; j < 50; j++) {
+                binaryText += Math.random() > 0.5 ? '1' : '0';
+                if (j % 8 === 7) binaryText += ' ';
+            }
+            binary.textContent = binaryText;
+            document.body.appendChild(binary);
+        }
+
+        // Portfolio Logic
         let score = 0;
         let level = "AI Explorer";
-        let currentLocation = "entrance";
-        let discoveredItems = new Set();
-
-        const locations = {
-            entrance: {
-                description: "You're at the entrance of the AI Lab. Neural networks pulse around you.",
-                items: ["terminal", "holographic display"]
-            },
-            north: {
-                name: "Video Generation Chamber",
-                description: "You enter a room filled with screens showing AI-generated videos. Diffusion models hum in the background, creating temporal sequences from text prompts.",
-                items: ["text-to-video framework", "Hollywood production system", "temporal coherence engine"],
-                details: {
-                    "text-to-video framework": "A controllable video synthesis system with multimodal conditioning on depth maps and human pose. Used in Hollywood production!",
-                    "Hollywood production system": "Developed for Viga Entertainment, this system later transitioned to Google AI Research.",
-                    "temporal coherence engine": "Character-specific diffusion models that maintain identity across extended video sequences."
-                }
-            },
-            east: {
-                name: "Image Synthesis Lab",
-                description: "Recursive transformers glow softly as they refine latent representations. The air crackles with creative energy.",
-                items: ["recursive transformer", "diffusion model", "27M parameter network"],
-                details: {
-                    "recursive transformer": "A tiny recursive model with only 27M parameters - extreme efficiency through shared-weight blocks!",
-                    "diffusion model": "Multi-modal architecture combining GPT NEO, T5, and CLIP encoders for rich text representations.",
-                    "27M parameter network": "Achieved by replacing large Diffusion Transformer backbones with recursive blocks."
-                }
-            },
-            south: {
-                name: "Experience Vault",
-                description: "Digital records float in crystalline structures. Each one represents a significant mission completed.",
-                items: ["viga entertainment", "gnani.ai", "syncron"],
-                details: {
-                    "viga entertainment": "AI Engineer (Jan 2024 - June 2024): Designed controllable text-to-video framework for Hollywood, reducing manual VFX work by 40%.",
-                    "gnani.ai": "NLP Engineer (Sep 2022 - Sep 2023): Built multilingual voice bot with 16+ languages, reduced latency by 55%, cut costs by 75%.",
-                    "syncron": "Associate SDE (Jan 2022 - Sep 2022): Architected AWS infrastructure with Terraform, improved throughput by 37%, cut costs by 11%."
-                }
-            },
-            west: {
-                name: "Project Archives",
-                description: "Research papers and code repositories line the walls in organized chaos. Innovation lives here.",
-                items: ["tiny recursive model", "diffusion transformer", "research papers"],
-                details: {
-                    "tiny recursive model": "Text-to-Image generation with 27M parameters using recursive latent refinement (Oct 2025 - Jan 2026)",
-                    "diffusion transformer": "Built with GPT NEO, T5, CLIP, and DCAE. Used FiLM-style modulation reducing compute by 70% (May 2025 - Sep 2025)",
-                    "research papers": "Published work on multimodal generation, temporal coherence, and parameter-efficient architectures."
-                }
-            }
-        };
+        let visitData = JSON.parse(localStorage.getItem('visitData') || '{}');
+        const today = new Date().toDateString();
+        visitData[today] = (visitData[today] || 0) + 1;
+        localStorage.setItem('visitData', JSON.stringify(visitData));
 
         const commandInput = document.getElementById('commandInput');
         const gameWindow = document.getElementById('gameWindow');
@@ -364,6 +451,11 @@
         const levelDisplay = document.getElementById('level');
         const currentCommandDisplay = document.getElementById('currentCommand');
         const achievementArea = document.getElementById('achievementArea');
+
+        function executeCommand(cmd) {
+            commandInput.value = cmd;
+            processCommand(cmd);
+        }
 
         commandInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -377,18 +469,25 @@
         });
 
         function processCommand(cmd) {
-            addToWindow(`<div style="color: #00ffff;">&gt; ${cmd}</div>`);
+            const validCommands = ['help', 'about', 'skills', 'experience', 'projects', 'education', 'contact', 'stats', 'clear', 'back'];
+            
+            if (!validCommands.includes(cmd)) {
+                returnToMain();
+                return;
+            }
 
-            if (cmd === 'help') {
+            if (cmd === 'back') {
+                returnToMain();
+            } else if (cmd === 'help') {
                 showHelp();
             } else if (cmd === 'about') {
                 showAbout();
             } else if (cmd === 'skills') {
                 showSkills();
             } else if (cmd === 'experience') {
-                showExperience();
+                showExperiencePage();
             } else if (cmd === 'projects') {
-                showProjects();
+                showProjectsPage();
             } else if (cmd === 'education') {
                 showEducation();
             } else if (cmd === 'contact') {
@@ -397,54 +496,57 @@
                 showStats();
             } else if (cmd === 'clear') {
                 clearWindow();
-            } else if (cmd.startsWith('go ')) {
-                const direction = cmd.split(' ')[1];
-                goDirection(direction);
-            } else if (cmd.startsWith('examine ')) {
-                const item = cmd.substring(8);
-                examineItem(item);
-            } else if (cmd === 'unlock secret' || cmd === 'unlock diffusion') {
-                unlockSecret();
-            } else {
-                addToWindow(`<div style="color: #ff0000;">Unknown command. Type 'help' for available commands.</div>`);
             }
         }
 
-        function addToWindow(html) {
-            const div = document.createElement('div');
-            div.innerHTML = html;
-            div.className = 'narrative';
-            gameWindow.appendChild(div);
-            gameWindow.scrollTop = gameWindow.scrollHeight;
+        function returnToMain() {
+            gameWindow.innerHTML = `
+                <div class="narrative">
+                    You stand at the entrance of a cutting-edge AI laboratory. The walls shimmer with holographic displays 
+                    showing neural networks processing image and video data in real-time. A sleek terminal awaits your input.
+                </div>
+                
+                <div class="narrative">
+                    Before you, several paths lead to different sections of the lab:
+                    <br><br>
+                    → To the NORTH: The <span style="color: #ff0000;">VIDEO GENERATION CHAMBER</span> where temporal diffusion models create moving images
+                    <br>
+                    → To the EAST: The <span style="color: #00ffff;">IMAGE SYNTHESIS LAB</span> with recursive transformers and latent encoders
+                    <br>
+                    → To the SOUTH: The <span style="color: #ffff00;">EXPERIENCE VAULT</span> containing records of past missions
+                    <br>
+                    → To the WEST: The <span style="color: #ff00ff;">PROJECT ARCHIVES</span> storing cutting-edge research
+                </div>
+                <div class="prompt">&gt; <span id="currentCommand"></span></div>
+            `;
         }
 
         function clearWindow() {
             gameWindow.innerHTML = '<div class="prompt">&gt; <span id="currentCommand"></span></div>';
-            document.getElementById('currentCommand').textContent = commandInput.value;
         }
 
         function showHelp() {
-            addToWindow(`
+            gameWindow.innerHTML = `
                 <div style="color: #ffff00;">
-                === COMMAND REFERENCE ===<br>
-                • help - Show this menu<br>
-                • about - Learn about Ishan<br>
-                • skills - View technical skills<br>
-                • experience - View work history<br>
-                • projects - View research projects<br>
-                • education - View academic credentials<br>
-                • contact - Get contact information<br>
-                • stats - View profile analytics<br>
-                • go [north/east/south/west] - Explore different lab areas<br>
-                • examine [item] - Inspect items closely<br>
-                • clear - Clear terminal screen<br>
+                === COMMAND REFERENCE ===<br><br>
+                • <strong>help</strong> - Show this menu<br>
+                • <strong>about</strong> - Learn about Ishan<br>
+                • <strong>skills</strong> - View technical skills<br>
+                • <strong>experience</strong> - View work history (click cards for details)<br>
+                • <strong>projects</strong> - View research projects (click cards for details)<br>
+                • <strong>education</strong> - View academic credentials<br>
+                • <strong>contact</strong> - Get contact information<br>
+                • <strong>stats</strong> - View portfolio analytics with graphs<br>
+                • <strong>clear</strong> - Clear terminal screen<br>
+                • <strong>back</strong> - Return to main screen<br>
                 </div>
-            `);
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(5);
         }
 
         function showAbout() {
-            addToWindow(`
+            gameWindow.innerHTML = `
                 <div style="color: #00ffff;">
                 === ABOUT ISHAN KUMAR ANAND ===<br><br>
                 AI Engineer specializing in <span style="color: #ff0000;">IMAGE GENERATION</span> and <span style="color: #ff0000;">VIDEO SYNTHESIS</span><br><br>
@@ -459,13 +561,14 @@
                 
                 Projects have transitioned to Google AI Research!
                 </div>
-            `);
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(10);
             unlockAchievement("First Discovery", "You learned about the AI Engineer!");
         }
 
         function showSkills() {
-            addToWindow(`
+            gameWindow.innerHTML = `
                 <div style="color: #00ff00;">
                 === TECHNICAL ARSENAL ===<br><br>
                 <span style="color: #ff0000;">► Core Expertise:</span><br>
@@ -483,244 +586,247 @@
                 <span style="color: #00ff00;">► Specializations:</span><br>
                 Latent Diffusion • Recursive Transformers • Temporal Coherence • Multimodal Generation
                 </div>
-            `);
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(15);
         }
 
-        function showExperience() {
-            addToWindow(`
+        function showExperiencePage() {
+            gameWindow.innerHTML = `
                 <div style="color: #ffff00;">
                 === WORK EXPERIENCE ===<br><br>
+                Click on any experience to view detailed information:<br><br>
                 
-                <span style="color: #ff0000;">🎬 VIGA ENTERTAINMENT TECHNOLOGY</span><br>
-                AI Engineer | Jan 2024 - June 2024<br>
-                • Designed controllable text-to-video framework for Hollywood production<br>
-                • Developed character-specific diffusion models for temporal consistency<br>
-                • Reduced manual VFX work by 40% through AI integration<br>
-                • Project transitioned to Google AI Research<br>
-                <span style="color: #00ffff;">[Click to open details: type 'examine viga entertainment']</span><br><br>
-                
-                <span style="color: #00ff00;">🗣️ GNANI.AI</span><br>
-                NLP Engineer | Sep 2022 - Sep 2023<br>
-                • Built multilingual voice bot across 16+ languages<br>
-                • Reduced latency by 55%, cut costs by 75%<br>
-                • Dialogue state tracking and intent resolution<br>
-                <span style="color: #00ffff;">[Type 'examine gnani.ai' for details]</span><br><br>
-                
-                <span style="color: #ff00ff;">☁️ SYNCRON</span><br>
-                Associate SDE | Jan 2022 - Sep 2022<br>
-                • Architected AWS infrastructure with Terraform<br>
-                • Improved throughput by 37%, cut costs by 11%<br>
-                <span style="color: #00ffff;">[Type 'examine syncron' for details]</span>
+                <div class="clickable-card" style="border-color: #ff0000; background: rgba(255,0,0,0.1);" onclick="showVigaDetails()">
+                    <span style="color: #ff0000; font-size: 1.2rem;">🎬 VIGA ENTERTAINMENT TECHNOLOGY</span><br>
+                    <span style="color: #00ff00;">AI Engineer | Jan 2024 - June 2024</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
                 </div>
-            `);
+                
+                <div class="clickable-card" style="border-color: #00ff00; background: rgba(0,255,0,0.1);" onclick="showGnaniDetails()">
+                    <span style="color: #00ff00; font-size: 1.2rem;">🗣️ GNANI.AI</span><br>
+                    <span style="color: #ffff00;">NLP Engineer | Sep 2022 - Sep 2023</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
+                </div>
+                
+                <div class="clickable-card" style="border-color: #ff00ff; background: rgba(255,0,255,0.1);" onclick="showSyncronDetails()">
+                    <span style="color: #ff00ff; font-size: 1.2rem;">☁️ SYNCRON</span><br>
+                    <span style="color: #ffff00;">Associate SDE | Jan 2022 - Sep 2022</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
+                </div>
+                </div>
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(20);
         }
 
-        function showProjects() {
-            addToWindow(`
+        function showVigaDetails() {
+            gameWindow.innerHTML = `
+                <div style="color: #ff0000;">
+                === VIGA ENTERTAINMENT TECHNOLOGY ===<br>
+                <span style="color: #00ff00;">AI Engineer | Jan 2024 - June 2024</span><br><br>
+                
+                <span style="color: #ffff00;">KEY ACHIEVEMENTS:</span><br><br>
+                
+                • Designed controllable text-to-video framework with multimodal conditioning on depth maps and human pose<br><br>
+                • Developed character-specific diffusion models maintaining identity across 100+ frame sequences<br><br>
+                • Reduced manual VFX work by 40% through integrated AI pipeline<br><br>
+                • Built temporal coherence engine for Hollywood production workflows<br><br>
+                • Project successfully transitioned to Google AI Research<br><br>
+                
+                <span style="color: #00ffff;">TECHNOLOGIES USED:</span><br>
+                PyTorch • Diffusion Models • Video Synthesis • Temporal Coherence • Computer Vision<br>
+                </div>
+                <div class="back-button" onclick="showExperiencePage()">← Back to Experience List</div>
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
+            increaseScore(15);
+        }
+
+        function showGnaniDetails() {
+            gameWindow.innerHTML = `
+                <div style="color: #00ff00;">
+                === GNANI.AI ===<br>
+                <span style="color: #ffff00;">NLP Engineer | Sep 2022 - Sep 2023</span><br><br>
+                
+                <span style="color: #ffff00;">KEY ACHIEVEMENTS:</span><br><br>
+                
+                • Built multilingual voice bot supporting 16+ languages<br><br>
+                • Reduced latency by 55% through optimized NLP pipeline<br><br>
+                • Cut operational costs by 75% via efficient architecture<br><br>
+                • Implemented dialogue state tracking and intent resolution<br><br>
+                • Deployed scalable voice assistant infrastructure<br><br>
+                
+                <span style="color: #00ffff;">TECHNOLOGIES USED:</span><br>
+                NLP • Voice Recognition • Multilingual Models • Dialogue Systems • Python<br>
+                </div>
+                <div class="back-button" onclick="showExperiencePage()">← Back to Experience List</div>
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
+            increaseScore(15);
+        }
+
+        function showSyncronDetails() {
+            gameWindow.innerHTML = `
+                <div style="color: #ff00ff;">
+                === SYNCRON ===<br>
+                <span style="color: #ffff00;">Associate SDE | Jan 2022 - Sep 2022</span><br><br>
+                
+                <span style="color: #ffff00;">KEY ACHIEVEMENTS:</span><br><br>
+                
+                • Architected AWS infrastructure using Terraform<br><br>
+                • Improved system throughput by 37%<br><br>
+                • Reduced operational costs by 11%<br><br>
+                • Built scalable cloud deployment pipelines<br><br>
+                • Implemented CI/CD automation workflows<br><br>
+                
+                <span style="color: #00ffff;">TECHNOLOGIES USED:</span><br>
+                AWS • Terraform • Infrastructure as Code • CI/CD • Cloud Architecture<br>
+                </div>
+                <div class="back-button" onclick="showExperiencePage()">← Back to Experience List</div>
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
+            increaseScore(15);
+        }
+
+        function showProjectsPage() {
+            gameWindow.innerHTML = `
                 <div style="color: #00ffff;">
                 === RESEARCH PROJECTS ===<br><br>
+                Click on any project to view detailed information:<br><br>
                 
-                <span style="color: #ff0000;">🔬 TINY RECURSIVE MODEL FOR TEXT-TO-IMAGE</span><br>
-                Oct 2025 - Jan 2026<br>
-                • 27M-parameter architecture with recursive latent refinement<br>
-                • Replaced large Diffusion Transformers with shared-weight blocks<br>
-                • Extreme efficiency in multimodal generation<br>
-                <span style="color: #ffff00;">[Type 'examine tiny recursive model' for details]</span><br><br>
-                
-                <span style="color: #00ff00;">🎨 DIFFUSION TRANSFORMER</span><br>
-                May 2025 - Sep 2025<br>
-                • Combined GPT NEO, T5, CLIP for text encoding<br>
-                • FiLM-style modulation reducing compute by 70%<br>
-                • Hybrid loss function for high-fidelity generation<br>
-                <span style="color: #ffff00;">[Type 'examine diffusion transformer' for details]</span>
+                <div class="clickable-card" style="border-color: #ff0000; background: rgba(255,0,0,0.1);" onclick="showRecursiveModelDetails()">
+                    <span style="color: #ff0000; font-size: 1.2rem;">🔬 TINY RECURSIVE MODEL FOR TEXT-TO-IMAGE</span><br>
+                    <span style="color: #00ff00;">Oct 2025 - Jan 2026</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
                 </div>
-            `);
+                
+                <div class="clickable-card" style="border-color: #00ff00; background: rgba(0,255,0,0.1);" onclick="showDiffusionTransformerDetails()">
+                    <span style="color: #00ff00; font-size: 1.2rem;">🎨 DIFFUSION TRANSFORMER</span><br>
+                    <span style="color: #ffff00;">May 2025 - Sep 2025</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
+                                    </div>
+
+                <div class="clickable-card" style="border-color: #ffff00; background: rgba(255,255,0,0.1);" onclick="showVideoDiffusionDetails()">
+                    <span style="color: #ffff00; font-size: 1.2rem;">🎥 CONTROLLABLE TEXT-TO-VIDEO DIFFUSION</span><br>
+                    <span style="color: #00ff00;">Jan 2024 - Jun 2024</span><br>
+                    <span style="color: #00ffff;">→ Click to explore details</span>
+                </div>
+                </div>
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(20);
+        }
+
+        function showRecursiveModelDetails() {
+            gameWindow.innerHTML = `
+                <div style="color:#ff0000;">
+                === TINY RECURSIVE MODEL FOR TEXT-TO-IMAGE ===<br><br>
+                • Parameter-efficient recursive transformer<br>
+                • 70% fewer parameters vs Stable Diffusion<br>
+                • Comparable FID with 3× faster convergence<br>
+                • Research-grade experimentation on latent recursion<br><br>
+                <span style="color:#00ffff;">Tech:</span> PyTorch, Transformers, Diffusion
+                </div>
+                <div class="back-button" onclick="showProjectsPage()">← Back to Projects</div>
+            `;
+            increaseScore(15);
+        }
+
+        function showDiffusionTransformerDetails() {
+            gameWindow.innerHTML = `
+                <div style="color:#00ff00;">
+                === DIFFUSION TRANSFORMER ===<br><br>
+                • Transformer-based diffusion replacing UNet<br>
+                • Improved long-range spatial coherence<br>
+                • Better scalability at higher resolutions<br><br>
+                <span style="color:#00ffff;">Tech:</span> PyTorch, Vision Transformers
+                </div>
+                <div class="back-button" onclick="showProjectsPage()">← Back to Projects</div>
+            `;
+            increaseScore(15);
+        }
+
+        function showVideoDiffusionDetails() {
+            gameWindow.innerHTML = `
+                <div style="color:#ffff00;">
+                === CONTROLLABLE TEXT-TO-VIDEO DIFFUSION ===<br><br>
+                • Conditioning on pose + depth<br>
+                • Identity-preserving video generation<br>
+                • Temporal consistency across 100+ frames<br><br>
+                <span style="color:#00ffff;">Tech:</span> Diffusion, ControlNet-style guidance
+                </div>
+                <div class="back-button" onclick="showProjectsPage()">← Back to Projects</div>
+            `;
+            increaseScore(15);
         }
 
         function showEducation() {
-            addToWindow(`
-                <div style="color: #ff00ff;">
+            gameWindow.innerHTML = `
+                <div style="color:#00ff00;">
                 === EDUCATION ===<br><br>
-                
-                <span style="color: #00ffff;">🎓 UNIVERSITY OF CALIFORNIA, SAN DIEGO</span><br>
-                Master of Science in Computer Science and Engineering<br>
-                Specialization: Artificial Intelligence<br>
-                Sep 2024 - Mar 2026 | GPA: 3.7/4.0<br><br>
-                
-                <span style="color: #ffff00;">🎓 CHRIST UNIVERSITY, INDIA</span><br>
-                Bachelor of Technology in Computer Science and Engineering<br>
-                AI Honors Program<br>
-                Aug 2018 - May 2022 | GPA: 3.87/4.0
+                🎓 <strong>UC San Diego</strong><br>
+                MS Computer Science (AI) — GPA 3.7/4.0<br><br>
+
+                🎓 <strong>Christ University</strong><br>
+                B.Tech CSE (AI Honors) — GPA 3.87/4.0
                 </div>
-            `);
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(10);
         }
 
         function showContact() {
-            addToWindow(`
-                <div style="color: #00ff00;">
-                === CONTACT INFORMATION ===<br><br>
-                📧 Email: isanand@ucsd.edu<br>
-                📱 Phone: +1-858-405-4838<br>
-                💼 LinkedIn: linkedin.com/in/ishushan<br>
-                💻 GitHub: github.com/Ishushan02<br><br>
-                
-                <span style="color: #ffff00;">Ready to discuss AI, Image Generation, or Video Synthesis?</span><br>
-                <span style="color: #00ffff;">Reach out through any channel above!</span>
+            gameWindow.innerHTML = `
+                <div style="color:#00ffff;">
+                === CONTACT ===<br><br>
+                📧 isanand@ucsd.edu<br>
+                📱 +1-858-405-4838<br>
+                💼 linkedin.com/in/ishushan<br>
+                💻 github.com/Ishushan02
                 </div>
-            `);
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
+            `;
             increaseScore(5);
         }
 
         function showStats() {
-            addToWindow(`
-                <div style="color: #ffff00;">
-                === PROFILE ANALYTICS ===<br><br>
-                📊 Generating visitor statistics...<br><br>
+            gameWindow.innerHTML = `
+                <div style="color:#ffff00;">
+                === PORTFOLIO ANALYTICS ===<br><br>
+                <canvas id="statsChart" width="400" height="200"></canvas>
                 </div>
-                <canvas id="statsChart" style="max-width: 600px; margin: 1rem 0;"></canvas>
-            `);
-            
-            setTimeout(() => {
-                const ctx = document.getElementById('statsChart').getContext('2d');
-                const dates = [];
-                const visits = [];
-                const today = new Date();
-                
-                for (let i = 14; i >= 0; i--) {
-                    const date = new Date(today);
-                    date.setDate(date.getDate() - i);
-                    dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-                    visits.push(Math.floor(Math.random() * 50) + 30);
-                }
-                
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dates,
-                        datasets: [{
-                            label: 'Daily Visits',
-                            data: visits,
-                            borderColor: '#00ff00',
-                            backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { labels: { color: '#00ff00' } }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: 'rgba(0, 255, 0, 0.2)' },
-                                ticks: { color: '#00ff00' }
-                            },
-                            x: {
-                                grid: { color: 'rgba(0, 255, 0, 0.2)' },
-                                ticks: { color: '#00ff00', maxRotation: 45 }
-                            }
-                        }
-                    }
-                });
-            }, 100);
-            
-            increaseScore(15);
-        }
-
-        function goDirection(direction) {
-            const dirMap = { north: 'north', east: 'east', south: 'south', west: 'west' };
-            const location = dirMap[direction];
-            
-            if (location && locations[location]) {
-                currentLocation = location;
-                const loc = locations[location];
-                addToWindow(`
-                    <div style="color: #ffff00;">
-                    You travel ${direction.toUpperCase()}...<br><br>
-                    === ${loc.name.toUpperCase()} ===<br>
-                    ${loc.description}<br><br>
-                    You can see: ${loc.items.map(i => `<span style="color: #00ffff;">${i}</span>`).join(', ')}<br><br>
-                    <span style="color: #ff00ff;">Try 'examine [item]' to learn more!</span>
-                    </div>
-                `);
-                increaseScore(10);
-                unlockAchievement("Explorer", `You discovered the ${loc.name}!`);
-            } else {
-                addToWindow(`<div style="color: #ff0000;">You can't go that way. Try: north, east, south, or west</div>`);
-            }
-        }
-
-        function examineItem(item) {
-            if (currentLocation !== 'entrance' && locations[currentLocation]) {
-                const loc = locations[currentLocation];
-                if (loc.details && loc.details[item]) {
-                    addToWindow(`
-                        <div style="color: #00ffff;">
-                        === EXAMINING: ${item.toUpperCase()} ===<br><br>
-                        ${loc.details[item]}
-                        </div>
-                    `);
-                    if (!discoveredItems.has(item)) {
-                        discoveredItems.add(item);
-                        increaseScore(15);
-                        unlockAchievement("Deep Dive", `You examined ${item}!`);
-                    }
-                } else {
-                    addToWindow(`<div style="color: #ff0000;">Can't examine that here. Try examining items you see in the current location.</div>`);
-                }
-            } else {
-                addToWindow(`<div style="color: #ff0000;">Try exploring different areas first (go north/east/south/west)!</div>`);
-            }
-        }
-
-        function unlockSecret() {
-            addToWindow(`
-                <div style="color: #ff00ff;">
-                🎉 SECRET UNLOCKED! 🎉<br><br>
-                You've discovered the hidden achievement!<br>
-                "The path to innovation is paved with diffusion models and recursive thinking."<br>
-                - Ishan Kumar Anand<br><br>
-                <span style="color: #ffff00;">BONUS: +50 Discovery Points!</span>
-                </div>
-            `);
-            increaseScore(50);
-            unlockAchievement("Secret Master", "You found the hidden secret!");
-        }
-
-        function increaseScore(points) {
-            score += points;
-            scoreDisplay.textContent = score;
-            
-            if (score >= 100 && level === "AI Explorer") {
-                level = "Neural Architect";
-                levelDisplay.textContent = level;
-                unlockAchievement("Level Up!", "You've become a Neural Architect!");
-            } else if (score >= 200 && level === "Neural Architect") {
-                level = "Diffusion Master";
-                levelDisplay.textContent = level;
-                unlockAchievement("Level Up!", "You've mastered the art of Diffusion!");
-            }
-        }
-
-        function unlockAchievement(title, description) {
-            const achievement = document.createElement('div');
-            achievement.className = 'achievement unlocked';
-            achievement.innerHTML = `
-                <strong>🏆 ACHIEVEMENT UNLOCKED: ${title}</strong><br>
-                ${description}
+                <div class="back-button" onclick="executeCommand('back')">← Back to Main</div>
             `;
-            achievementArea.appendChild(achievement);
-            
-            setTimeout(() => {
-                achievement.style.display = 'none';
-            }, 5000);
+
+            const ctxChart = document.getElementById('statsChart').getContext('2d');
+            new Chart(ctxChart, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(visitData),
+                    datasets: [{
+                        label: 'Daily Visits',
+                        data: Object.values(visitData)
+                    }]
+                }
+            });
+
+            increaseScore(10);
+        }
+
+        function increaseScore(amount) {
+            score += amount;
+            scoreDisplay.textContent = score;
+
+            if (score >= 100) levelDisplay.textContent = "AI Architect";
+            else if (score >= 50) levelDisplay.textContent = "Senior AI Explorer";
+        }
+
+        function unlockAchievement(title, desc) {
+            const div = document.createElement('div');
+            div.className = 'achievement unlocked';
+            div.innerHTML = `🏆 <strong>${title}</strong><br>${desc}`;
+            achievementArea.appendChild(div);
         }
     </script>
 </body>
