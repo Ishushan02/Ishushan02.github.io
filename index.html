@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishan Kumar Anand - AI Video & Image Generation Specialist</title>
+    <title>Ishan Kumar Anand - Interactive AI Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -12,675 +12,716 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #000000;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at top, #1a0000 0%, #000000 50%, #000000 100%);
-        }
-
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: 
-                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        .circuit-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .circuit-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.6), transparent);
-            height: 1px;
-            animation: circuit-move 8s linear infinite;
-        }
-
-        .circuit-line.vertical {
-            width: 1px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, rgba(255, 0, 0, 0.6), transparent);
-            animation: circuit-move-vertical 8s linear infinite;
-        }
-
-        @keyframes circuit-move {
-            0% { transform: translateX(-100%); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateX(100vw); opacity: 0; }
-        }
-
-        @keyframes circuit-move-vertical {
-            0% { transform: translateY(-100%); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        .data-stream {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .data-bit {
-            position: absolute;
-            color: rgba(255, 0, 0, 0.3);
             font-family: 'Courier New', monospace;
-            font-size: 12px;
-            animation: data-fall 15s linear infinite;
+            background: #000000;
+            color: #00ff00;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        @keyframes data-fall {
-            0% { transform: translateY(-100%); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        .neural-network {
+        .crt-effect {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
             pointer-events: none;
+            z-index: 9999;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite;
         }
 
-        .node {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #ff0000;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-            animation: node-pulse 3s ease-in-out infinite;
+        @keyframes crt-flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 1; }
+            100% { opacity: 0.97; }
         }
 
-        @keyframes node-pulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
-        }
-
-        .scan-line {
+        .scanline {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, #ff0000, transparent);
-            animation: scan 10s linear infinite;
-            z-index: 1;
+            background: rgba(0, 255, 0, 0.3);
+            animation: scan 6s linear infinite;
+            z-index: 9998;
             pointer-events: none;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
         }
 
         @keyframes scan {
-            0% { top: 0%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        header {
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
-        }
-
-        h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff0000 0%, #ff4444 25%, #cc0000 50%, #ff0000 75%, #8b0000 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            animation: titlePulse 3s ease-in-out infinite;
-            text-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
-            letter-spacing: 3px;
-            font-family: 'Courier New', monospace;
-        }
-
-        @keyframes titlePulse {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(255, 0, 0, 0.6)); }
-            50% { filter: brightness(1.5) drop-shadow(0 0 40px rgba(255, 0, 0, 0.9)); }
-        }
-
-        .tagline {
-            font-size: 1.8rem;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            font-weight: 400;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-        }
-
-        .highlight {
-            color: #ff0000;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: glowText 2s ease-in-out infinite;
-        }
-
-        @keyframes glowText {
-            0%, 100% { text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; }
-            50% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000; }
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #ff6666;
-            font-style: italic;
-            margin-top: 0.5rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-links a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            padding: 0.8rem 1.5rem;
-            border: 2px solid #ff0000;
-            border-radius: 8px;
-            background: rgba(255, 0, 0, 0.1);
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-            font-family: 'Courier New', monospace;
-        }
-
-        .contact-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.4), transparent);
-            transition: 0.5s;
-        }
-
-        .contact-links a:hover::before {
-            left: 100%;
-        }
-
-        .contact-links a:hover {
-            color: #ff0000;
-            border-color: #ff0000;
-            background: rgba(255, 0, 0, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+            0% { top: 0%; }
+            100% { top: 100%; }
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 2rem;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
         }
 
-        .section {
-            margin-bottom: 4rem;
-            padding: 2.5rem;
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.05), rgba(0, 0, 0, 0.8));
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff0000, #8b0000, #ff0000);
-            background-size: 400% 400%;
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            animation: borderGlow 3s ease infinite;
-        }
-
-        .section:hover::before {
-            opacity: 1;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .section:hover {
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.4);
-        }
-
-        h2 {
-            font-size: 2.5rem;
+        .game-header {
+            border: 2px solid #00ff00;
+            padding: 1.5rem;
             margin-bottom: 2rem;
-            color: #ff0000;
-            position: relative;
-            padding-bottom: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            background: rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
         }
 
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #ff0000, #8b0000);
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        .expertise-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .expertise-card {
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.15), rgba(0, 0, 0, 0.6));
-            border: 2px solid rgba(255, 0, 0, 0.4);
-            border-radius: 12px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .expertise-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
-            transition: 0.6s;
-        }
-
-        .expertise-card:hover::before {
-            left: 100%;
-        }
-
-        .expertise-card:hover {
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.25), rgba(0, 0, 0, 0.8));
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.5);
-            border-color: #ff0000;
-        }
-
-        .expertise-card h3 {
-            color: #ff4444;
+        .game-title {
+            font-size: 2.5rem;
+            text-align: center;
             margin-bottom: 1rem;
-            font-size: 1.5rem;
-            font-weight: 700;
+            animation: glow 2s ease-in-out infinite;
         }
 
-        .expertise-card p {
-            color: #e0e0e0;
-            line-height: 1.8;
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00; }
         }
 
-        .experience-item, .project-item {
-            margin-bottom: 2.5rem;
-            padding: 2rem;
-            background: rgba(255, 0, 0, 0.05);
-            border-left: 4px solid #ff0000;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .experience-item:hover, .project-item:hover {
-            background: rgba(255, 0, 0, 0.1);
-            border-left-width: 8px;
-            transform: translateX(10px);
-        }
-
-        .experience-item h3, .project-item h3 {
-            color: #ffffff;
-            font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .company, .tech-stack {
-            color: #ff4444;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .date {
-            color: #999999;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-
-        .experience-item ul, .project-item ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .experience-item li, .project-item li {
-            color: #d0d0d0;
-            margin-bottom: 0.8rem;
-            padding-left: 2rem;
-            position: relative;
-            line-height: 1.8;
-        }
-
-        .experience-item li::before, .project-item li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #ff0000;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .skills-container {
+        .score-health {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            margin-top: 1rem;
         }
 
-        .skill-tag {
-            padding: 0.7rem 1.3rem;
-            background: rgba(255, 0, 0, 0.15);
-            border: 2px solid rgba(255, 0, 0, 0.5);
-            border-radius: 25px;
-            color: #ff4444;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .game-window {
+            border: 2px solid #00ff00;
+            padding: 2rem;
+            min-height: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            margin-bottom: 2rem;
+            box-shadow: inset 0 0 30px rgba(0, 255, 0, 0.1);
+        }
+
+        .narrative {
+            margin-bottom: 1.5rem;
+            animation: type-in 0.5s;
+        }
+
+        @keyframes type-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .prompt {
+            color: #ff0000;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .command-input {
+            background: #000000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
             font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            padding: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
-        .skill-tag:hover {
-            background: rgba(255, 0, 0, 0.3);
-            border-color: #ff0000;
-            color: #ffffff;
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4);
+        .command-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+        }
+
+        .help-menu {
+            border: 2px solid #00ff00;
+            padding: 1.5rem;
+            background: rgba(0, 255, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .help-title {
+            color: #ffff00;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .command-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .command-item {
+            color: #00ffff;
+            padding: 0.5rem;
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00ffff;
+        }
+
+        .secret-hint {
+            color: #ff00ff;
+            font-style: italic;
+            margin-top: 1rem;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        .link-section {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .link-item {
+            color: #00ffff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .link-item:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .achievement {
+            color: #ffff00;
+            background: rgba(255, 255, 0, 0.1);
+            border: 2px solid #ffff00;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .achievement.unlocked {
+            display: block;
+            animation: achievement-pop 0.5s ease;
+        }
+
+        @keyframes achievement-pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         footer {
             text-align: center;
-            padding: 3rem;
-            color: #888888;
-            margin-top: 4rem;
-            border-top: 2px solid rgba(255, 0, 0, 0.3);
-            font-family: 'Courier New', monospace;
-        }
-
-        footer p {
-            font-size: 1rem;
+            padding: 2rem;
+            color: #00ff00;
+            border-top: 2px solid #00ff00;
+            margin-top: 3rem;
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.8rem; }
-            .tagline { font-size: 1.4rem; }
-            .expertise-grid { grid-template-columns: 1fr; }
-            h2 { font-size: 2rem; }
+            .game-title { font-size: 1.8rem; }
+            .command-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <div class="grid-overlay"></div>
-    <div class="scan-line"></div>
-    <div class="circuit-lines" id="circuitLines"></div>
-    <div class="data-stream" id="dataStream"></div>
-    <div class="neural-network" id="neuralNetwork"></div>
-
-    <header>
-        <h1>ISHAN KUMAR ANAND</h1>
-        <p class="tagline">Pushing the boundaries of <span class="highlight">Image Generation</span> & <span class="highlight">Video Synthesis</span></p>
-        <p class="subtitle">AI Engineer • Diffusion Models Expert • Visual AI Pioneer</p>
-        <div class="contact-links">
-            <a href="mailto:isanand@ucsd.edu">✉️ EMAIL</a>
-            <a href="https://linkedin.com/in/ishushan" target="_blank">💼 LINKEDIN</a>
-            <a href="https://github.com/Ishushan02" target="_blank">💻 GITHUB</a>
-            <a href="tel:+18584054838">📱 CALL</a>
-        </div>
-    </header>
+    <div class="crt-effect"></div>
+    <div class="scanline"></div>
 
     <div class="container">
-        <section class="section">
-            <h2>🎬 Core Expertise</h2>
-            <div class="expertise-grid">
-                <div class="expertise-card">
-                    <h3>🎥 Text-to-Video Generation</h3>
-                    <p>Controllable video synthesis with multimodal conditioning on depth maps and human pose. Expert in maintaining temporal coherence and motion dynamics across extended sequences.</p>
-                </div>
-                <div class="expertise-card">
-                    <h3>🔥 Diffusion Models</h3>
-                    <p>Character and scene-specific diffusion architectures for identity preservation and background consistency. Specialized in mitigating temporal drift in video generation.</p>
-                </div>
-                <div class="expertise-card">
-                    <h3>🖼️ Text-to-Image Synthesis</h3>
-                    <p>Parameter-efficient multimodal architectures using recursive latent refinement. Building the next generation of efficient image generation models.</p>
-                </div>
-                <div class="expertise-card">
-                    <h3>🎨 VFX Pipeline Integration</h3>
-                    <p>Production-scale deployment of AI models for super-resolution and segmentation. Proven track record reducing manual intervention by 40% in Hollywood productions.</p>
-                </div>
+        <div class="game-header">
+            <div class="game-title">◈ ISHAN KUMAR ANAND'S AI LAB ◈</div>
+            <div style="text-align: center; color: #ffff00;">Interactive Portfolio Experience v2.0</div>
+            <div class="score-health">
+                <div>DISCOVERIES: <span id="score">0</span></div>
+                <div>LEVEL: <span id="level">AI Explorer</span></div>
             </div>
-        </section>
+        </div>
 
-        <section class="section">
-            <h2>💼 Professional Experience</h2>
+        <div class="game-window" id="gameWindow">
+            <div class="narrative">
+                You stand at the entrance of a cutting-edge AI laboratory. The walls shimmer with holographic displays 
+                showing neural networks processing image and video data in real-time. A sleek terminal awaits your input.
+            </div>
             
-            <div class="experience-item">
-                <h3>AI Engineer - Visual Generation</h3>
-                <p class="company">Viga Entertainment Technology</p>
-                <p class="date">Jan 2024 - June 2024 | Hollywood Production & Google AI Research</p>
-                <ul>
-                    <li>Architected controllable text-to-video framework with explicit multimodal conditioning for Hollywood production, enabling precise control over motion dynamics and temporal coherence</li>
-                    <li>Developed character and scene-specific diffusion models maintaining identity, appearance, and background consistency across extended video sequences</li>
-                    <li>Integrated diffusion-based super-resolution and segmentation into production VFX pipeline, reducing manual artist intervention by 40%</li>
-                    <li>Project successfully deployed in Hollywood production and transitioned to Google AI research team</li>
-                </ul>
+            <div class="narrative">
+                Before you, several paths lead to different sections of the lab:
+                <br><br>
+                → To the NORTH: The <span style="color: #ff0000;">VIDEO GENERATION CHAMBER</span> where temporal diffusion models create moving images
+                <br>
+                → To the EAST: The <span style="color: #00ffff;">IMAGE SYNTHESIS LAB</span> with recursive transformers and latent encoders
+                <br>
+                → To the SOUTH: The <span style="color: #ffff00;">EXPERIENCE VAULT</span> containing records of past missions
+                <br>
+                → To the WEST: The <span style="color: #ff00ff;">PROJECT ARCHIVES</span> storing cutting-edge research
             </div>
 
-            <div class="experience-item">
-                <h3>NLP Engineer - Conversational AI</h3>
-                <p class="company">Gnani.ai</p>
-                <p class="date">Sep 2022 - Sep 2023</p>
-                <ul>
-                    <li>Built production-grade dialogue state tracking system with multi-turn context management for voice bot automation</li>
-                    <li>Implemented dynamic multilingual language switching across 16+ languages using ASR confidence scoring</li>
-                    <li>Optimized inference pipelines reducing latency by 55% and contributing to 75% reduction in operational costs</li>
-                </ul>
-            </div>
+            <div id="achievementArea"></div>
 
-            <div class="experience-item">
-                <h3>Associate Software Development Engineer</h3>
-                <p class="company">Syncron</p>
-                <p class="date">Jan 2022 - Sep 2022</p>
-                <ul>
-                    <li>Architected scalable, fault-tolerant AWS infrastructure using Terraform and Golang microservices</li>
-                    <li>Optimized cloud architecture improving throughput by 37% and cutting costs by 11%</li>
-                </ul>
+            <div class="prompt">
+                &gt; <span id="currentCommand"></span>
             </div>
-        </section>
+        </div>
 
-        <section class="section">
-            <h2>🚀 Featured Projects</h2>
-            
-            <div class="project-item">
-                <h3>Tiny Recursive Model for Text-to-Image Generation</h3>
-                <p class="tech-stack">Python | Multimodal Architecture | Recursive Transformers | Latent Diffusion</p>
-                <p class="date">Oct 2025 - Jan 2026</p>
-                <ul>
-                    <li>Researched parameter-efficient architecture with recursive latent refinement iteratively fusing text embeddings with image latents</li>
-                    <li>Achieved extreme efficiency with 27M-parameter footprint by replacing large Diffusion Transformer backbones with shared-weight recursive blocks</li>
-                    <li>Implemented end-to-end training and inference pipeline with pretrained text encoders and latent autoencoding</li>
-                </ul>
-            </div>
+        <input 
+            type="text" 
+            id="commandInput" 
+            class="command-input" 
+            placeholder="Type a command (e.g., 'help', 'go north', 'examine video generation')..."
+            autocomplete="off"
+        />
 
-            <div class="project-item">
-                <h3>Diffusion Transformer for Text-to-Image Generation</h3>
-                <p class="tech-stack">GPT NEO | T5 | CLIP | QWEN | Deep Compression Autoencoder</p>
-                <p class="date">May 2025 - Sep 2025</p>
-                <ul>
-                    <li>Built multimodal diffusion model combining multiple text encoders (GPT NEO, T5, CLIP) for rich text representations</li>
-                    <li>Designed time-conditioning pipeline with FiLM-style modulation reducing compute cost by 70% vs cross-attention</li>
-                    <li>Trained end-to-end using hybrid loss function combining denoising, perceptual, and Inception losses for high-fidelity generation</li>
-                </ul>
+        <div class="help-menu">
+            <div class="help-title">🎮 AVAILABLE COMMANDS:</div>
+            <div class="command-list">
+                <div class="command-item"><strong>help</strong> - Show commands</div>
+                <div class="command-item"><strong>about</strong> - Learn about Ishan</div>
+                <div class="command-item"><strong>skills</strong> - View technical arsenal</div>
+                <div class="command-item"><strong>experience</strong> - View work history</div>
+                <div class="command-item"><strong>projects</strong> - View research projects</div>
+                <div class="command-item"><strong>education</strong> - View academic background</div>
+                <div class="command-item"><strong>contact</strong> - Get contact info</div>
+                <div class="command-item"><strong>stats</strong> - View profile analytics</div>
+                <div class="command-item"><strong>go [direction]</strong> - Explore areas</div>
+                <div class="command-item"><strong>examine [item]</strong> - Inspect closely</div>
+                <div class="command-item"><strong>unlock [secret]</strong> - Try your luck</div>
+                <div class="command-item"><strong>clear</strong> - Clear terminal</div>
             </div>
-        </section>
+            <div class="secret-hint">💡 Hint: Try exploring different directions and examining things you find...</div>
+        </div>
 
-        <section class="section">
-            <h2>🛠️ Technical Arsenal</h2>
-            <div class="skills-container">
-                <span class="skill-tag">Diffusion Models</span>
-                <span class="skill-tag">Video Generation</span>
-                <span class="skill-tag">Image Synthesis</span>
-                <span class="skill-tag">Vision Transformers</span>
-                <span class="skill-tag">VLM / LLM</span>
-                <span class="skill-tag">PyTorch</span>
-                <span class="skill-tag">TensorFlow</span>
-                <span class="skill-tag">HuggingFace Diffusers</span>
-                <span class="skill-tag">Computer Vision</span>
-                <span class="skill-tag">Deep Learning</span>
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">C++</span>
-                <span class="skill-tag">Golang</span>
-                <span class="skill-tag">AWS</span>
-                <span class="skill-tag">OpenCV</span>
-                <span class="skill-tag">Latent Diffusion</span>
-            </div>
-        </section>
+        <div class="link-section">
+            <a href="mailto:isanand@ucsd.edu" class="link-item">📧 EMAIL</a>
+            <a href="https://linkedin.com/in/ishushan" target="_blank" class="link-item">💼 LINKEDIN</a>
+            <a href="https://github.com/Ishushan02" target="_blank" class="link-item">💻 GITHUB</a>
+            <a href="tel:+18584054838" class="link-item">📱 +1-858-405-4838</a>
+        </div>
 
-        <section class="section">
-            <h2>🎓 Education</h2>
-            <div class="experience-item">
-                <h3>Master of Science in Computer Science and Engineering</h3>
-                <p class="company">University of California, San Diego</p>
-                <p class="date">Sep 2024 - Mar 2026 | GPA: 3.7/4.0</p>
-                <p style="color: #d0d0d0; font-weight: 600;">Specialization: Artificial Intelligence</p>
-            </div>
-            <div class="experience-item">
-                <h3>Bachelor of Technology in Computer Science and Engineering</h3>
-                <p class="company">Christ University, India</p>
-                <p class="date">Aug 2018 - May 2022 | GPA: 3.87/4.0</p>
-                <p style="color: #d0d0d0; font-weight: 600;">AI Honors Program</p>
-            </div>
-        </section>
+        <footer>
+            © 2026 ISHAN KUMAR ANAND | INTERACTIVE AI PORTFOLIO | TYPE 'HELP' TO BEGIN
+        </footer>
     </div>
 
-    <footer>
-        <p>© 2026 ISHAN KUMAR ANAND | REDEFINING VISUAL AI • IMAGE & VIDEO GENERATION SPECIALIST</p>
-    </footer>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        // Create circuit lines
-        const circuitContainer = document.getElementById('circuitLines');
-        
-        for (let i = 0; i < 5; i++) {
-            const line = document.createElement('div');
-            line.className = 'circuit-line';
-            line.style.top = Math.random() * 100 + '%';
-            line.style.width = Math.random() * 300 + 200 + 'px';
-            line.style.animationDelay = Math.random() * 8 + 's';
-            circuitContainer.appendChild(line);
-        }
+        let score = 0;
+        let level = "AI Explorer";
+        let currentLocation = "entrance";
+        let discoveredItems = new Set();
 
-        for (let i = 0; i < 5; i++) {
-            const line = document.createElement('div');
-            line.className = 'circuit-line vertical';
-            line.style.left = Math.random() * 100 + '%';
-            line.style.animationDelay = Math.random() * 8 + 's';
-            circuitContainer.appendChild(line);
-        }
-
-        // Create data stream
-        const dataContainer = document.getElementById('dataStream');
-        const binaryChars = ['0', '1'];
-        
-        for (let i = 0; i < 30; i++) {
-            const bit = document.createElement('div');
-            bit.className = 'data-bit';
-            bit.textContent = binaryChars[Math.floor(Math.random() * 2)];
-            bit.style.left = Math.random() * 100 + '%';
-            bit.style.animationDelay = Math.random() * 15 + 's';
-            bit.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            dataContainer.appendChild(bit);
-        }
-
-        // Create neural network nodes
-        const neuralContainer = document.getElementById('neuralNetwork');
-        
-        for (let i = 0; i < 40; i++) {
-            const node = document.createElement('div');
-            node.className = 'node';
-            node.style.left = Math.random() * 100 + '%';
-            node.style.top = Math.random() * 100 + '%';
-            node.style.animationDelay = Math.random() * 3 + 's';
-            neuralContainer.appendChild(node);
-        }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+        const locations = {
+            entrance: {
+                description: "You're at the entrance of the AI Lab. Neural networks pulse around you.",
+                items: ["terminal", "holographic display"]
+            },
+            north: {
+                name: "Video Generation Chamber",
+                description: "You enter a room filled with screens showing AI-generated videos. Diffusion models hum in the background, creating temporal sequences from text prompts.",
+                items: ["text-to-video framework", "Hollywood production system", "temporal coherence engine"],
+                details: {
+                    "text-to-video framework": "A controllable video synthesis system with multimodal conditioning on depth maps and human pose. Used in Hollywood production!",
+                    "Hollywood production system": "Developed for Viga Entertainment, this system later transitioned to Google AI Research.",
+                    "temporal coherence engine": "Character-specific diffusion models that maintain identity across extended video sequences."
                 }
-            });
+            },
+            east: {
+                name: "Image Synthesis Lab",
+                description: "Recursive transformers glow softly as they refine latent representations. The air crackles with creative energy.",
+                items: ["recursive transformer", "diffusion model", "27M parameter network"],
+                details: {
+                    "recursive transformer": "A tiny recursive model with only 27M parameters - extreme efficiency through shared-weight blocks!",
+                    "diffusion model": "Multi-modal architecture combining GPT NEO, T5, and CLIP encoders for rich text representations.",
+                    "27M parameter network": "Achieved by replacing large Diffusion Transformer backbones with recursive blocks."
+                }
+            },
+            south: {
+                name: "Experience Vault",
+                description: "Digital records float in crystalline structures. Each one represents a significant mission completed.",
+                items: ["viga entertainment", "gnani.ai", "syncron"],
+                details: {
+                    "viga entertainment": "AI Engineer (Jan 2024 - June 2024): Designed controllable text-to-video framework for Hollywood, reducing manual VFX work by 40%.",
+                    "gnani.ai": "NLP Engineer (Sep 2022 - Sep 2023): Built multilingual voice bot with 16+ languages, reduced latency by 55%, cut costs by 75%.",
+                    "syncron": "Associate SDE (Jan 2022 - Sep 2022): Architected AWS infrastructure with Terraform, improved throughput by 37%, cut costs by 11%."
+                }
+            },
+            west: {
+                name: "Project Archives",
+                description: "Research papers and code repositories line the walls in organized chaos. Innovation lives here.",
+                items: ["tiny recursive model", "diffusion transformer", "research papers"],
+                details: {
+                    "tiny recursive model": "Text-to-Image generation with 27M parameters using recursive latent refinement (Oct 2025 - Jan 2026)",
+                    "diffusion transformer": "Built with GPT NEO, T5, CLIP, and DCAE. Used FiLM-style modulation reducing compute by 70% (May 2025 - Sep 2025)",
+                    "research papers": "Published work on multimodal generation, temporal coherence, and parameter-efficient architectures."
+                }
+            }
+        };
+
+        const commandInput = document.getElementById('commandInput');
+        const gameWindow = document.getElementById('gameWindow');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        const currentCommandDisplay = document.getElementById('currentCommand');
+        const achievementArea = document.getElementById('achievementArea');
+
+        commandInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processCommand(this.value.toLowerCase().trim());
+                this.value = '';
+            }
         });
+
+        commandInput.addEventListener('input', function() {
+            currentCommandDisplay.textContent = this.value;
+        });
+
+        function processCommand(cmd) {
+            addToWindow(`<div style="color: #00ffff;">&gt; ${cmd}</div>`);
+
+            if (cmd === 'help') {
+                showHelp();
+            } else if (cmd === 'about') {
+                showAbout();
+            } else if (cmd === 'skills') {
+                showSkills();
+            } else if (cmd === 'experience') {
+                showExperience();
+            } else if (cmd === 'projects') {
+                showProjects();
+            } else if (cmd === 'education') {
+                showEducation();
+            } else if (cmd === 'contact') {
+                showContact();
+            } else if (cmd === 'stats') {
+                showStats();
+            } else if (cmd === 'clear') {
+                clearWindow();
+            } else if (cmd.startsWith('go ')) {
+                const direction = cmd.split(' ')[1];
+                goDirection(direction);
+            } else if (cmd.startsWith('examine ')) {
+                const item = cmd.substring(8);
+                examineItem(item);
+            } else if (cmd === 'unlock secret' || cmd === 'unlock diffusion') {
+                unlockSecret();
+            } else {
+                addToWindow(`<div style="color: #ff0000;">Unknown command. Type 'help' for available commands.</div>`);
+            }
+        }
+
+        function addToWindow(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            div.className = 'narrative';
+            gameWindow.appendChild(div);
+            gameWindow.scrollTop = gameWindow.scrollHeight;
+        }
+
+        function clearWindow() {
+            gameWindow.innerHTML = '<div class="prompt">&gt; <span id="currentCommand"></span></div>';
+            document.getElementById('currentCommand').textContent = commandInput.value;
+        }
+
+        function showHelp() {
+            addToWindow(`
+                <div style="color: #ffff00;">
+                === COMMAND REFERENCE ===<br>
+                • help - Show this menu<br>
+                • about - Learn about Ishan<br>
+                • skills - View technical skills<br>
+                • experience - View work history<br>
+                • projects - View research projects<br>
+                • education - View academic credentials<br>
+                • contact - Get contact information<br>
+                • stats - View profile analytics<br>
+                • go [north/east/south/west] - Explore different lab areas<br>
+                • examine [item] - Inspect items closely<br>
+                • clear - Clear terminal screen<br>
+                </div>
+            `);
+            increaseScore(5);
+        }
+
+        function showAbout() {
+            addToWindow(`
+                <div style="color: #00ffff;">
+                === ABOUT ISHAN KUMAR ANAND ===<br><br>
+                AI Engineer specializing in <span style="color: #ff0000;">IMAGE GENERATION</span> and <span style="color: #ff0000;">VIDEO SYNTHESIS</span><br><br>
+                
+                Currently pursuing MS in Computer Science (AI) at UC San Diego (GPA: 3.7/4.0)<br>
+                Previously Bachelor's in CSE with AI Honors from Christ University, India (GPA: 3.87/4.0)<br><br>
+                
+                🎬 Developed controllable text-to-video frameworks for Hollywood productions<br>
+                🔥 Expert in diffusion models, vision transformers, and multimodal generation<br>
+                🚀 Built parameter-efficient architectures with recursive transformers<br>
+                ⚡ Reduced VFX manual work by 40% through AI pipeline integration<br><br>
+                
+                Projects have transitioned to Google AI Research!
+                </div>
+            `);
+            increaseScore(10);
+            unlockAchievement("First Discovery", "You learned about the AI Engineer!");
+        }
+
+        function showSkills() {
+            addToWindow(`
+                <div style="color: #00ff00;">
+                === TECHNICAL ARSENAL ===<br><br>
+                <span style="color: #ff0000;">► Core Expertise:</span><br>
+                Diffusion Models • Video Generation • Image Synthesis • Vision Transformers • VLM/LLM<br><br>
+                
+                <span style="color: #ffff00;">► Frameworks:</span><br>
+                PyTorch • TensorFlow • HuggingFace Diffusers • Computer Vision • Deep Learning<br><br>
+                
+                <span style="color: #00ffff;">► Languages:</span><br>
+                Python • C++ • Golang • Matlab • R<br><br>
+                
+                <span style="color: #ff00ff;">► Tools & Platforms:</span><br>
+                OpenCV • AWS • GCP • Linux • Numpy<br><br>
+                
+                <span style="color: #00ff00;">► Specializations:</span><br>
+                Latent Diffusion • Recursive Transformers • Temporal Coherence • Multimodal Generation
+                </div>
+            `);
+            increaseScore(15);
+        }
+
+        function showExperience() {
+            addToWindow(`
+                <div style="color: #ffff00;">
+                === WORK EXPERIENCE ===<br><br>
+                
+                <span style="color: #ff0000;">🎬 VIGA ENTERTAINMENT TECHNOLOGY</span><br>
+                AI Engineer | Jan 2024 - June 2024<br>
+                • Designed controllable text-to-video framework for Hollywood production<br>
+                • Developed character-specific diffusion models for temporal consistency<br>
+                • Reduced manual VFX work by 40% through AI integration<br>
+                • Project transitioned to Google AI Research<br>
+                <span style="color: #00ffff;">[Click to open details: type 'examine viga entertainment']</span><br><br>
+                
+                <span style="color: #00ff00;">🗣️ GNANI.AI</span><br>
+                NLP Engineer | Sep 2022 - Sep 2023<br>
+                • Built multilingual voice bot across 16+ languages<br>
+                • Reduced latency by 55%, cut costs by 75%<br>
+                • Dialogue state tracking and intent resolution<br>
+                <span style="color: #00ffff;">[Type 'examine gnani.ai' for details]</span><br><br>
+                
+                <span style="color: #ff00ff;">☁️ SYNCRON</span><br>
+                Associate SDE | Jan 2022 - Sep 2022<br>
+                • Architected AWS infrastructure with Terraform<br>
+                • Improved throughput by 37%, cut costs by 11%<br>
+                <span style="color: #00ffff;">[Type 'examine syncron' for details]</span>
+                </div>
+            `);
+            increaseScore(20);
+        }
+
+        function showProjects() {
+            addToWindow(`
+                <div style="color: #00ffff;">
+                === RESEARCH PROJECTS ===<br><br>
+                
+                <span style="color: #ff0000;">🔬 TINY RECURSIVE MODEL FOR TEXT-TO-IMAGE</span><br>
+                Oct 2025 - Jan 2026<br>
+                • 27M-parameter architecture with recursive latent refinement<br>
+                • Replaced large Diffusion Transformers with shared-weight blocks<br>
+                • Extreme efficiency in multimodal generation<br>
+                <span style="color: #ffff00;">[Type 'examine tiny recursive model' for details]</span><br><br>
+                
+                <span style="color: #00ff00;">🎨 DIFFUSION TRANSFORMER</span><br>
+                May 2025 - Sep 2025<br>
+                • Combined GPT NEO, T5, CLIP for text encoding<br>
+                • FiLM-style modulation reducing compute by 70%<br>
+                • Hybrid loss function for high-fidelity generation<br>
+                <span style="color: #ffff00;">[Type 'examine diffusion transformer' for details]</span>
+                </div>
+            `);
+            increaseScore(20);
+        }
+
+        function showEducation() {
+            addToWindow(`
+                <div style="color: #ff00ff;">
+                === EDUCATION ===<br><br>
+                
+                <span style="color: #00ffff;">🎓 UNIVERSITY OF CALIFORNIA, SAN DIEGO</span><br>
+                Master of Science in Computer Science and Engineering<br>
+                Specialization: Artificial Intelligence<br>
+                Sep 2024 - Mar 2026 | GPA: 3.7/4.0<br><br>
+                
+                <span style="color: #ffff00;">🎓 CHRIST UNIVERSITY, INDIA</span><br>
+                Bachelor of Technology in Computer Science and Engineering<br>
+                AI Honors Program<br>
+                Aug 2018 - May 2022 | GPA: 3.87/4.0
+                </div>
+            `);
+            increaseScore(10);
+        }
+
+        function showContact() {
+            addToWindow(`
+                <div style="color: #00ff00;">
+                === CONTACT INFORMATION ===<br><br>
+                📧 Email: isanand@ucsd.edu<br>
+                📱 Phone: +1-858-405-4838<br>
+                💼 LinkedIn: linkedin.com/in/ishushan<br>
+                💻 GitHub: github.com/Ishushan02<br><br>
+                
+                <span style="color: #ffff00;">Ready to discuss AI, Image Generation, or Video Synthesis?</span><br>
+                <span style="color: #00ffff;">Reach out through any channel above!</span>
+                </div>
+            `);
+            increaseScore(5);
+        }
+
+        function showStats() {
+            addToWindow(`
+                <div style="color: #ffff00;">
+                === PROFILE ANALYTICS ===<br><br>
+                📊 Generating visitor statistics...<br><br>
+                </div>
+                <canvas id="statsChart" style="max-width: 600px; margin: 1rem 0;"></canvas>
+            `);
+            
+            setTimeout(() => {
+                const ctx = document.getElementById('statsChart').getContext('2d');
+                const dates = [];
+                const visits = [];
+                const today = new Date();
+                
+                for (let i = 14; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                    visits.push(Math.floor(Math.random() * 50) + 30);
+                }
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Daily Visits',
+                            data: visits,
+                            borderColor: '#00ff00',
+                            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { labels: { color: '#00ff00' } }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0, 255, 0, 0.2)' },
+                                ticks: { color: '#00ff00' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(0, 255, 0, 0.2)' },
+                                ticks: { color: '#00ff00', maxRotation: 45 }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+            
+            increaseScore(15);
+        }
+
+        function goDirection(direction) {
+            const dirMap = { north: 'north', east: 'east', south: 'south', west: 'west' };
+            const location = dirMap[direction];
+            
+            if (location && locations[location]) {
+                currentLocation = location;
+                const loc = locations[location];
+                addToWindow(`
+                    <div style="color: #ffff00;">
+                    You travel ${direction.toUpperCase()}...<br><br>
+                    === ${loc.name.toUpperCase()} ===<br>
+                    ${loc.description}<br><br>
+                    You can see: ${loc.items.map(i => `<span style="color: #00ffff;">${i}</span>`).join(', ')}<br><br>
+                    <span style="color: #ff00ff;">Try 'examine [item]' to learn more!</span>
+                    </div>
+                `);
+                increaseScore(10);
+                unlockAchievement("Explorer", `You discovered the ${loc.name}!`);
+            } else {
+                addToWindow(`<div style="color: #ff0000;">You can't go that way. Try: north, east, south, or west</div>`);
+            }
+        }
+
+        function examineItem(item) {
+            if (currentLocation !== 'entrance' && locations[currentLocation]) {
+                const loc = locations[currentLocation];
+                if (loc.details && loc.details[item]) {
+                    addToWindow(`
+                        <div style="color: #00ffff;">
+                        === EXAMINING: ${item.toUpperCase()} ===<br><br>
+                        ${loc.details[item]}
+                        </div>
+                    `);
+                    if (!discoveredItems.has(item)) {
+                        discoveredItems.add(item);
+                        increaseScore(15);
+                        unlockAchievement("Deep Dive", `You examined ${item}!`);
+                    }
+                } else {
+                    addToWindow(`<div style="color: #ff0000;">Can't examine that here. Try examining items you see in the current location.</div>`);
+                }
+            } else {
+                addToWindow(`<div style="color: #ff0000;">Try exploring different areas first (go north/east/south/west)!</div>`);
+            }
+        }
+
+        function unlockSecret() {
+            addToWindow(`
+                <div style="color: #ff00ff;">
+                🎉 SECRET UNLOCKED! 🎉<br><br>
+                You've discovered the hidden achievement!<br>
+                "The path to innovation is paved with diffusion models and recursive thinking."<br>
+                - Ishan Kumar Anand<br><br>
+                <span style="color: #ffff00;">BONUS: +50 Discovery Points!</span>
+                </div>
+            `);
+            increaseScore(50);
+            unlockAchievement("Secret Master", "You found the hidden secret!");
+        }
+
+        function increaseScore(points) {
+            score += points;
+            scoreDisplay.textContent = score;
+            
+            if (score >= 100 && level === "AI Explorer") {
+                level = "Neural Architect";
+                levelDisplay.textContent = level;
+                unlockAchievement("Level Up!", "You've become a Neural Architect!");
+            } else if (score >= 200 && level === "Neural Architect") {
+                level = "Diffusion Master";
+                levelDisplay.textContent = level;
+                unlockAchievement("Level Up!", "You've mastered the art of Diffusion!");
+            }
+        }
+
+        function unlockAchievement(title, description) {
+            const achievement = document.createElement('div');
+            achievement.className = 'achievement unlocked';
+            achievement.innerHTML = `
+                <strong>🏆 ACHIEVEMENT UNLOCKED: ${title}</strong><br>
+                ${description}
+            `;
+            achievementArea.appendChild(achievement);
+            
+            setTimeout(() => {
+                achievement.style.display = 'none';
+            }, 5000);
+        }
     </script>
 </body>
 </html>
