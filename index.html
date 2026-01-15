@@ -25,14 +25,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, #0a0000, #1a0000, #2d0000, #0d0d0d);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            background: radial-gradient(ellipse at top, #1a0000 0%, #000000 50%, #000000 100%);
         }
 
         .grid-overlay {
@@ -43,39 +36,95 @@
             height: 100%;
             z-index: -1;
             background-image: 
-                linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
+                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        .particles {
+        .circuit-lines {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            overflow: hidden;
         }
 
-        .particle {
+        .circuit-line {
             position: absolute;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(139, 0, 0, 0.3));
-            border-radius: 50%;
-            animation: float 25s infinite;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.6), transparent);
+            height: 1px;
+            animation: circuit-move 8s linear infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-            25% { transform: translate(80px, -80px) scale(1.3); opacity: 0.7; }
-            50% { transform: translate(-60px, 60px) scale(0.9); opacity: 0.5; }
-            75% { transform: translate(100px, 40px) scale(1.2); opacity: 0.6; }
+        .circuit-line.vertical {
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(255, 0, 0, 0.6), transparent);
+            animation: circuit-move-vertical 8s linear infinite;
+        }
+
+        @keyframes circuit-move {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100vw); opacity: 0; }
+        }
+
+        @keyframes circuit-move-vertical {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .data-stream {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .data-bit {
+            position: absolute;
+            color: rgba(255, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            animation: data-fall 15s linear infinite;
+        }
+
+        @keyframes data-fall {
+            0% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .neural-network {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            animation: node-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes node-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
 
         .scan-line {
@@ -85,14 +134,16 @@
             width: 100%;
             height: 2px;
             background: linear-gradient(90deg, transparent, #ff0000, transparent);
-            animation: scan 8s linear infinite;
+            animation: scan 10s linear infinite;
             z-index: 1;
             pointer-events: none;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
         }
 
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
-            50% { opacity: 1; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% { top: 100%; opacity: 0; }
         }
 
@@ -113,7 +164,8 @@
             margin-bottom: 1rem;
             animation: titlePulse 3s ease-in-out infinite;
             text-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
         }
 
         @keyframes titlePulse {
@@ -147,6 +199,7 @@
             color: #ff6666;
             font-style: italic;
             margin-top: 0.5rem;
+            font-family: 'Courier New', monospace;
         }
 
         .contact-links {
@@ -168,6 +221,7 @@
             font-weight: 600;
             position: relative;
             overflow: hidden;
+            font-family: 'Courier New', monospace;
         }
 
         .contact-links a::before {
@@ -389,6 +443,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
         }
 
         .skill-tag:hover {
@@ -405,6 +460,7 @@
             color: #888888;
             margin-top: 4rem;
             border-top: 2px solid rgba(255, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
         }
 
         footer p {
@@ -423,7 +479,9 @@
     <div class="animated-bg"></div>
     <div class="grid-overlay"></div>
     <div class="scan-line"></div>
-    <div class="particles" id="particles"></div>
+    <div class="circuit-lines" id="circuitLines"></div>
+    <div class="data-stream" id="dataStream"></div>
+    <div class="neural-network" id="neuralNetwork"></div>
 
     <header>
         <h1>ISHAN KUMAR ANAND</h1>
@@ -567,23 +625,50 @@
     </footer>
 
     <script>
-        // Create floating particles with red glow
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 30;
+        // Create circuit lines
+        const circuitContainer = document.getElementById('circuitLines');
+        
+        for (let i = 0; i < 5; i++) {
+            const line = document.createElement('div');
+            line.className = 'circuit-line';
+            line.style.top = Math.random() * 100 + '%';
+            line.style.width = Math.random() * 300 + 200 + 'px';
+            line.style.animationDelay = Math.random() * 8 + 's';
+            circuitContainer.appendChild(line);
+        }
 
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            const size = Math.random() * 80 + 30;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 25 + 's';
-            particle.style.animationDuration = (Math.random() * 15 + 20) + 's';
-            
-            particlesContainer.appendChild(particle);
+        for (let i = 0; i < 5; i++) {
+            const line = document.createElement('div');
+            line.className = 'circuit-line vertical';
+            line.style.left = Math.random() * 100 + '%';
+            line.style.animationDelay = Math.random() * 8 + 's';
+            circuitContainer.appendChild(line);
+        }
+
+        // Create data stream
+        const dataContainer = document.getElementById('dataStream');
+        const binaryChars = ['0', '1'];
+        
+        for (let i = 0; i < 30; i++) {
+            const bit = document.createElement('div');
+            bit.className = 'data-bit';
+            bit.textContent = binaryChars[Math.floor(Math.random() * 2)];
+            bit.style.left = Math.random() * 100 + '%';
+            bit.style.animationDelay = Math.random() * 15 + 's';
+            bit.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            dataContainer.appendChild(bit);
+        }
+
+        // Create neural network nodes
+        const neuralContainer = document.getElementById('neuralNetwork');
+        
+        for (let i = 0; i < 40; i++) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.style.left = Math.random() * 100 + '%';
+            node.style.top = Math.random() * 100 + '%';
+            node.style.animationDelay = Math.random() * 3 + 's';
+            neuralContainer.appendChild(node);
         }
 
         // Smooth scroll
@@ -594,16 +679,6 @@
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
-            });
-        });
-
-        // Add parallax effect to sections
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const particles = document.querySelectorAll('.particle');
-            particles.forEach((particle, index) => {
-                const speed = (index % 3 + 1) * 0.05;
-                particle.style.transform = `translateY(${scrolled * speed}px)`;
             });
         });
     </script>
