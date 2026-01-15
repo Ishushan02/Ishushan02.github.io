@@ -833,6 +833,8 @@
 </html> -->
 
 
+<!-- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -885,7 +887,7 @@
             100% { opacity: 0.97; }
         }
 
-        .scanline {
+        /* .scanline {
             position: fixed;
             top: 0;
             left: 0;
@@ -900,7 +902,7 @@
         @keyframes scan {
             0% { top: 0%; }
             100% { top: 100%; }
-        }
+        } */
 
         .container {
             max-width: 1000px;
@@ -1097,7 +1099,6 @@
 <body>
     <canvas id="matrix-canvas"></canvas>
     <div class="crt-effect"></div>
-    <div class="scanline"></div>
 
     <div class="container">
         <div class="game-header">
@@ -1653,5 +1654,270 @@
             achievementArea.appendChild(achievement);
         }
     </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Kumar Anand | Interactive AI Lab</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Courier New', monospace;
+    background: black;
+    color: #00ff00;
+    overflow-x: hidden;
+}
+
+/* Matrix Background */
+#matrix-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+/* CRT glow only (NO scanline) */
+.crt-effect {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%);
+    background-size: 100% 4px;
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0%,100% { opacity: 0.97; }
+    50% { opacity: 1; }
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+.game-header {
+    border: 2px solid #00ff00;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.game-title {
+    font-size: 2.5rem;
+    animation: glow 2s infinite;
+}
+
+@keyframes glow {
+    0%,100% { text-shadow: 0 0 10px #0f0; }
+    50% { text-shadow: 0 0 30px #0f0; }
+}
+
+.score-health {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.game-window {
+    border: 2px solid #00ff00;
+    padding: 2rem;
+    min-height: 400px;
+    margin: 2rem 0;
+    background: rgba(0,0,0,0.85);
+}
+
+.command-input {
+    width: 100%;
+    padding: 1rem;
+    background: black;
+    color: #0f0;
+    border: 2px solid #0f0;
+    font-size: 1.1rem;
+}
+
+.command-item {
+    padding: .5rem;
+    cursor: pointer;
+    border-left: 3px solid cyan;
+    margin: .3rem 0;
+}
+
+.command-item:hover {
+    background: rgba(0,255,255,0.2);
+}
+
+.back-button {
+    color: magenta;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+footer {
+    text-align: center;
+    border-top: 2px solid #0f0;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<!-- Terminal typing sound -->
+<audio id="typeSound" preload="auto">
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-typewriter-soft-hit-1366.mp3">
+</audio>
+
+<div class="container">
+
+<div class="game-header">
+    <div class="game-title">◈ ISHAN KUMAR ANAND'S AI LAB ◈</div>
+    <div>Interactive Portfolio Experience</div>
+    <div class="score-health">
+        <div>DISCOVERIES: <span id="score">0</span></div>
+        <div>LEVEL: AI Explorer</div>
+    </div>
+</div>
+
+<div class="game-window" id="gameWindow">
+    You stand inside a futuristic AI laboratory.  
+    A terminal awaits your command.
+</div>
+
+<input id="commandInput" class="command-input"
+placeholder="Type a command (help, about, projects, experience...)">
+
+<div class="command-item" onclick="run('help')">help</div>
+<div class="command-item" onclick="run('about')">about</div>
+<div class="command-item" onclick="run('skills')">skills</div>
+<div class="command-item" onclick="run('projects')">projects</div>
+<div class="command-item" onclick="run('experience')">experience</div>
+<div class="command-item" onclick="run('education')">education</div>
+<div class="command-item" onclick="run('contact')">contact</div>
+
+<footer>© 2026 Ishan Kumar Anand</footer>
+
+</div>
+
+<script>
+// MATRIX EFFECT
+const canvas = document.getElementById("matrix-canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%";
+const font = 14;
+const cols = canvas.width / font;
+const drops = Array(Math.floor(cols)).fill(1);
+
+setInterval(() => {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "#0f0";
+    ctx.font = font+"px monospace";
+    drops.forEach((y,i)=>{
+        ctx.fillText(chars[Math.random()*chars.length|0], i*font, y*font);
+        if (y*font > canvas.height && Math.random()>0.975) drops[i]=0;
+        drops[i]++;
+    });
+},33);
+
+// TERMINAL SOUND
+const input = document.getElementById("commandInput");
+const sound = document.getElementById("typeSound");
+
+input.addEventListener("keydown", e=>{
+    if (e.key.length === 1) {
+        sound.currentTime = 0;
+        sound.volume = 0.2;
+        sound.play();
+    }
+});
+
+// COMMAND ENGINE
+let score = 0;
+const win = document.getElementById("gameWindow");
+const scoreEl = document.getElementById("score");
+
+function addScore(x){
+    score += x;
+    scoreEl.textContent = score;
+}
+
+function run(cmd){
+    input.value = cmd;
+    process(cmd);
+}
+
+input.addEventListener("keypress", e=>{
+    if(e.key==="Enter"){
+        process(input.value.toLowerCase());
+        input.value="";
+    }
+});
+
+function process(cmd){
+    if(cmd==="help"){
+        win.innerHTML = "Commands: about, skills, projects, experience, education, contact";
+        addScore(5);
+    }
+    else if(cmd==="about"){
+        win.innerHTML = "AI Engineer focused on Image & Video Generation.";
+        addScore(10);
+    }
+    else if(cmd==="skills"){
+        win.innerHTML = "Diffusion Models • Vision Transformers • Video Synthesis";
+        addScore(10);
+    }
+    else if(cmd==="projects"){
+        win.innerHTML = `
+        Click to open project pages:<br><br>
+        <span class="back-button" onclick="openPage('projects/recursive-model.html')">🔬 Recursive Model</span><br>
+        <span class="back-button" onclick="openPage('projects/diffusion-transformer.html')">🎨 Diffusion Transformer</span>
+        `;
+        addScore(15);
+    }
+    else if(cmd==="experience"){
+        win.innerHTML = `
+        Click to open experience pages:<br><br>
+        <span class="back-button" onclick="openPage('experience/viga.html')">🎬 VIGA Entertainment</span><br>
+        <span class="back-button" onclick="openPage('experience/gnani.html')">🗣️ GNANI.AI</span><br>
+        <span class="back-button" onclick="openPage('experience/syncron.html')">☁️ SYNCRON</span>
+        `;
+        addScore(15);
+    }
+    else if(cmd==="education"){
+        win.innerHTML = "MS CS (AI) @ UC San Diego | GPA 3.7";
+        addScore(5);
+    }
+    else if(cmd==="contact"){
+        win.innerHTML = "isanand@ucsd.edu | linkedin.com/in/ishushan";
+        addScore(5);
+    }
+}
+
+function openPage(url){
+    window.open(url,"_blank");
+}
+</script>
+
 </body>
 </html>
