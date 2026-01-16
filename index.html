@@ -370,150 +370,115 @@
     </script>
 </body>
 </html> -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ishan Anand</title>
+<title>Ishan Anand - Website</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-    font-family:'Courier New',monospace;
-    background:#000;color:#00ff00;
-    overflow:hidden;height:100vh
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'Courier New', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
 }
 
-#matrix-canvas{position:fixed;inset:0;z-index:1;opacity:.2}
-.crt-effect{
-    position:fixed;inset:0;z-index:9999;
-    pointer-events:none;
-    background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
+#matrix-canvas {
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:.2;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
     background-size:100% 4px;
-    animation:crt .15s infinite
+    animation:crt-flicker .15s infinite;
 }
-@keyframes crt{50%{opacity:.9}}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
 
-.container{
-    position:relative;z-index:5;
-    height:100vh;padding:2rem;
-    display:flex;flex-direction:column
+.container {
+    position:relative; z-index:10; height:100vh; display:flex; flex-direction:column; padding:2rem;
 }
-.header{text-align:center}
-.main-title{
-    font-size:3rem;
-    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent
+.header { text-align:center; margin-bottom:2rem; text-shadow:0 0 10px rgba(0,255,0,.8); }
+.main-title {
+    font-size:3rem; margin-bottom:.5rem;
+    animation:glow 2s ease-in-out infinite;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
-.subtitle{color:#00ffff}
+@keyframes glow {
+    0%,100% { text-shadow:0 0 10px #ff00ff,0 0 20px #00ffff; filter:brightness(1); }
+    50% { text-shadow:0 0 20px #ff00ff,0 0 40px #00ffff; filter:brightness(1.2); }
+}
+.subtitle { color:#00ffff; font-size:1.2rem; }
 
-.nav-grid{
-    flex:1;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:2rem;
-    max-width:1200px;
-    margin:auto;
-    align-items:center
+.nav-grid {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; max-width:1200px; margin:0 auto; flex:1; align-items:center;
 }
 
-.nav-card{
-    position:relative;
-    padding:2rem 1rem;
-    text-align:center;
-    cursor:pointer;
-    transition:.4s;
+.nav-card {
+    position:relative; padding:2rem 1rem; text-align:center; height:100%;
+    cursor:pointer; transition:all .4s ease; display:flex; flex-direction:column; justify-content:center;
 }
-.nav-card:hover{transform:scale(1.1) translateY(-10px)}
+.nav-card:hover { transform:scale(1.1) translateY(-10px); }
+.nav-card:hover .ascii-art { animation:pulse .5s ease-in-out; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
 
-.ascii-art{
-    font-size:.7rem;
-    line-height:1.1;
-    white-space:pre;
-    text-shadow:0 0 20px currentColor;
-    z-index:3;
+.ascii-art {
+    font-size:.7rem; line-height:1.1; white-space:pre; font-weight:bold; margin-bottom:1rem;
+    text-shadow:0 0 20px currentColor; transition:all .3s ease;
 }
-.card-desc{opacity:.7}
+.card-desc { font-size:.9rem; opacity:.7; font-style:italic; }
+
+.social-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,.95); padding:.8rem; display:flex; justify-content:center; gap:3rem; z-index:100; }
+.social-item { display:flex; align-items:center; gap:.5rem; text-decoration:none; transition:.3s ease; padding:.3rem .8rem; cursor:pointer; }
+.social-item:hover { transform:translateY(-3px); text-shadow:0 0 10px currentColor; }
+
+.social-icon { font-size:.3rem; line-height:1; white-space:pre; font-weight:bold; }
+
+@media(max-width:768px){ .nav-grid{grid-template-columns:1fr; gap:1rem} .ascii-art{font-size:.45rem} }
 
 /* ================= ORBIT SYSTEM ================= */
-
-.radial-menu{
-    position:absolute;
-    width:240px;height:240px;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%) scale(.2);
-    opacity:0;
-    pointer-events:none;
-    transition:.4s;
-    filter:drop-shadow(0 0 25px #00ff00);
+.radial-menu {
+    position:absolute; width:240px; height:240px;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(.2); opacity:0;
+    pointer-events:none; transition:.4s; z-index:5;
 }
+.nav-card:hover .radial-menu { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
 
-.nav-card:hover .radial-menu{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
-    pointer-events:auto;
-}
+.orbit-fast{animation:orbit 8s linear infinite;}
+.orbit-medium{animation:orbit 12s linear infinite reverse;}
+.orbit-slow{animation:orbit 16s linear infinite;}
+@keyframes orbit{0%{transform:translate(-50%,-50%) rotate(0deg);} 100%{transform:translate(-50%,-50%) rotate(360deg);}}
 
-/* Orbit variants */
-.orbit-fast{animation:orbit 8s linear infinite}
-.orbit-slow{animation:orbit 14s linear infinite reverse}
-.orbit-medium{animation:orbit 11s ease-in-out infinite}
-
-@keyframes orbit{
-    from{transform:translate(-50%,-50%) rotate(0)}
-    to{transform:translate(-50%,-50%) rotate(360deg)}
-}
-
-.radial-item{
-    position:absolute;
-    top:50%;left:50%;
-    width:46px;height:46px;
-    border-radius:50%;
-    background:rgba(0,0,0,.9);
-    border:1px solid #00ff00;
-    box-shadow:0 0 15px #00ff00;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.radial-item {
+    position:absolute; top:50%; left:50%;
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(0,0,0,.9); border:1px solid #00ff00;
+    box-shadow:0 0 15px #00ff00; display:flex; align-items:center; justify-content:center;
     transition:.3s;
 }
-.radial-item img{
-    width:26px;height:26px;
-    filter:drop-shadow(0 0 8px #00ff00);
-    animation:counter 10s linear infinite
-}
-@keyframes counter{
-    from{transform:rotate(360deg)}
-    to{transform:rotate(0)}
-}
+.radial-item img { width:26px; height:26px; filter:drop-shadow(0 0 8px #00ff00); }
 
-.radial-item:hover{
-    box-shadow:0 0 30px #00ff00;
-    transform:scale(1.3) translate(-50%,-50%);
-}
+.radial-item:hover { box-shadow:0 0 30px #00ff00; transform:scale(1.3) translate(-50%,-50%); }
+.radial-item:active{transform:scale(1.6) translate(-50%,-50%);}
 
-/* Positioning */
-.radial-item:nth-child(1){transform:rotate(0) translate(105px)}
-.radial-item:nth-child(2){transform:rotate(60deg) translate(105px)}
-.radial-item:nth-child(3){transform:rotate(120deg) translate(105px)}
-.radial-item:nth-child(4){transform:rotate(180deg) translate(105px)}
-.radial-item:nth-child(5){transform:rotate(240deg) translate(105px)}
-.radial-item:nth-child(6){transform:rotate(300deg) translate(105px)}
-
-/* Click zoom */
-.radial-item:active{transform:scale(1.6)}
-
-/* ================= AUDIO ================= */
-audio{display:none}
-
-@media(max-width:768px){
-    .nav-grid{grid-template-columns:1fr}
-}
+/* circular positions for up to 6 items */
+.radial-item:nth-child(1){transform:rotate(0deg) translate(105px);}
+.radial-item:nth-child(2){transform:rotate(60deg) translate(105px);}
+.radial-item:nth-child(3){transform:rotate(120deg) translate(105px);}
+.radial-item:nth-child(4){transform:rotate(180deg) translate(105px);}
+.radial-item:nth-child(5){transform:rotate(240deg) translate(105px);}
+.radial-item:nth-child(6){transform:rotate(300deg) translate(105px);}
 </style>
 </head>
-
 <body>
 
 <canvas id="matrix-canvas"></canvas>
@@ -533,73 +498,110 @@ audio{display:none}
 
 <!-- EXPERIENCE -->
 <div class="nav-card" onmouseenter="playHover()">
-<div class="ascii-art" style="color:#ff0000;">EXPERIENCE</div>
-<div class="card-desc">Professional Journey</div>
-<div class="radial-menu orbit-fast">
-<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
-<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
-<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
-<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp4.png"></a>
-</div>
+    <div class="ascii-art" style="color:#ff0000;">
+███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
+██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
+█████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
+██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
+╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+    </div>
+    <div class="card-desc">Professional Journey</div>
+
+    <div class="radial-menu orbit-fast">
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp4.png"></a>
+    </div>
 </div>
 
 <!-- PROJECTS -->
 <div class="nav-card" onmouseenter="playHover()">
-<div class="ascii-art" style="color:#00ff00;">PROJECTS</div>
-<div class="card-desc">Research & Innovation</div>
-<div class="radial-menu orbit-medium">
-<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
-<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
-<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj3.png"></a>
-</div>
+    <div class="ascii-art" style="color:#00ff00;">
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+    </div>
+    <div class="card-desc">Research & Innovation</div>
+
+    <div class="radial-menu orbit-medium">
+        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
+        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
+        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj3.png"></a>
+    </div>
 </div>
 
 <!-- EDUCATION -->
 <div class="nav-card" onmouseenter="playHover()">
-<div class="ascii-art" style="color:#ffff00;">EDUCATION</div>
-<div class="card-desc">Academic Background</div>
-<div class="radial-menu orbit-slow">
-<a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
-<a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
-</div>
+    <div class="ascii-art" style="color:#ffff00;">
+███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+█████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    </div>
+    <div class="card-desc">Academic Background</div>
+
+    <div class="radial-menu orbit-slow">
+        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
+        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
+    </div>
 </div>
 
 <!-- PUBLICATION -->
 <div class="nav-card" onmouseenter="playHover()">
-<div class="ascii-art" style="color:#ff00ff;">PUBLICATION</div>
-<div class="card-desc">Research Papers</div>
-<div class="radial-menu orbit-medium">
-<a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
-<a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
-</div>
+    <div class="ascii-art" style="color:#ff00ff;">
+██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    </div>
+    <div class="card-desc">Research Papers</div>
+
+    <div class="radial-menu orbit-medium">
+        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
+        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
+    </div>
 </div>
 
 </div>
 </div>
 
 <script>
-const c=document.getElementById("matrix-canvas"),x=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-const chars="ISHAN ईशान 0123456789",fs=16;
-const cols=Math.floor(c.width/fs),drops=Array(cols).fill(0);
+const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=16;
+const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
 setInterval(()=>{
-x.fillStyle="rgba(0,0,0,.05)";
-x.fillRect(0,0,c.width,c.height);
-x.fillStyle="#0f0";x.font=fs+"px monospace";
-drops.forEach((y,i)=>{
-x.fillText(chars[Math.random()*chars.length|0],i*fs,y*fs);
-drops[i]=(y*fs>c.height&&Math.random()>.98)?0:y+1;
-});
+    ctx.fillStyle="rgba(0,0,0,.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.font=fs+"px monospace";
+    drops.forEach((y,i)=>{
+        ctx.fillStyle="#0f0";
+        ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y*fs);
+        drops[i]=(y*fs>canvas.height&&Math.random()>.975)?0:y+1;
+    });
 },50);
 
-/* Sound handlers */
-const h=document.getElementById("hoverSound"),
-t=document.getElementById("tickSound"),
-cS=document.getElementById("clickSound");
+window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
 
-function playHover(){h.volume=.15;h.currentTime=0;h.play()}
-function playTick(){t.volume=.1;t.currentTime=0;t.play()}
-function playClick(){cS.volume=.2;cS.currentTime=0;cS.play()}
+/* Sounds */
+const hoverSound=document.getElementById("hoverSound");
+const tickSound=document.getElementById("tickSound");
+const clickSound=document.getElementById("clickSound");
+
+function playHover(){hoverSound.currentTime=0; hoverSound.volume=.15; hoverSound.play();}
+function playTick(){tickSound.currentTime=0; tickSound.volume=.1; tickSound.play();}
+function playClick(){clickSound.currentTime=0; clickSound.volume=.2; clickSound.play();}
 </script>
 
 </body>
