@@ -891,7 +891,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
         }
 
@@ -913,33 +913,32 @@
 
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
             padding: 2rem;
         }
 
         .nav-card {
-            background: rgba(0, 0, 0, 0.9);
-            border: 3px solid;
-            padding: 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
-            overflow: hidden;
+            padding: 3rem 1rem;
+            text-align: center;
         }
 
         .nav-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 0%, transparent 70%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 70%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+            z-index: -1;
         }
 
         .nav-card:hover::before {
@@ -947,53 +946,101 @@
         }
 
         .nav-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 0 40px currentColor;
+            transform: scale(1.1) translateY(-20px);
         }
 
-        .nav-card.experience {
-            border-color: #ff0000;
+        .nav-card:hover .ascii-art {
+            animation: pulse 0.5s ease-in-out;
         }
 
-        .nav-card.projects {
-            border-color: #00ff00;
-        }
-
-        .nav-card.education {
-            border-color: #ffff00;
-        }
-
-        .nav-card.publication {
-            border-color: #ff00ff;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .ascii-art {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             line-height: 1.1;
-            text-align: center;
-            margin-bottom: 1rem;
+            white-space: pre;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .social-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            border-top: 2px solid #00ff00;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #00ff00;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .social-item:hover {
+            transform: translateY(-5px);
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .social-item:hover .social-icon {
+            animation: iconGlow 0.5s ease-in-out;
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { text-shadow: 0 0 10px currentColor; }
+            50% { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+        }
+
+        .social-icon {
+            font-size: 0.6rem;
+            line-height: 1;
             white-space: pre;
             font-weight: bold;
         }
 
-        .card-title {
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 0.5rem;
+        .social-text {
+            font-size: 1rem;
             font-weight: bold;
         }
 
-        .card-desc {
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
+        .social-item.email { color: #ff0000; }
+        .social-item.github { color: #00ff00; }
+        .social-item.linkedin { color: #00ffff; }
 
         .content-page {
             display: none;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem 2rem 6rem;
         }
 
         .content-page.active {
@@ -1028,6 +1075,7 @@
         .back-btn:hover {
             background: rgba(0, 255, 0, 0.3);
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+            transform: translateX(-10px);
         }
 
         .item-card {
@@ -1060,8 +1108,17 @@
 
         @media (max-width: 768px) {
             .main-title { font-size: 2rem; }
-            .nav-grid { grid-template-columns: 1fr; }
+            .nav-grid { 
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
             .ascii-art { font-size: 0.5rem; }
+            .social-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .social-icon { font-size: 0.4rem; }
         }
 
         .detail-content {
@@ -1079,6 +1136,10 @@
             color: #ffff00;
             margin-bottom: 0.5rem;
         }
+
+        #homePage {
+            padding-bottom: 6rem;
+        }
     </style>
 </head>
 <body>
@@ -1095,54 +1156,54 @@
             <div class="nav-grid">
                 <div class="nav-card experience" onclick="showPage('experience')">
                     <div class="ascii-art" style="color: #ff0000;">
- ███████╗██╗  ██╗██████╗ 
- ██╔════╝╚██╗██╔╝██╔══██╗
- █████╗   ╚███╔╝ ██████╔╝
- ██╔══╝   ██╔██╗ ██╔═══╝ 
- ███████╗██╔╝ ██╗██║     
- ╚══════╝╚═╝  ╚═╝╚═╝     
+ ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
+ ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
+ █████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
+ ██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+ ███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
+ ╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
                     </div>
                     <div class="card-title" style="color: #ff0000;">EXPERIENCE</div>
-                    <div class="card-desc">Explore work history & achievements</div>
+                    <div class="card-desc">Professional Journey</div>
                 </div>
 
                 <div class="nav-card projects" onclick="showPage('projects')">
                     <div class="ascii-art" style="color: #00ff00;">
- ██████╗ ██████╗  ██████╗      
- ██╔══██╗██╔══██╗██╔═══██╗     
- ██████╔╝██████╔╝██║   ██║     
- ██╔═══╝ ██╔══██╗██║   ██║     
- ██║     ██║  ██║╚██████╔╝     
- ╚═╝     ╚═╝  ╚═╝ ╚═════╝      
+ ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+ ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+ ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+ ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+ ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+ ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
                     </div>
                     <div class="card-title" style="color: #00ff00;">PROJECTS</div>
-                    <div class="card-desc">Research & AI innovations</div>
+                    <div class="card-desc">Research & Innovation</div>
                 </div>
 
                 <div class="nav-card education" onclick="showPage('education')">
                     <div class="ascii-art" style="color: #ffff00;">
- ███████╗██████╗ ██╗   ██╗
- ██╔════╝██╔══██╗██║   ██║
- █████╗  ██║  ██║██║   ██║
- ██╔══╝  ██║  ██║██║   ██║
- ███████╗██████╔╝╚██████╔╝
- ╚══════╝╚═════╝  ╚═════╝ 
+ ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+ ██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+ █████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+ ██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+ ███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
                     </div>
                     <div class="card-title" style="color: #ffff00;">EDUCATION</div>
-                    <div class="card-desc">Academic credentials</div>
+                    <div class="card-desc">Academic Background</div>
                 </div>
 
                 <div class="nav-card publication" onclick="showPage('publication')">
                     <div class="ascii-art" style="color: #ff00ff;">
- ██████╗ ██╗   ██╗██████╗ 
- ██╔══██╗██║   ██║██╔══██╗
- ██████╔╝██║   ██║██████╔╝
- ██╔═══╝ ██║   ██║██╔══██╗
- ██║     ╚██████╔╝██████╔╝
- ╚═╝      ╚═════╝ ╚═════╝ 
+ ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+ ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+ ██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+ ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+ ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
                     </div>
                     <div class="card-title" style="color: #ff00ff;">PUBLICATION</div>
-                    <div class="card-desc">Research papers & articles</div>
+                    <div class="card-desc">Research Papers</div>
                 </div>
             </div>
         </div>
@@ -1425,6 +1486,45 @@
         </div>
     </div>
 
+    <!-- Social Media Bar -->
+    <div class="social-bar">
+        <a href="mailto:isanand@ucsd.edu" class="social-item email">
+            <div class="social-icon">
+ _____ 
+|  ___|
+| |__  
+|  __| 
+| |___ 
+|_____|
+            </div>
+            <span class="social-text">isanand@ucsd.edu</span>
+        </a>
+
+        <a href="https://github.com/Ishushan02" target="_blank" class="social-item github">
+            <div class="social-icon">
+  ___  
+ / _ \ 
+| |_| |
+|  _  |
+| | | |
+|_| |_|
+            </div>
+            <span class="social-text">github.com/Ishushan02</span>
+        </a>
+
+        <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-item linkedin">
+            <div class="social-icon">
+ _     
+| |    
+| |    
+| |    
+| |___ 
+|_____|
+            </div>
+            <span class="social-text">linkedin.com/in/ishushan</span>
+        </a>
+    </div>
+
     <script>
         // Matrix Rain Effect
         const canvas = document.getElementById('matrix-canvas');
@@ -1473,18 +1573,23 @@
         function showPage(pageName) {
             document.querySelectorAll('.content-page, #homePage').forEach(page => {
                 page.style.display = 'none';
+                page.classList.remove('active');
             });
 
             if (pageName === 'home') {
                 document.getElementById('homePage').style.display = 'block';
             } else if (pageName === 'experience') {
                 document.getElementById('experiencePage').classList.add('active');
+                document.getElementById('experiencePage').style.display = 'block';
             } else if (pageName === 'projects') {
                 document.getElementById('projectsPage').classList.add('active');
+                document.getElementById('projectsPage').style.display = 'block';
             } else if (pageName === 'education') {
                 document.getElementById('educationPage').classList.add('active');
+                document.getElementById('educationPage').style.display = 'block';
             } else if (pageName === 'publication') {
                 document.getElementById('publicationPage').classList.add('active');
+                document.getElementById('publicationPage').style.display = 'block';
             }
 
             window.scrollTo(0, 0);
