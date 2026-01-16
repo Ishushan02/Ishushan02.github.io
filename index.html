@@ -520,7 +520,6 @@ arrangeRadial("pubMenu");
 </body>
 </html> -->
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -616,15 +615,17 @@ body {
 .social-item:hover { transform:translateY(-3px); text-shadow:0 0 10px currentColor; }
 .social-icon { font-size:.3rem; line-height:1; white-space:pre; font-weight:bold; }
 
+/* ================= TOP-RIGHT TERMINAL ================= */
+.top-right-terminal {
+    position:fixed; top:2rem; right:2rem; z-index:100;
+    background:rgba(20,0,0,0.9); padding:1rem 1.2rem; border:1px solid #800000;
+    color:#ff3333; font-family:monospace; font-size:.85rem; line-height:1.4;
+    box-shadow:0 0 20px #800000; border-radius:6px;
+    white-space:pre;
+}
+
 /* ================= FLOATING SIDE DOCK ================= */
-.side-dock {
-    position:fixed; top:50%; left:1rem; transform:translateY(-50%); display:flex; flex-direction:column; gap:1rem; z-index:20;
-}
-.side-dock a {
-    display:flex; align-items:center; gap:.5rem; font-size:.75rem; color:#0f0; text-decoration:none;
-    padding:.3rem .6rem; border:1px solid #0f0; border-radius:4px; transition:.3s;
-}
-.side-dock a:hover { background:rgba(0,255,0,.1); box-shadow:0 0 10px #0f0; }
+/* Removed per user request */
 
 /* ================= ORBIT SYSTEM ================= */
 .radial-menu {
@@ -695,10 +696,15 @@ body {
 <div class="terminal-snippet" style="top:60%; left:70%;">for epoch in range(100):</div>
 <div class="terminal-snippet" style="top:35%; left:50%;">accuracy = compute_accuracy()</div>
 
-<div class="side-dock">
-    <a href="https://github.com/Ishushan02" target="_blank">[GH] /ishan-kumar</a>
-    <a href="https://linkedin.com/in/ishushan" target="_blank">[IN] /in/ishan-kumar</a>
-    <a href="mailto:isanand@ucsd.edu">[ML] contact@ishan.ai</a>
+<!-- ================= TOP-RIGHT TERMINAL MODULE ================= -->
+<div class="top-right-terminal">
+[ACCESS_POINTS]
+--------------------------
+> MAIL:  
+> GITHUB:  
+> LINKEDIN:  
+--------------------------
+STATUS: REACHABLE
 </div>
 
 <div class="container">
@@ -743,7 +749,7 @@ body {
 </div>
 
 <div class="nav-card">
-    <div class="ascii-art" style="color:#fff200;">
+    <div class="ascii-art" style="color:#fff75f;">
 ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
 ██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
 █████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
@@ -794,7 +800,7 @@ setInterval(()=>{
         drops[i]=(y*fs>canvas.height&&Math.random()>.975)?0:y+1;
     });
 },50);
-window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight});
 
 /* Dynamic orbit items */
 function arrangeRadial(menuId,radius=105){
