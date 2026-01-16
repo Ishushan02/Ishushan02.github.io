@@ -466,17 +466,8 @@ body {
     transition:.3s;
 }
 .radial-item img { width:26px; height:26px; filter:drop-shadow(0 0 8px #00ff00); }
-
 .radial-item:hover { box-shadow:0 0 30px #00ff00; transform:scale(1.3) translate(-50%,-50%); }
 .radial-item:active{transform:scale(1.6) translate(-50%,-50%);}
-
-/* circular positions for up to 6 items */
-.radial-item:nth-child(1){transform:rotate(0deg) translate(105px);}
-.radial-item:nth-child(2){transform:rotate(60deg) translate(105px);}
-.radial-item:nth-child(3){transform:rotate(120deg) translate(105px);}
-.radial-item:nth-child(4){transform:rotate(180deg) translate(105px);}
-.radial-item:nth-child(5){transform:rotate(240deg) translate(105px);}
-.radial-item:nth-child(6){transform:rotate(300deg) translate(105px);}
 </style>
 </head>
 <body>
@@ -508,7 +499,7 @@ body {
     </div>
     <div class="card-desc">Professional Journey</div>
 
-    <div class="radial-menu orbit-fast">
+    <div class="radial-menu orbit-fast" id="expMenu">
         <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
         <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
         <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
@@ -528,7 +519,7 @@ body {
     </div>
     <div class="card-desc">Research & Innovation</div>
 
-    <div class="radial-menu orbit-medium">
+    <div class="radial-menu orbit-medium" id="projMenu">
         <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
         <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
         <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj3.png"></a>
@@ -547,7 +538,7 @@ body {
     </div>
     <div class="card-desc">Academic Background</div>
 
-    <div class="radial-menu orbit-slow">
+    <div class="radial-menu orbit-slow" id="eduMenu">
         <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
         <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
     </div>
@@ -565,7 +556,7 @@ body {
     </div>
     <div class="card-desc">Research Papers</div>
 
-    <div class="radial-menu orbit-medium">
+    <div class="radial-menu orbit-medium" id="pubMenu">
         <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
         <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
     </div>
@@ -589,19 +580,34 @@ setInterval(()=>{
     });
 },50);
 
-window.addEventListener("resize",()=>{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-});
+window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
 
 /* Sounds */
 const hoverSound=document.getElementById("hoverSound");
 const tickSound=document.getElementById("tickSound");
 const clickSound=document.getElementById("clickSound");
-
 function playHover(){hoverSound.currentTime=0; hoverSound.volume=.15; hoverSound.play();}
 function playTick(){tickSound.currentTime=0; tickSound.volume=.1; tickSound.play();}
 function playClick(){clickSound.currentTime=0; clickSound.volume=.2; clickSound.play();}
+
+/* ========== DYNAMIC CIRCLE SPACING ========== */
+function arrangeRadial(menuId, radius=105){
+    const menu=document.getElementById(menuId);
+    const items=menu.querySelectorAll('.radial-item');
+    const count=items.length;
+    items.forEach((item,i)=>{
+        const angle=(i/count)*2*Math.PI;
+        const x=Math.cos(angle)*radius;
+        const y=Math.sin(angle)*radius;
+        item.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
+    });
+}
+
+/* Apply to all menus */
+arrangeRadial("expMenu");
+arrangeRadial("projMenu");
+arrangeRadial("eduMenu");
+arrangeRadial("pubMenu");
 </script>
 
 </body>
