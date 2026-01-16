@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Ishan Kumar Anand</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #00ff00;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite;
+        }
+
+        @keyframes crt-flicker {
+            0%, 100% { opacity: 0.97; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 2rem 2rem 8rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 3px solid #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #00ff00;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 255, 0, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+            transform: translateX(-10px);
+        }
+
+        .item-card {
+            border: 2px solid;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .item-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-meta {
+            color: #ffff00;
+            margin-bottom: 1rem;
+        }
+
+        .item-desc {
+            color: #00ffff;
+        }
+
+        .social-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            z-index: 100;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+        }
+
+        .social-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-icon {
+            font-size: 0.3rem;
+            line-height: 1;
+            white-space: pre;
+            font-weight: bold;
+        }
+
+        .social-item.email { color: #ff6b9d; }
+        .social-item.github { color: #4ecdc4; }
+        .social-item.linkedin { color: #95e1d3; }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="crt-effect"></div>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← BACK TO MAIN</a>
+
+        <div class="page-header">
+            <div class="page-title">RESEARCH PROJECTS</div>
+        </div>
+
+        <div class="item-card" style="border-color: #ff0000;" onclick="window.location.href='recursive.html'">
+            <div class="item-title" style="color: #ff0000;">🔬 TINY RECURSIVE MODEL</div>
+            <div class="item-meta">Text-to-Image Generation | Oct 2025 - Jan 2026</div>
+            <div class="item-desc">→ Click to explore parameter-efficient architecture</div>
+        </div>
+
+        <div class="item-card" style="border-color: #00ff00;" onclick="window.location.href='diffusion.html'">
+            <div class="item-title" style="color: #00ff00;">🎨 DIFFUSION TRANSFORMER</div>
+            <div class="item-meta">Image Synthesis | May 2025 - Sep 2025</div>
+            <div class="item-desc">→ Click to explore transformer-based diffusion</div>
+        </div>
+
+        <div class="item-card" style="border-color: #ffff00;" onclick="window.location.href='video.html'">
+            <div class="item-title" style="color: #ffff00;">🎥 CONTROLLABLE VIDEO DIFFUSION</div>
+            <div class="item-meta">Text-to-Video | Jan 2024 - Jun 2024</div>
+            <div class="item-desc">→ Click to explore multimodal conditioning</div>
+        </div>
+    </div>
+
+    <div class="social-bar">
+        <a href="mailto:isanand@ucsd.edu" class="social-item email">
+            <div class="social-icon">
+ ███████╗███╗   ███╗ █████╗ ██╗██╗     
+ ██╔════╝████╗ ████║██╔══██╗██║██║     
+ █████╗  ██╔████╔██║███████║██║██║     
+ ██╔══╝  ██║╚██╔╝██║██╔══██║██║██║     
+ ███████╗██║ ╚═╝ ██║██║  ██║██║███████╗
+ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝
+            </div>
+        </a>
+
+        <a href="https://github.com/Ishushan02" target="_blank" class="social-item github">
+            <div class="social-icon">
+  ██████╗ ██╗████████╗██╗  ██╗██╗   ██╗██████╗ 
+ ██╔════╝ ██║╚══██╔══╝██║  ██║██║   ██║██╔══██╗
+ ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝
+ ██║   ██║██║   ██║   ██╔══██║██║   ██║██╔══██╗
+ ╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝
+  ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
+            </div>
+        </a>
+
+        <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-item linkedin">
+            <div class="social-icon">
+ ██╗     ██╗███╗   ██╗██╗  ██╗███████╗██████╗ ██╗███╗   ██╗
+ ██║     ██║████╗  ██║██║ ██╔╝██╔════╝██╔══██╗██║████╗  ██║
+ ██║     ██║██╔██╗ ██║█████╔╝ █████╗  ██║  ██║██║██╔██╗ ██║
+ ██║     ██║██║╚██╗██║██╔═██╗ ██╔══╝  ██║  ██║██║██║╚██╗██║
+ ███████╗██║██║ ╚████║██║  ██╗███████╗██████╔╝██║██║ ╚████║
+ ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝╚═╝  ╚═══╝
+            </div>
+        </a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अआइईउऊऋएऐओऔअंअःकखगगघङचछजजझञटटठडढणतथददधनपफबबभमयरलवशषसहक्षत्रज्ञアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, (drops[i] + 1) * fontSize);
+                gradient.addColorStop(0, '#0f0');
+                gradient.addColorStop(1, '#060');
+                ctx.fillStyle = gradient;
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishan Kumar Anand - AI Portfolio</title>
+    <title>Ishan Anand - Website </title>
     <style>
         * {
             margin: 0;
@@ -293,7 +293,6 @@
         </div>
     </div>
 
-    <!-- Social Media Bar -->
     <div class="social-bar">
         <a href="mailto:isanand@ucsd.edu" class="social-item email">
             <div class="social-icon">
@@ -338,6 +337,381 @@
         canvas.height = window.innerHeight;
 
         const chars = 'ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ01234 ISHAN 56789@#$%^&*()_+-=[]{}|;: ईशान :,.<>?/~ ईशान , अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ईशान ख ग घ ङ च छ ज झ ञ ट ठ. ड ढ. ण त थ द ध न प फ ब भ म. यर ल व श. ष स ह क् ष त् र ज् ञ アイウエオカキク ईशान ケコサシス I S H A N セソタチツテトナニヌネノハヒ ईशान フヘホマミムメモヤ I S H A N ユヨラリル ईशान レロワヲン';
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, (drops[i] + 1) * fontSize);
+                gradient.addColorStop(0, '#0f0');
+                gradient.addColorStop(1, '#060');
+                ctx.fillStyle = gradient;
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishan Anand - Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #00ff00;
+            overflow: hidden;
+            line-height: 1.6;
+            height: 100vh;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite;
+        }
+
+        @keyframes crt-flicker {
+            0%, 100% { opacity: 0.97; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+        }
+
+        .main-title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: glow 2s ease-in-out infinite;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.5);
+                filter: brightness(1);
+            }
+            50% { 
+                text-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.8);
+                filter: brightness(1.2);
+            }
+        }
+
+        .subtitle {
+            color: #00ffff;
+            font-size: 1.2rem;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+            align-items: center;
+        }
+
+        .nav-card {
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            padding: 2rem 1rem;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .nav-card:hover::before {
+            opacity: 1;
+        }
+
+        .nav-card:hover {
+            transform: scale(1.1) translateY(-10px);
+        }
+
+        .nav-card:hover .ascii-art {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .ascii-art {
+            font-size: 0.7rem;
+            line-height: 1.1;
+            white-space: pre;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .social-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            z-index: 100;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+        }
+
+        .social-item:hover {
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .social-item:hover .social-icon {
+            animation: iconGlow 0.5s ease-in-out;
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { text-shadow: 0 0 10px currentColor; }
+            50% { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+        }
+
+        .social-icon {
+            font-size: 0.3rem;
+            line-height: 1;
+            white-space: pre;
+            font-weight: bold;
+        }
+
+        .social-item.email { color: #ff6b9d; }
+        .social-item.github { color: #4ecdc4; }
+        .social-item.linkedin { color: #95e1d3; }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 2rem; }
+            .nav-grid { 
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .ascii-art { font-size: 0.45rem; }
+            .social-bar {
+                flex-direction: column;
+                gap: 0.3rem;
+                padding: 0.5rem;
+            }
+            .social-icon { font-size: 0.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="crt-effect"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="main-title">ISHAN KUMAR ANAND</div>
+            <div class="subtitle">AI ENGINEER</div>
+        </div>
+
+        <div class="nav-grid">
+            <div class="nav-card experience" onclick="window.location.href='experience.html'">
+                <div class="ascii-art" style="color: #ff0000;">
+ ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
+ ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
+ █████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
+ ██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+ ███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
+ ╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+                </div>
+                <div class="card-desc">Professional Journey</div>
+            </div>
+
+            <div class="nav-card projects" onclick="window.location.href='projects.html'">
+                <div class="ascii-art" style="color: #00ff00;">
+ ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+ ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+ ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+ ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+ ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+ ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+                </div>
+                <div class="card-desc">Research & Innovation</div>
+            </div>
+
+            <div class="nav-card education" onclick="window.location.href='education.html'">
+                <div class="ascii-art" style="color: #ffff00;">
+ ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+ ██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+ █████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+ ██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+ ███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                </div>
+                <div class="card-desc">Academic Background</div>
+            </div>
+
+            <div class="nav-card publication" onclick="window.location.href='publication.html'">
+                <div class="ascii-art" style="color: #ff00ff;">
+ ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+ ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+ ██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+ ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+ ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+                </div>
+                <div class="card-desc">Research Papers</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-bar">
+        <a href="mailto:isanand@ucsd.edu" class="social-item email">
+            <div class="social-icon">
+ ███████╗███╗   ███╗ █████╗ ██╗██╗     
+ ██╔════╝████╗ ████║██╔══██╗██║██║     
+ █████╗  ██╔████╔██║███████║██║██║     
+ ██╔══╝  ██║╚██╔╝██║██╔══██║██║██║     
+ ███████╗██║ ╚═╝ ██║██║  ██║██║███████╗
+ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝
+            </div>
+        </a>
+
+        <a href="https://github.com/Ishushan02" target="_blank" class="social-item github">
+            <div class="social-icon">
+  ██████╗ ██╗████████╗██╗  ██╗██╗   ██╗██████╗ 
+ ██╔════╝ ██║╚══██╔══╝██║  ██║██║   ██║██╔══██╗
+ ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝
+ ██║   ██║██║   ██║   ██╔══██║██║   ██║██╔══██╗
+ ╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝
+  ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
+            </div>
+        </a>
+
+        <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-item linkedin">
+            <div class="social-icon">
+ ██╗     ██╗███╗   ██╗██╗  ██╗███████╗██████╗ ██╗███╗   ██╗
+ ██║     ██║████╗  ██║██║ ██╔╝██╔════╝██╔══██╗██║████╗  ██║
+ ██║     ██║██╔██╗ ██║█████╔╝ █████╗  ██║  ██║██║██╔██╗ ██║
+ ██║     ██║██║╚██╗██║██╔═██╗ ██╔══╝  ██║  ██║██║██║╚██╗██║
+ ███████╗██║██║ ╚████║██║  ██╗███████╗██████╔╝██║██║ ╚████║
+ ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝╚═╝  ╚═══╝
+            </div>
+        </a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = ' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';
         const fontSize = 16;
         const columns = Math.floor(canvas.width / fontSize);
         const drops = [];
