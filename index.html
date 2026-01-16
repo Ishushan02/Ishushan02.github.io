@@ -489,7 +489,7 @@ body {
 <script>
 const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=16;
+const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=10;
 const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
 setInterval(()=>{
     ctx.fillStyle="rgba(0,0,0,.05)";
