@@ -1,379 +1,6 @@
 <!-- <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishan Anand - Website</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background: #000000;
-            color: #00ff00;
-            overflow: hidden;
-            line-height: 1.6;
-            height: 100vh;
-        }
-
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.2;
-        }
-
-        .crt-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px;
-            animation: crt-flicker 0.15s infinite;
-        }
-
-        @keyframes crt-flicker {
-            0%, 100% { opacity: 0.97; }
-            50% { opacity: 1; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-        }
-
-        .main-title {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            animation: glow 2s ease-in-out infinite;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff0000);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @keyframes glow {
-            0%, 100% { 
-                text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.5);
-                filter: brightness(1);
-            }
-            50% { 
-                text-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.8);
-                filter: brightness(1.2);
-            }
-        }
-
-        .subtitle {
-            color: #00ffff;
-            font-size: 1.2rem;
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex: 1;
-            align-items: center;
-        }
-
-        .nav-card {
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            padding: 2rem 1rem;
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .nav-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-
-        .nav-card:hover::before {
-            opacity: 1;
-        }
-
-        .nav-card:hover {
-            transform: scale(1.1) translateY(-10px);
-        }
-
-        .nav-card:hover .ascii-art {
-            animation: pulse 0.5s ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .ascii-art {
-            font-size: 0.7rem;
-            line-height: 1.1;
-            white-space: pre;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px currentColor;
-            transition: all 0.3s ease;
-        }
-
-        .card-title {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            letter-spacing: 3px;
-        }
-
-        .card-desc {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            font-style: italic;
-        }
-
-        .social-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.95);
-            padding: 0.8rem;
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            z-index: 100;
-        }
-
-        .social-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            padding: 0.3rem 0.8rem;
-            cursor: pointer;
-        }
-
-        .social-item:hover {
-            transform: translateY(-3px);
-            text-shadow: 0 0 10px currentColor;
-        }
-
-        .social-item:hover .social-icon {
-            animation: iconGlow 0.5s ease-in-out;
-        }
-
-        @keyframes iconGlow {
-            0%, 100% { text-shadow: 0 0 10px currentColor; }
-            50% { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
-        }
-
-        .social-icon {
-            font-size: 0.3rem;
-            line-height: 1;
-            white-space: pre;
-            font-weight: bold;
-        }
-
-        .social-item.email { color: #ff6b9d; }
-        .social-item.github { color: #4ecdc4; }
-        .social-item.linkedin { color: #95e1d3; }
-
-        @media (max-width: 768px) {
-            .main-title { font-size: 2rem; }
-            .nav-grid { 
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .ascii-art { font-size: 0.45rem; }
-            .social-bar {
-                flex-direction: column;
-                gap: 0.3rem;
-                padding: 0.5rem;
-            }
-            .social-icon { font-size: 0.25rem; }
-        }
-    </style>
-</head>
-<body>
-    <canvas id="matrix-canvas"></canvas>
-    <div class="crt-effect"></div>
-
-    <div class="container">
-        <div class="header">
-            <div class="main-title">ISHAN KUMAR ANAND</div>
-            <div class="subtitle">AI ENGINEER</div>
-        </div>
-
-        <div class="nav-grid">
-            <div class="nav-card experience" onclick="window.location.href='experience.html'">
-                <div class="ascii-art" style="color: #ff0000;">
- ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
- ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
- █████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
- ██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
- ███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
- ╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
-                </div>
-                <div class="card-desc">Professional Journey</div>
-            </div>
-
-            <div class="nav-card projects" onclick="window.location.href='projects.html'">
-                <div class="ascii-art" style="color: #00ff00;">
- ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
- ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
- ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
- ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
- ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
- ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
-                </div>
-                <div class="card-desc">Research & Innovation</div>
-            </div>
-
-            <div class="nav-card education" onclick="window.location.href='education.html'">
-                <div class="ascii-art" style="color: #ffff00;">
- ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
- ██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
- █████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
- ██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
- ███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
- ╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-                </div>
-                <div class="card-desc">Academic Background</div>
-            </div>
-
-            <div class="nav-card publication" onclick="window.location.href='publication.html'">
-                <div class="ascii-art" style="color: #ff00ff;">
- ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
- ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
- ██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
- ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
- ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
- ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-                </div>
-                <div class="card-desc">Research Papers</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="social-bar">
-        <a href="mailto:isanand@ucsd.edu" class="social-item email">
-            <div class="social-icon">
- ███████╗███╗   ███╗ █████╗ ██╗██╗     
- ██╔════╝████╗ ████║██╔══██╗██║██║     
- █████╗  ██╔████╔██║███████║██║██║     
- ██╔══╝  ██║╚██╔╝██║██╔══██║██║██║     
- ███████╗██║ ╚═╝ ██║██║  ██║██║███████╗
- ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝
-            </div>
-        </a>
-
-        <a href="https://github.com/Ishushan02" target="_blank" class="social-item github">
-            <div class="social-icon">
-  ██████╗ ██╗████████╗██╗  ██╗██╗   ██╗██████╗ 
- ██╔════╝ ██║╚══██╔══╝██║  ██║██║   ██║██╔══██╗
- ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝
- ██║   ██║██║   ██║   ██╔══██║██║   ██║██╔══██╗
- ╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝
-  ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
-            </div>
-        </a>
-
-        <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-item linkedin">
-            <div class="social-icon">
- ██╗     ██╗███╗   ██╗██╗  ██╗███████╗██████╗ ██╗███╗   ██╗
- ██║     ██║████╗  ██║██║ ██╔╝██╔════╝██╔══██╗██║████╗  ██║
- ██║     ██║██╔██╗ ██║█████╔╝ █████╗  ██║  ██║██║██╔██╗ ██║
- ██║     ██║██║╚██╗██║██╔═██╗ ██╔══╝  ██║  ██║██║██║╚██╗██║
- ███████╗██║██║ ╚████║██║  ██╗███████╗██████╔╝██║██║ ╚████║
- ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝╚═╝  ╚═══╝
-            </div>
-        </a>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const chars = ' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        const drops = [];
-
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -100;
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const char = chars[Math.floor(Math.random() * chars.length)];
-                const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, (drops[i] + 1) * fontSize);
-                gradient.addColorStop(0, '#0f0');
-                gradient.addColorStop(1, '#060');
-                ctx.fillStyle = gradient;
-                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 50);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
-</body>
-</html> -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ishan Anand - Website</title>
@@ -497,7 +124,6 @@ body {
 
 <div class="nav-grid">
 
-<!-- EXPERIENCE -->
 <div class="nav-card" onmouseenter="playHover()">
     <div class="ascii-art" style="color:#ff0000;">
 ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
@@ -516,7 +142,6 @@ body {
     </div>
 </div>
 
-<!-- PROJECTS -->
 <div class="nav-card" onmouseenter="playHover()">
     <div class="ascii-art" style="color:#00ff00;">
 ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
@@ -535,7 +160,6 @@ body {
     </div>
 </div>
 
-<!-- EDUCATION -->
 <div class="nav-card" onmouseenter="playHover()">
     <div class="ascii-art" style="color:#ffff00;">
 ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
@@ -553,7 +177,6 @@ body {
     </div>
 </div>
 
-<!-- PUBLICATION -->
 <div class="nav-card" onmouseenter="playHover()">
     <div class="ascii-art" style="color:#ff00ff;">
 ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
@@ -606,6 +229,307 @@ function arrangeRadial(menuId, radius=105){
 }
 
 /* Apply to all menus */
+arrangeRadial("expMenu");
+arrangeRadial("projMenu");
+arrangeRadial("eduMenu");
+arrangeRadial("pubMenu");
+</script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Anand - Website</title>
+
+<!-- Import a monospaced font for improved typography -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
+}
+
+/* ================= MATRIX CANVAS ================= */
+#matrix-canvas {
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;
+}
+
+/* Fade gradient to bottom for visual depth */
+#matrix-canvas::after {
+    content:'';
+    position:absolute; bottom:0; left:0; width:100%; height:40%;
+    background:linear-gradient(rgba(0,0,0,0), #000);
+    pointer-events:none;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+/* ================= CONTAINER ================= */
+.container {
+    position:relative; z-index:10; height:100vh; display:flex; flex-direction:column; padding:2rem;
+}
+.header { text-align:center; margin-bottom:2rem; text-shadow:0 0 15px rgba(0,255,0,.9); }
+.main-title {
+    font-size:3rem; margin-bottom:.5rem; font-weight:700;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    text-shadow:0 0 8px #00ff00,0 0 20px #00ff00;
+    position:relative;
+}
+.main-title span.glitch {
+    position:absolute; left:0; top:0; opacity:0.7;
+    animation:glitch 1s infinite;
+}
+@keyframes glitch {
+    0% { transform:translate(0,0); opacity:0.7; }
+    20% { transform:translate(-2px,2px); opacity:0.8; }
+    40% { transform:translate(2px,-2px); opacity:0.6; }
+    60% { transform:translate(-1px,1px); opacity:0.7; }
+    80% { transform:translate(1px,-1px); opacity:0.8; }
+    100% { transform:translate(0,0); opacity:0.7; }
+}
+.subtitle { color:#0f0; font-size:1.4rem; font-weight:600; text-shadow:0 0 6px #0f0; margin-bottom:1rem; }
+
+/* ================= NAV GRID ================= */
+.nav-grid {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; max-width:1200px; margin:0 auto; flex:1; align-items:center;
+}
+
+/* Glow outer effect for 3D depth */
+.nav-card {
+    position:relative; padding:2rem 1rem; text-align:center; height:100%;
+    cursor:pointer; transition:all .4s ease; display:flex; flex-direction:column; justify-content:center;
+    box-shadow:0 0 25px rgba(0,255,0,0.3);
+    border-radius:8px;
+}
+.nav-card:hover { transform:scale(1.1) translateY(-10px); box-shadow:0 0 50px rgba(0,255,0,0.6); }
+.nav-card:hover .ascii-art { animation:pulse .5s ease-in-out; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+
+.ascii-art {
+    font-size:.7rem; line-height:1.1; white-space:pre; font-weight:bold; margin-bottom:1rem;
+    text-shadow:0 0 20px currentColor; transition:all .3s ease;
+}
+.card-desc { font-size:1rem; opacity:.8; font-style:italic; color:#0f0; }
+
+/* ================= SOCIAL BAR ================= */
+.social-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,.95); padding:.8rem; display:flex; justify-content:center; gap:3rem; z-index:100; }
+.social-item { display:flex; align-items:center; gap:.5rem; text-decoration:none; transition:.3s ease; padding:.3rem .8rem; cursor:pointer; }
+.social-item:hover { transform:translateY(-3px); text-shadow:0 0 10px currentColor; }
+.social-icon { font-size:.3rem; line-height:1; white-space:pre; font-weight:bold; }
+
+/* ================= ORBIT SYSTEM ================= */
+.radial-menu {
+    position:absolute; width:240px; height:240px;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(.2); opacity:0;
+    pointer-events:none; transition:.4s; z-index:5;
+}
+.nav-card:hover .radial-menu { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+
+.orbit-fast{animation:orbit 8s linear infinite;}
+.orbit-medium{animation:orbit 12s linear infinite reverse;}
+.orbit-slow{animation:orbit 16s linear infinite;}
+@keyframes orbit{0%{transform:translate(-50%,-50%) rotate(0deg);} 100%{transform:translate(-50%,-50%) rotate(360deg);}}
+
+.radial-item {
+    position:absolute; top:50%; left:50%;
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(0,0,0,.9); border:1px solid #0f0;
+    box-shadow:0 0 15px #0f0; display:flex; align-items:center; justify-content:center;
+    transition:.3s;
+}
+.radial-item img { width:26px; height:26px; filter:drop-shadow(0 0 8px #0f0); }
+.radial-item:hover { box-shadow:0 0 30px #0f0; transform:scale(1.3) translate(-50%,-50%); }
+.radial-item:active{transform:scale(1.6) translate(-50%,-50%);}
+
+/* ================= PROFILE PIC ================= */
+#profile-pic {
+    position:fixed; top:1rem; left:1rem; width:80px; height:80px;
+    border-radius:0; border:2px solid #ff0000;
+    z-index:20;
+    animation:blinkGlow 1s infinite alternate;
+}
+@keyframes blinkGlow {
+    0% { box-shadow:0 0 10px #ff0000; }
+    50% { box-shadow:0 0 25px #ff0000; }
+    100% { box-shadow:0 0 10px #ff0000; }
+}
+
+/* ================= HUD / SYSTEM INFO ================= */
+#system-bar {
+    position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#0f0;
+    font-family:monospace; font-size:.8rem; padding:.4rem 1rem; z-index:15;
+    display:flex; justify-content:space-between; align-items:center;
+}
+
+/* ================= CORNER ACCENTS ================= */
+.corner {
+    position:fixed; width:20px; height:20px; border:1px solid #0f0; z-index:10;
+}
+.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
+.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
+.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
+.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+/* ================= TERMINAL SNIPPETS ================= */
+.terminal-snippet {
+    position:absolute; font-size:.6rem; color:rgba(100,100,100,0.3); font-family:monospace; white-space:pre;
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<!-- Profile Pic -->
+<img id="profile-pic" src="images/pic.png" alt="Profile Picture">
+
+<!-- System Status Bar -->
+<div id="system-bar">
+    <div>SYSTEM: ONLINE</div>
+    <div>LATENCY: 24ms</div>
+    <div>LOCATION: YOUR_CITY</div>
+    <div>SCANNING...</div>
+</div>
+
+<!-- Corner accents -->
+<div class="corner top-left"></div>
+<div class="corner top-right"></div>
+<div class="corner bottom-left"></div>
+<div class="corner bottom-right"></div>
+
+<!-- Terminal snippets -->
+<div class="terminal-snippet" style="top:15%; left:20%;">def neural_net():</div>
+<div class="terminal-snippet" style="top:60%; left:70%;">for epoch in range(100):</div>
+<div class="terminal-snippet" style="top:35%; left:50%;">accuracy = compute_accuracy()</div>
+
+<div class="container">
+<div class="header">
+<div class="main-title">ISHAN KUMAR ANAND<span class="glitch">ISHAN KUMAR ANAND</span></div>
+<div class="subtitle">AI ENGINEER</div>
+</div>
+
+<div class="nav-grid">
+<!-- EXPERIENCE -->
+<div class="nav-card">
+    <div class="ascii-art" style="color:#ff0000;">
+███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
+██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
+█████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
+██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
+╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+    </div>
+    <div class="card-desc">Professional Journey</div>
+    <div class="radial-menu orbit-fast" id="expMenu">
+        <a href="experience/syncron.html" class="radial-item"><img src="images/syncron.png"></a>
+        <a href="experience/gnani.html" class="radial-item"><img src="images/gnani2.png"></a>
+        <a href="experience/viga.html" class="radial-item"><img src="images/viga.png"></a>
+    </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="nav-card">
+    <div class="ascii-art" style="color:#00ff00;">
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+    </div>
+    <div class="card-desc">Research & Innovation</div>
+    <div class="radial-menu orbit-medium" id="projMenu">
+        <a href="projects.html" class="radial-item"><img src="img/proj1.png"></a>
+        <a href="projects.html" class="radial-item"><img src="img/proj2.png"></a>
+        <a href="projects.html" class="radial-item"><img src="img/proj3.png"></a>
+    </div>
+</div>
+
+<!-- EDUCATION -->
+<div class="nav-card">
+    <div class="ascii-art" style="color:#ffff00;">
+███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+█████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    </div>
+    <div class="card-desc">Academic Background</div>
+    <div class="radial-menu orbit-slow" id="eduMenu">
+        <a href="education.html" class="radial-item"><img src="img/edu1.png"></a>
+        <a href="education.html" class="radial-item"><img src="img/edu2.png"></a>
+    </div>
+</div>
+
+<!-- PUBLICATION -->
+<div class="nav-card">
+    <div class="ascii-art" style="color:#ff00ff;">
+██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    </div>
+    <div class="card-desc">Research Papers</div>
+    <div class="radial-menu orbit-medium" id="pubMenu">
+        <a href="publication.html" class="radial-item"><img src="img/pub1.png"></a>
+        <a href="publication.html" class="radial-item"><img src="img/pub2.png"></a>
+    </div>
+</div>
+
+</div>
+</div>
+
+<script>
+const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=16;
+const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
+setInterval(()=>{
+    ctx.fillStyle="rgba(0,0,0,.03)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.font=fs+"px monospace";
+    drops.forEach((y,i)=>{
+        ctx.fillStyle="#0f0";
+        ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y*fs);
+        drops[i]=(y*fs>canvas.height&&Math.random()>.975)?0:y+1;
+    });
+},40);
+window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+
+/* Dynamic orbit items */
+function arrangeRadial(menuId,radius=105){
+    const menu=document.getElementById(menuId);
+    const items=menu.querySelectorAll('.radial-item');
+    const count=items.length;
+    items.forEach((item,i)=>{
+        const angle=(i/count)*2*Math.PI;
+        const x=Math.cos(angle)*radius;
+        const y=Math.sin(angle)*radius;
+        item.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
+    });
+}
 arrangeRadial("expMenu");
 arrangeRadial("projMenu");
 arrangeRadial("eduMenu");
