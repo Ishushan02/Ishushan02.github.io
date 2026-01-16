@@ -380,79 +380,129 @@
 
 <style>
 /* ================= EXISTING STYLES (UNCHANGED) ================= */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:hidden;height:100vh;}
-#matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.2;}
-.crt-effect{position:fixed;inset:0;pointer-events:none;z-index:9999;background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);background-size:100% 4px;animation:crt-flicker .15s infinite;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:'Courier New',monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    height:100vh
+}
+#matrix-canvas{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    z-index:1;pointer-events:none;opacity:.2
+}
+.crt-effect{
+    position:fixed;inset:0;z-index:9999;pointer-events:none;
+    background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;animation:crt-flicker .15s infinite
+}
 @keyframes crt-flicker{0%,100%{opacity:.97}50%{opacity:1}}
-
 .container{position:relative;z-index:10;height:100vh;display:flex;flex-direction:column;padding:2rem}
 .header{text-align:center;margin-bottom:2rem}
-.main-title{font-size:3rem;margin-bottom:.5rem;animation:glow 2s infinite;background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-@keyframes glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+.main-title{
+    font-size:3rem;
+    animation:glow 2s infinite;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent
+}
+@keyframes glow{
+    0%,100%{filter:brightness(1)}
+    50%{filter:brightness(1.3)}
+}
 .subtitle{color:#00ffff}
-
-.nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:auto;flex:1}
-.nav-card{position:relative;cursor:pointer;transition:.4s;padding:2rem;text-align:center;overflow:hidden}
-.nav-card:hover{transform:scale(1.1) translateY(-10px)}
-
-.ascii-art{font-size:.7rem;white-space:pre;line-height:1.1;text-shadow:0 0 20px currentColor}
-
-/* ================= NEW ORBIT FEATURE ================= */
-
-.orbit-container{
-    position:absolute;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    pointer-events:none;
-    opacity:0;
-    transition:.4s;
+.nav-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:2rem;max-width:1200px;margin:auto;flex:1;align-items:center
 }
-
-.nav-card:hover .orbit-container{
-    opacity:1;
-}
-
-.orbit{
+.nav-card{
     position:relative;
+    cursor:pointer;
+    transition:.4s;
+    padding:2rem;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center
+}
+.nav-card:hover{transform:scale(1.1) translateY(-10px)}
+.ascii-art{
+    font-size:.7rem;white-space:pre;line-height:1.1;
+    text-shadow:0 0 20px currentColor;margin-bottom:1rem
+}
+.card-desc{opacity:.7;font-style:italic}
+
+/* ================= NEW RADIAL MENU ================= */
+
+.radial-menu{
+    position:absolute;
     width:220px;
     height:220px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(.3);
+    opacity:0;
+    pointer-events:none;
+    transition:.4s ease;
 }
 
-.orbit-item{
+.nav-card:hover .radial-menu{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+.radial-item{
     position:absolute;
-    width:42px;
-    height:42px;
+    top:50%;left:50%;
+    width:44px;height:44px;
     border-radius:50%;
-    background:#000;
-    border:1px solid currentColor;
-    overflow:hidden;
+    background:rgba(0,0,0,.8);
+    border:1px solid #00ff00;
+    box-shadow:0 0 12px #00ff00;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform-origin:center;
+    transition:.3s;
 }
 
-.orbit-item img{
-    width:100%;
-    height:100%;
+.radial-item img{
+    width:26px;height:26px;
     object-fit:contain;
-    filter:drop-shadow(0 0 6px currentColor);
+    filter:drop-shadow(0 0 5px #00ff00);
 }
 
-/* circular positions */
-.orbit-item:nth-child(1){top:0;left:50%;transform:translateX(-50%)}
-.orbit-item:nth-child(2){top:50%;right:0;transform:translateY(-50%)}
-.orbit-item:nth-child(3){bottom:0;left:50%;transform:translateX(-50%)}
-.orbit-item:nth-child(4){top:50%;left:0;transform:translateY(-50%)}
+.radial-item:hover{
+    box-shadow:0 0 25px #00ff00;
+    transform:scale(1.2) translate(-50%,-50%);
+}
+
+/* Circular positioning */
+.radial-item:nth-child(1){transform:rotate(0deg) translate(100px) rotate(0deg)}
+.radial-item:nth-child(2){transform:rotate(60deg) translate(100px) rotate(-60deg)}
+.radial-item:nth-child(3){transform:rotate(120deg) translate(100px) rotate(-120deg)}
+.radial-item:nth-child(4){transform:rotate(180deg) translate(100px) rotate(-180deg)}
+.radial-item:nth-child(5){transform:rotate(240deg) translate(100px) rotate(-240deg)}
+.radial-item:nth-child(6){transform:rotate(300deg) translate(100px) rotate(-300deg)}
 
 /* ================= SOCIAL BAR (UNCHANGED) ================= */
-.social-bar{position:fixed;bottom:0;width:100%;display:flex;justify-content:center;gap:3rem;background:#000;padding:.7rem;z-index:100}
-.social-item{transition:.3s}
-.social-item:hover{transform:translateY(-3px)}
-.social-icon{font-size:.3rem;white-space:pre}
+.social-bar{
+    position:fixed;bottom:0;left:0;right:0;
+    display:flex;justify-content:center;gap:3rem;
+    background:rgba(0,0,0,.95);padding:.8rem;z-index:100
+}
+.social-item{color:#00ff00;text-decoration:none}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+    .nav-grid{grid-template-columns:1fr}
+    .radial-menu{width:180px;height:180px}
+}
 </style>
 </head>
 
 <body>
+
 <canvas id="matrix-canvas"></canvas>
 <div class="crt-effect"></div>
 
@@ -464,85 +514,56 @@ body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:
 
 <div class="nav-grid">
 
-<!-- EXPERIENCE -->
-<div class="nav-card" style="color:#ff0000">
-<div class="ascii-art">
- ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
- ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
- █████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
- ██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
- ███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
- ╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
-</div>
-<div class="orbit-container">
-<div class="orbit">
-<div class="orbit-item"><img src="images/syncron.png"></div>
-<div class="orbit-item"><img src="images/gnani2.png"></div>
-<div class="orbit-item"><img src="images/viga.png"></div>
-</div>
+<!-- ================= EXPERIENCE ================= -->
+<div class="nav-card" onclick="location.href='experience.html'">
+<div class="ascii-art" style="color:#ff0000">EXPERIENCE</div>
+<div class="card-desc">Professional Journey</div>
+
+<div class="radial-menu">
+<a href="experience.html" class="radial-item"><img src="images/syncron.png"></a>
+<a href="experience.html" class="radial-item"><img src="images/gnani2.png"></a>
+<a href="experience.html" class="radial-item"><img src="images/viga.png"></a>
 </div>
 </div>
 
-<!-- PROJECTS -->
-<div class="nav-card" style="color:#00ff00">
-<div class="ascii-art">
- ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
- ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
- ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
- ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
- ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
- ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
-</div>
+<!-- ================= PROJECTS ================= -->
+<div class="nav-card" onclick="location.href='projects.html'">
+<div class="ascii-art" style="color:#00ff00">PROJECTS</div>
+<div class="card-desc">Research & Innovation</div>
 
-<div class="orbit-container">
-<div class="orbit">
-<div class="orbit-item"><img src="images/project1.png"></div>
-<div class="orbit-item"><img src="images/project2.png"></div>
-<div class="orbit-item"><img src="images/project3.png"></div>
-<div class="orbit-item"><img src="images/project4.png"></div>
-</div>
+<div class="radial-menu">
+<a href="projects.html" class="radial-item"><img src="img/proj1.png"></a>
+<a href="projects.html" class="radial-item"><img src="img/proj2.png"></a>
+<a href="projects.html" class="radial-item"><img src="img/proj3.png"></a>
+<a href="projects.html" class="radial-item"><img src="img/proj4.png"></a>
+<a href="projects.html" class="radial-item"><img src="img/proj5.png"></a>
+<a href="projects.html" class="radial-item"><img src="img/proj6.png"></a>
 </div>
 </div>
 
-<!-- EDUCATION -->
-<div class="nav-card" style="color:#ffff00">
-<div class="ascii-art">
- ███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
- ██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
- █████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
- ██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
- ███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
- ╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-</div>
+<!-- ================= EDUCATION ================= -->
+<div class="nav-card" onclick="location.href='education.html'">
+<div class="ascii-art" style="color:#ffff00">EDUCATION</div>
+<div class="card-desc">Academic Background</div>
 
-<div class="orbit-container">
-<div class="orbit">
-<div class="orbit-item"><img src="images/edu1.png"></div>
-<div class="orbit-item"><img src="images/edu2.png"></div>
-<div class="orbit-item"><img src="images/edu3.png"></div>
-<div class="orbit-item"><img src="images/edu4.png"></div>
-</div>
+<div class="radial-menu">
+<a href="education.html" class="radial-item"><img src="img/edu1.png"></a>
+<a href="education.html" class="radial-item"><img src="img/edu2.png"></a>
+<a href="education.html" class="radial-item"><img src="img/edu3.png"></a>
+<a href="education.html" class="radial-item"><img src="img/edu4.png"></a>
 </div>
 </div>
 
-<!-- PUBLICATION -->
-<div class="nav-card" style="color:#ff00ff">
-<div class="ascii-art">
- ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
- ██╔══██╗██║   ██║██╔══██╗██║     ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
- ██████╔╝██║   ██║██████╔╝██║     ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
- ██╔═══╝ ██║   ██║██╔══██╗██║     ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
- ██║     ╚██████╔╝██████╔╝███████╗██║╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
- ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-</div>
+<!-- ================= PUBLICATION ================= -->
+<div class="nav-card" onclick="location.href='publication.html'">
+<div class="ascii-art" style="color:#ff00ff">PUBLICATION</div>
+<div class="card-desc">Research Papers</div>
 
-<div class="orbit-container">
-<div class="orbit">
-<div class="orbit-item"><img src="images/pub1.png"></div>
-<div class="orbit-item"><img src="images/pub2.png"></div>
-<div class="orbit-item"><img src="images/pub3.png"></div>
-<div class="orbit-item"><img src="images/pub4.png"></div>
-</div>
+<div class="radial-menu">
+<a href="publication.html" class="radial-item"><img src="img/pub1.png"></a>
+<a href="publication.html" class="radial-item"><img src="img/pub2.png"></a>
+<a href="publication.html" class="radial-item"><img src="img/pub3.png"></a>
+<a href="publication.html" class="radial-item"><img src="img/pub4.png"></a>
 </div>
 </div>
 
@@ -550,10 +571,19 @@ body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:
 </div>
 
 <script>
-const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
+const canvas=document.getElementById('matrix-canvas'),ctx=canvas.getContext('2d');
 canvas.width=innerWidth;canvas.height=innerHeight;
-const chars="ISHAN0123456789";const fontSize=16;const cols=canvas.width/fontSize;const drops=Array(cols).fill(1);
-setInterval(()=>{ctx.fillStyle="rgba(0,0,0,.05)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#0f0";ctx.font=fontSize+"px monospace";drops.forEach((y,i)=>{const t=chars[Math.random()*chars.length|0];ctx.fillText(t,i*fontSize,y*fontSize);drops[i]=y*fontSize>canvas.height&&Math.random()>.975?0:y+1})},50);
+const chars="ISHAN ईशान 0123456789@#$%";
+const size=16,cols=Math.floor(canvas.width/size),drops=Array(cols).fill(0);
+setInterval(()=>{
+ctx.fillStyle="rgba(0,0,0,.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="#0f0";ctx.font=size+"px monospace";
+drops.forEach((y,i)=>{
+ctx.fillText(chars[Math.random()*chars.length|0],i*size,y*size);
+drops[i]=(y*size>canvas.height&&Math.random()>0.975)?0:y+1;
+});
+},50);
 </script>
 
 </body>
