@@ -475,9 +475,6 @@ body {
 <canvas id="matrix-canvas"></canvas>
 <div class="crt-effect"></div>
 
-<audio id="hoverSound" src="sounds/hover.mp3"></audio>
-<audio id="tickSound" src="sounds/tick.mp3"></audio>
-<audio id="clickSound" src="sounds/click.mp3"></audio>
 
 <div class="container">
 <div class="header">
@@ -500,10 +497,9 @@ body {
     <div class="card-desc">Professional Journey</div>
 
     <div class="radial-menu orbit-fast" id="expMenu">
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp4.png"></a>
+        <a href="experience/syncron.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="images/syncron.png"></a>
+        <a href="experience/gnani.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="images/gnani2.png"></a>
+        <a href="experience/viga.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="images/viga.png"></a>
     </div>
 </div>
 
@@ -582,13 +578,6 @@ setInterval(()=>{
 
 window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
 
-/* Sounds */
-const hoverSound=document.getElementById("hoverSound");
-const tickSound=document.getElementById("tickSound");
-const clickSound=document.getElementById("clickSound");
-function playHover(){hoverSound.currentTime=0; hoverSound.volume=.15; hoverSound.play();}
-function playTick(){tickSound.currentTime=0; tickSound.volume=.1; tickSound.play();}
-function playClick(){clickSound.currentTime=0; clickSound.volume=.2; clickSound.play();}
 
 /* ========== DYNAMIC CIRCLE SPACING ========== */
 function arrangeRadial(menuId, radius=105){
