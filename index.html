@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -368,5 +368,253 @@
             canvas.height = window.innerHeight;
         });
     </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Anand - Website</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family:'Courier New',monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    height:100vh;
+}
+
+#matrix-canvas{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    opacity:.2;
+    pointer-events:none;
+}
+
+.crt-effect{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    pointer-events:none;
+    background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+
+@keyframes crt-flicker{0%,100%{opacity:.97}50%{opacity:1}}
+
+.container{
+    position:relative;
+    z-index:10;
+    height:100vh;
+    padding:2rem;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{text-align:center;margin-bottom:2rem}
+.main-title{
+    font-size:3rem;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:glow 2s infinite;
+}
+@keyframes glow{
+    0%,100%{filter:brightness(1)}
+    50%{filter:brightness(1.3)}
+}
+.subtitle{color:#00ffff}
+
+.nav-grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:2rem;
+    max-width:1200px;
+    margin:auto;
+}
+
+.nav-card{
+    position:relative;
+    cursor:pointer;
+    transition:.4s ease;
+    text-align:center;
+    padding:2rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.nav-card:hover{
+    transform:scale(1.1) translateY(-10px);
+}
+
+.ascii-art{
+    font-size:.7rem;
+    white-space:pre;
+    line-height:1.1;
+    margin-bottom:1rem;
+    text-shadow:0 0 20px currentColor;
+}
+
+.card-desc{opacity:.7;font-style:italic}
+
+/* ===== ORBIT SYSTEM ===== */
+.orbit{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s ease;
+}
+.nav-card:hover .orbit{
+    opacity:1;
+}
+
+.orbit-item{
+    position:absolute;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    overflow:hidden;
+    background:#000;
+    box-shadow:0 0 15px currentColor;
+    animation:spin 8s linear infinite;
+}
+.orbit-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Circle positions */
+.orbit-item:nth-child(1){top:5%;left:50%;transform:translateX(-50%)}
+.orbit-item:nth-child(2){top:50%;right:5%;transform:translateY(-50%)}
+.orbit-item:nth-child(3){bottom:5%;left:50%;transform:translateX(-50%)}
+.orbit-item:nth-child(4){top:50%;left:5%;transform:translateY(-50%)}
+
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.experience .orbit-item{color:#ff0000}
+.projects .orbit-item{color:#00ff00}
+.education .orbit-item{color:#ffff00}
+.publication .orbit-item{color:#ff00ff}
+
+/* Social bar */
+.social-bar{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    background:#000;
+    padding:.8rem;
+    display:flex;
+    justify-content:center;
+    gap:3rem;
+    z-index:100;
+}
+.social-item{text-decoration:none;transition:.3s}
+.social-item:hover{transform:translateY(-4px)}
+.social-icon{font-size:.3rem;white-space:pre}
+
+@media(max-width:768px){
+    .nav-grid{grid-template-columns:1fr}
+    .ascii-art{font-size:.45rem}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<div class="container">
+<div class="header">
+    <div class="main-title">ISHAN KUMAR ANAND</div>
+    <div class="subtitle">AI ENGINEER</div>
+</div>
+
+<div class="nav-grid">
+
+<!-- EXPERIENCE -->
+<div class="nav-card experience" onclick="location.href='experience.html'">
+<div class="ascii-art" style="color:#ff0000;">EXPERIENCE</div>
+<div class="card-desc">Professional Journey</div>
+<div class="orbit">
+    <div class="orbit-item"><img src="images/exp1.png"></div>
+    <div class="orbit-item"><img src="images/exp2.png"></div>
+    <div class="orbit-item"><img src="images/exp3.png"></div>
+    <div class="orbit-item"><img src="images/exp4.png"></div>
+</div>
+</div>
+
+<!-- PROJECTS -->
+<div class="nav-card projects" onclick="location.href='projects.html'">
+<div class="ascii-art" style="color:#00ff00;">PROJECTS</div>
+<div class="card-desc">Research & Innovation</div>
+<div class="orbit">
+    <div class="orbit-item"><img src="images/proj1.png"></div>
+    <div class="orbit-item"><img src="images/proj2.png"></div>
+    <div class="orbit-item"><img src="images/proj3.png"></div>
+    <div class="orbit-item"><img src="images/proj4.png"></div>
+</div>
+</div>
+
+<!-- EDUCATION -->
+<div class="nav-card education" onclick="location.href='education.html'">
+<div class="ascii-art" style="color:#ffff00;">EDUCATION</div>
+<div class="card-desc">Academic Background</div>
+<div class="orbit">
+    <div class="orbit-item"><img src="images/edu1.png"></div>
+    <div class="orbit-item"><img src="images/edu2.png"></div>
+    <div class="orbit-item"><img src="images/edu3.png"></div>
+</div>
+</div>
+
+<!-- PUBLICATION -->
+<div class="nav-card publication" onclick="location.href='publication.html'">
+<div class="ascii-art" style="color:#ff00ff;">PUBLICATION</div>
+<div class="card-desc">Research Papers</div>
+<div class="orbit">
+    <div class="orbit-item"><img src="images/pub1.png"></div>
+    <div class="orbit-item"><img src="images/pub2.png"></div>
+    <div class="orbit-item"><img src="images/pub3.png"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const canvas=document.getElementById('matrix-canvas');
+const ctx=canvas.getContext('2d');
+canvas.width=innerWidth;canvas.height=innerHeight;
+const chars = ' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';
+const fontSize=16;
+const cols=Math.floor(canvas.width/fontSize);
+const drops=Array(cols).fill(1);
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.font=fontSize+"px monospace";
+for(let i=0;i<drops.length;i++){
+const char=chars[Math.floor(Math.random()*chars.length)];
+ctx.fillStyle="#0f0";
+ctx.fillText(char,i*fontSize,drops[i]*fontSize);
+if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
+drops[i]++;
+}}
+setInterval(draw,50);
+onresize=()=>{canvas.width=innerWidth;canvas.height=innerHeight};
+</script>
+
 </body>
 </html>
