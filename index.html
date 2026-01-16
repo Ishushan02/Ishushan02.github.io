@@ -489,7 +489,8 @@ body {
 <script>
 const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=10;
+// const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=10;
+const chars=' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';fs=16;
 const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
 setInterval(()=>{
     ctx.fillStyle="rgba(0,0,0,.05)";
