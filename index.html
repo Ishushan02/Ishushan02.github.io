@@ -370,8 +370,6 @@
     </script>
 </body>
 </html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -380,45 +378,142 @@
 <title>Ishan Anand</title>
 
 <style>
-/* ================= BASIC STYLES ================= */
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:hidden;height:100vh}
+body{
+    font-family:'Courier New',monospace;
+    background:#000;color:#00ff00;
+    overflow:hidden;height:100vh
+}
+
 #matrix-canvas{position:fixed;inset:0;z-index:1;opacity:.2}
-.crt-effect{position:fixed;inset:0;z-index:9999;background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);background-size:100% 4px;animation:crt .15s infinite}
+.crt-effect{
+    position:fixed;inset:0;z-index:9999;
+    pointer-events:none;
+    background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt .15s infinite
+}
 @keyframes crt{50%{opacity:.9}}
-.container{position:relative;z-index:5;height:100vh;padding:2rem;display:flex;flex-direction:column}
+
+.container{
+    position:relative;z-index:5;
+    height:100vh;padding:2rem;
+    display:flex;flex-direction:column
+}
 .header{text-align:center}
-.main-title{font-size:3rem;background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:glow 2s ease-in-out infinite}
-@keyframes glow{0%,100%{text-shadow:0 0 10px rgba(255,0,255,.5),0 0 20px rgba(0,255,255,.5);filter:brightness(1)}50%{text-shadow:0 0 20px rgba(255,0,255,.8),0 0 40px rgba(0,255,255,.8);filter:brightness(1.2)}}
-.subtitle{color:#00ffff;font-size:1.2rem}
-.nav-grid{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:auto;align-items:center}
-.nav-card{position:relative;padding:2rem 1rem;text-align:center;cursor:pointer;transition:.4s}
+.main-title{
+    font-size:3rem;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent
+}
+.subtitle{color:#00ffff}
+
+.nav-grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:2rem;
+    max-width:1200px;
+    margin:auto;
+    align-items:center
+}
+
+.nav-card{
+    position:relative;
+    padding:2rem 1rem;
+    text-align:center;
+    cursor:pointer;
+    transition:.4s;
+}
 .nav-card:hover{transform:scale(1.1) translateY(-10px)}
-.ascii-art{font-size:.7rem;line-height:1.1;white-space:pre;text-shadow:0 0 20px currentColor;z-index:3}
+
+.ascii-art{
+    font-size:.7rem;
+    line-height:1.1;
+    white-space:pre;
+    text-shadow:0 0 20px currentColor;
+    z-index:3;
+}
 .card-desc{opacity:.7}
 
-/* ================= RADIAL ORBITS ================= */
-.radial-menu{position:absolute;width:240px;height:240px;top:50%;left:50%;transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;transition:.4s;filter:drop-shadow(0 0 25px #0f0)}
-.nav-card:hover .radial-menu{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+/* ================= ORBIT SYSTEM ================= */
+
+.radial-menu{
+    position:absolute;
+    width:240px;height:240px;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(.2);
+    opacity:0;
+    pointer-events:none;
+    transition:.4s;
+    filter:drop-shadow(0 0 25px #00ff00);
+}
+
+.nav-card:hover .radial-menu{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+    pointer-events:auto;
+}
+
+/* Orbit variants */
 .orbit-fast{animation:orbit 8s linear infinite}
-.orbit-medium{animation:orbit 12s linear infinite reverse}
-.orbit-slow{animation:orbit 16s linear infinite}
-@keyframes orbit{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
-.radial-item{position:absolute;top:50%;left:50%;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid #0f0;box-shadow:0 0 15px #0f0;display:flex;align-items:center;justify-content:center;transition:.3s}
-.radial-item img{width:26px;height:26px;filter:drop-shadow(0 0 8px #0f0);animation:counter 10s linear infinite}
-@keyframes counter{from{transform:rotate(360deg)}to{transform:rotate(0)}}
-.radial-item:hover{box-shadow:0 0 30px #0f0;transform:scale(1.3) translate(-50%,-50%)}
-.radial-item:active{transform:scale(1.6)}
-.radial-item:nth-child(1){transform:rotate(0deg) translate(105px)}
+.orbit-slow{animation:orbit 14s linear infinite reverse}
+.orbit-medium{animation:orbit 11s ease-in-out infinite}
+
+@keyframes orbit{
+    from{transform:translate(-50%,-50%) rotate(0)}
+    to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+
+.radial-item{
+    position:absolute;
+    top:50%;left:50%;
+    width:46px;height:46px;
+    border-radius:50%;
+    background:rgba(0,0,0,.9);
+    border:1px solid #00ff00;
+    box-shadow:0 0 15px #00ff00;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.3s;
+}
+.radial-item img{
+    width:26px;height:26px;
+    filter:drop-shadow(0 0 8px #00ff00);
+    animation:counter 10s linear infinite
+}
+@keyframes counter{
+    from{transform:rotate(360deg)}
+    to{transform:rotate(0)}
+}
+
+.radial-item:hover{
+    box-shadow:0 0 30px #00ff00;
+    transform:scale(1.3) translate(-50%,-50%);
+}
+
+/* Positioning */
+.radial-item:nth-child(1){transform:rotate(0) translate(105px)}
 .radial-item:nth-child(2){transform:rotate(60deg) translate(105px)}
 .radial-item:nth-child(3){transform:rotate(120deg) translate(105px)}
 .radial-item:nth-child(4){transform:rotate(180deg) translate(105px)}
 .radial-item:nth-child(5){transform:rotate(240deg) translate(105px)}
 .radial-item:nth-child(6){transform:rotate(300deg) translate(105px)}
 
-@media(max-width:768px){.nav-grid{grid-template-columns:1fr}.ascii-art{font-size:.45rem}}
+/* Click zoom */
+.radial-item:active{transform:scale(1.6)}
+
+/* ================= AUDIO ================= */
+audio{display:none}
+
+@media(max-width:768px){
+    .nav-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
 
 <canvas id="matrix-canvas"></canvas>
@@ -482,66 +577,30 @@ body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:
 </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 <script>
-// ================= MATRIX 3D WEBGL NEON =================
-const canvas=document.getElementById('matrix-canvas');
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
-const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
-camera.position.z=50;
-
-const particles=[];
-const geometry=new THREE.BufferGeometry();
-const count=5000;
-const positions=new Float32Array(count*3);
-for(let i=0;i<count*3;i++){positions[i]=(Math.random()-0.5)*200}
-geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
-const material=new THREE.PointsMaterial({color:0x00ff00,size:0.5});
-const pointCloud=new THREE.Points(geometry,material);
-scene.add(pointCloud);
-
-function animateMatrix(){
-    requestAnimationFrame(animateMatrix);
-    pointCloud.rotation.y+=0.002;
-    renderer.render(scene,camera);
-}
-animateMatrix();
-window.addEventListener('resize',()=>{
-    renderer.setSize(window.innerWidth,window.innerHeight);
-    camera.aspect=window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
+const c=document.getElementById("matrix-canvas"),x=c.getContext("2d");
+c.width=innerWidth;c.height=innerHeight;
+const chars="ISHAN ईशान 0123456789",fs=16;
+const cols=Math.floor(c.width/fs),drops=Array(cols).fill(0);
+setInterval(()=>{
+x.fillStyle="rgba(0,0,0,.05)";
+x.fillRect(0,0,c.width,c.height);
+x.fillStyle="#0f0";x.font=fs+"px monospace";
+drops.forEach((y,i)=>{
+x.fillText(chars[Math.random()*chars.length|0],i*fs,y*fs);
+drops[i]=(y*fs>c.height&&Math.random()>.98)?0:y+1;
 });
+},50);
 
-// ================= AUDIO HANDLERS =================
-const h=document.getElementById("hoverSound");
-const t=document.getElementById("tickSound");
-const cS=document.getElementById("clickSound");
+/* Sound handlers */
+const h=document.getElementById("hoverSound"),
+t=document.getElementById("tickSound"),
+cS=document.getElementById("clickSound");
 
 function playHover(){h.volume=.15;h.currentTime=0;h.play()}
 function playTick(){t.volume=.1;t.currentTime=0;t.play()}
 function playClick(){cS.volume=.2;cS.currentTime=0;cS.play()}
-
-// ================= MOUSE GRAVITY ORBITS =================
-document.addEventListener('mousemove',e=>{
-    const x=e.clientX/window.innerWidth-0.5;
-    const y=e.clientY/window.innerHeight-0.5;
-    document.querySelectorAll('.radial-menu').forEach(menu=>{
-        menu.style.transform=`translate(-50%,-50%) rotate(${x*30}deg) scale(1)`;
-    });
-});
-
-// ================= PORTAL PAGE TRANSITION =================
-document.querySelectorAll('.radial-item').forEach(item=>{
-    item.addEventListener('click',e=>{
-        e.preventDefault();
-        const href=item.getAttribute('href');
-        document.body.style.transition='all 1s';
-        document.body.style.filter='blur(10px)';
-        setTimeout(()=>{window.location.href=href},600);
-    });
-});
 </script>
+
 </body>
 </html>
