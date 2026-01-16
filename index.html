@@ -470,21 +470,16 @@ body {
 
 /* ================= PROFILE PIC ================= */
 #profile-pic {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #ff0000;
-    z-index: 20;
-    animation: blinkGlow 2s infinite alternate;
+    position:fixed; top:1rem; left:1rem; width:80px; height:80px; /* square */
+    border-radius:0; /* square */
+    border:2px solid #ff0000; /* red glow */
+    z-index:20;
+    animation:blinkGlow 1s infinite alternate;
 }
-
 @keyframes blinkGlow {
-    0% { box-shadow:0 0 10px #00ff00; }
-    50% { box-shadow:0 0 25px #00ff00; }
-    100% { box-shadow:0 0 10px #00ff00; }
+    0% { box-shadow:0 0 10px #ff0000; }
+    50% { box-shadow:0 0 25px #ff0000; }
+    100% { box-shadow:0 0 10px #ff0000; }
 }
 </style>
 </head>
@@ -583,17 +578,18 @@ body {
 <script>
 const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=16;
+const chars = ' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';fs=16;
+        
 const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
 setInterval(()=>{
-    ctx.fillStyle="rgba(0,0,0,.03)"; ctx.fillRect(0,0,canvas.width,canvas.height); // denser
+    ctx.fillStyle="rgba(0,0,0,.03)"; ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.font=fs+"px monospace";
     drops.forEach((y,i)=>{
         ctx.fillStyle="#0f0";
         ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y*fs);
         drops[i]=(y*fs>canvas.height&&Math.random()>.975)?0:y+1;
     });
-},40); // faster/more characters
+},40);
 
 window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
 
@@ -609,8 +605,6 @@ function arrangeRadial(menuId, radius=105){
         item.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
     });
 }
-
-/* Apply to all menus */
 arrangeRadial("expMenu");
 arrangeRadial("projMenu");
 arrangeRadial("eduMenu");
