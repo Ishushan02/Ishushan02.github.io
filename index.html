@@ -378,110 +378,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ishan Anand</title>
+
 <style>
+/* ================= BASIC STYLES ================= */
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'Courier New',monospace;
-  background:#000;color:#00ff00;
-  overflow:hidden;height:100vh;
-}
-
-#matrix-canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
-.crt-effect{
-  position:fixed;inset:0;z-index:9999;
-  pointer-events:none;
-  background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
-  background-size:100% 4px;
-  animation:crt-flicker .15s infinite
-}
-@keyframes crt-flicker{50%{opacity:.97}}
-
-.container{
-  position:relative;z-index:5;
-  height:100vh;padding:2rem;
-  display:flex;flex-direction:column
-}
+body{font-family:'Courier New',monospace;background:#000;color:#00ff00;overflow:hidden;height:100vh}
+#matrix-canvas{position:fixed;inset:0;z-index:1;opacity:.2}
+.crt-effect{position:fixed;inset:0;z-index:9999;background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);background-size:100% 4px;animation:crt .15s infinite}
+@keyframes crt{50%{opacity:.9}}
+.container{position:relative;z-index:5;height:100vh;padding:2rem;display:flex;flex-direction:column}
 .header{text-align:center}
-.main-title{
-  font-size:3rem;
-  background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.subtitle{color:#00ffff}
-
-.nav-grid{
-  flex:1;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:2rem;
-  max-width:1200px;
-  margin:auto;
-  align-items:center
-}
-
-.nav-card{
-  position:relative;
-  padding:2rem 1rem;
-  text-align:center;
-  cursor:pointer;
-  transition:.4s;
-}
+.main-title{font-size:3rem;background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:glow 2s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 10px rgba(255,0,255,.5),0 0 20px rgba(0,255,255,.5);filter:brightness(1)}50%{text-shadow:0 0 20px rgba(255,0,255,.8),0 0 40px rgba(0,255,255,.8);filter:brightness(1.2)}}
+.subtitle{color:#00ffff;font-size:1.2rem}
+.nav-grid{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:auto;align-items:center}
+.nav-card{position:relative;padding:2rem 1rem;text-align:center;cursor:pointer;transition:.4s}
 .nav-card:hover{transform:scale(1.1) translateY(-10px)}
-
-.ascii-art{
-  font-size:.7rem;
-  line-height:1.1;
-  white-space:pre;
-  text-shadow:0 0 20px currentColor;
-  z-index:3;
-}
+.ascii-art{font-size:.7rem;line-height:1.1;white-space:pre;text-shadow:0 0 20px currentColor;z-index:3}
 .card-desc{opacity:.7}
 
 /* ================= RADIAL ORBITS ================= */
-.radial-menu{
-  position:absolute;width:240px;height:240px;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(.2);
-  opacity:0;
-  pointer-events:none;
-  transition:.4s;
-  filter:drop-shadow(0 0 25px #0f0);
-}
-.nav-card:hover .radial-menu{
-  opacity:1;
-  transform:translate(-50%,-50%) scale(1);
-  pointer-events:auto;
-}
-
+.radial-menu{position:absolute;width:240px;height:240px;top:50%;left:50%;transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;transition:.4s;filter:drop-shadow(0 0 25px #0f0)}
+.nav-card:hover .radial-menu{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
 .orbit-fast{animation:orbit 8s linear infinite}
-.orbit-slow{animation:orbit 14s linear infinite reverse}
-.orbit-medium{animation:orbit 11s ease-in-out infinite}
-
-@keyframes orbit{
-  from{transform:translate(-50%,-50%) rotate(0)}
-  to{transform:translate(-50%,-50%) rotate(360deg)}
-}
-
-.radial-item{
-  position:absolute;
-  top:50%;left:50%;
-  width:46px;height:46px;
-  border-radius:50%;
-  background:rgba(0,0,0,.9);
-  border:1px solid #00ff00;
-  box-shadow:0 0 15px #00ff00;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.3s;
-}
-.radial-item img{
-  width:26px;height:26px;
-  filter:drop-shadow(0 0 8px #0f0);
-}
-.radial-item:hover{transform:scale(1.3) translate(-50%,-50%);box-shadow:0 0 30px #0f0}
-
+.orbit-medium{animation:orbit 12s linear infinite reverse}
+.orbit-slow{animation:orbit 16s linear infinite}
+@keyframes orbit{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.radial-item{position:absolute;top:50%;left:50%;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.9);border:1px solid #0f0;box-shadow:0 0 15px #0f0;display:flex;align-items:center;justify-content:center;transition:.3s}
+.radial-item img{width:26px;height:26px;filter:drop-shadow(0 0 8px #0f0);animation:counter 10s linear infinite}
+@keyframes counter{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+.radial-item:hover{box-shadow:0 0 30px #0f0;transform:scale(1.3) translate(-50%,-50%)}
+.radial-item:active{transform:scale(1.6)}
 .radial-item:nth-child(1){transform:rotate(0deg) translate(105px)}
 .radial-item:nth-child(2){transform:rotate(60deg) translate(105px)}
 .radial-item:nth-child(3){transform:rotate(120deg) translate(105px)}
@@ -489,118 +416,132 @@ body{
 .radial-item:nth-child(5){transform:rotate(240deg) translate(105px)}
 .radial-item:nth-child(6){transform:rotate(300deg) translate(105px)}
 
-/* ================= AUDIO ================= */
-audio{display:none}
-
-/* ================= RESPONSIVE ================= */
-@media(max-width:768px){
-  .nav-grid{grid-template-columns:1fr}
-  .ascii-art{font-size:0.45rem}
-  .radial-menu{width:180px;height:180px}
-}
+@media(max-width:768px){.nav-grid{grid-template-columns:1fr}.ascii-art{font-size:.45rem}}
 </style>
 </head>
-
 <body>
+
 <canvas id="matrix-canvas"></canvas>
 <div class="crt-effect"></div>
 
-<!-- SOUNDS -->
-<audio id="hoverSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/hover.mp3"></audio>
-<audio id="tickSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/tick.mp3"></audio>
-<audio id="clickSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/click.mp3"></audio>
+<audio id="hoverSound" src="sounds/hover.mp3"></audio>
+<audio id="tickSound" src="sounds/tick.mp3"></audio>
+<audio id="clickSound" src="sounds/click.mp3"></audio>
 
 <div class="container">
-  <div class="header">
-    <div class="main-title">ISHAN KUMAR ANAND</div>
-    <div class="subtitle">AI ENGINEER</div>
-  </div>
-
-  <div class="nav-grid">
-    <!-- EXPERIENCE -->
-    <div class="nav-card" onmouseenter="playHover()">
-      <div class="ascii-art" style="color:#ff0000;">EXPERIENCE</div>
-      <div class="card-desc">Professional Journey</div>
-      <div class="radial-menu orbit-fast">
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
-        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
-      </div>
-    </div>
-
-    <!-- PROJECTS -->
-    <div class="nav-card" onmouseenter="playHover()">
-      <div class="ascii-art" style="color:#00ff00;">PROJECTS</div>
-      <div class="card-desc">Research & Innovation</div>
-      <div class="radial-menu orbit-medium">
-        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
-        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
-      </div>
-    </div>
-
-    <!-- EDUCATION -->
-    <div class="nav-card" onmouseenter="playHover()">
-      <div class="ascii-art" style="color:#ffff00;">EDUCATION</div>
-      <div class="card-desc">Academic Background</div>
-      <div class="radial-menu orbit-slow">
-        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
-        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
-      </div>
-    </div>
-
-    <!-- PUBLICATION -->
-    <div class="nav-card" onmouseenter="playHover()">
-      <div class="ascii-art" style="color:#ff00ff;">PUBLICATION</div>
-      <div class="card-desc">Research Papers</div>
-      <div class="radial-menu orbit-medium">
-        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
-        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
-      </div>
-    </div>
-  </div>
+<div class="header">
+<div class="main-title">ISHAN KUMAR ANAND</div>
+<div class="subtitle">AI ENGINEER</div>
 </div>
 
+<div class="nav-grid">
+
+<!-- EXPERIENCE -->
+<div class="nav-card" onmouseenter="playHover()">
+<div class="ascii-art" style="color:#ff0000;">EXPERIENCE</div>
+<div class="card-desc">Professional Journey</div>
+<div class="radial-menu orbit-fast">
+<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
+<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
+<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
+<a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp4.png"></a>
+</div>
+</div>
+
+<!-- PROJECTS -->
+<div class="nav-card" onmouseenter="playHover()">
+<div class="ascii-art" style="color:#00ff00;">PROJECTS</div>
+<div class="card-desc">Research & Innovation</div>
+<div class="radial-menu orbit-medium">
+<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
+<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
+<a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj3.png"></a>
+</div>
+</div>
+
+<!-- EDUCATION -->
+<div class="nav-card" onmouseenter="playHover()">
+<div class="ascii-art" style="color:#ffff00;">EDUCATION</div>
+<div class="card-desc">Academic Background</div>
+<div class="radial-menu orbit-slow">
+<a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
+<a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
+</div>
+</div>
+
+<!-- PUBLICATION -->
+<div class="nav-card" onmouseenter="playHover()">
+<div class="ascii-art" style="color:#ff00ff;">PUBLICATION</div>
+<div class="card-desc">Research Papers</div>
+<div class="radial-menu orbit-medium">
+<a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
+<a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
+</div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 <script>
-// ================= MATRIX RAIN WebGL PARTICLES =================
-const canvas=document.getElementById("matrix-canvas");
-const gl=canvas.getContext("webgl")||canvas.getContext("experimental-webgl");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+// ================= MATRIX 3D WEBGL NEON =================
+const canvas=document.getElementById('matrix-canvas');
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+camera.position.z=50;
 
 const particles=[];
-for(let i=0;i<500;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    z:Math.random()*500,
-    speed:Math.random()*1+0.2
-  });
+const geometry=new THREE.BufferGeometry();
+const count=5000;
+const positions=new Float32Array(count*3);
+for(let i=0;i<count*3;i++){positions[i]=(Math.random()-0.5)*200}
+geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
+const material=new THREE.PointsMaterial({color:0x00ff00,size:0.5});
+const pointCloud=new THREE.Points(geometry,material);
+scene.add(pointCloud);
+
+function animateMatrix(){
+    requestAnimationFrame(animateMatrix);
+    pointCloud.rotation.y+=0.002;
+    renderer.render(scene,camera);
 }
+animateMatrix();
+window.addEventListener('resize',()=>{
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+});
 
-function drawMatrix(){
-  const ctx2d=canvas.getContext("2d");
-  ctx2d.fillStyle="rgba(0,0,0,0.05)";
-  ctx2d.fillRect(0,0,canvas.width,canvas.height);
-  ctx2d.fillStyle="#0f0";
-  ctx2d.font="14px monospace";
-  particles.forEach(p=>{
-    const size=(500-p.z)/100+2;
-    ctx2d.fillText("I",p.x,p.y);
-    p.y+=p.speed*5;
-    if(p.y>canvas.height){p.y=0;p.x=Math.random()*canvas.width;}
-  });
-  requestAnimationFrame(drawMatrix);
-}
-drawMatrix();
+// ================= AUDIO HANDLERS =================
+const h=document.getElementById("hoverSound");
+const t=document.getElementById("tickSound");
+const cS=document.getElementById("clickSound");
 
-// ================= AUDIO =================
-const hover=document.getElementById("hoverSound");
-const tick=document.getElementById("tickSound");
-const click=document.getElementById("clickSound");
+function playHover(){h.volume=.15;h.currentTime=0;h.play()}
+function playTick(){t.volume=.1;t.currentTime=0;t.play()}
+function playClick(){cS.volume=.2;cS.currentTime=0;cS.play()}
 
-function playHover(){hover.volume=.15;hover.currentTime=0;hover.play();}
-function playTick(){tick.volume=.1;tick.currentTime=0;tick.play();}
-function playClick(){click.volume=.2;click.currentTime=0;click.play();}
+// ================= MOUSE GRAVITY ORBITS =================
+document.addEventListener('mousemove',e=>{
+    const x=e.clientX/window.innerWidth-0.5;
+    const y=e.clientY/window.innerHeight-0.5;
+    document.querySelectorAll('.radial-menu').forEach(menu=>{
+        menu.style.transform=`translate(-50%,-50%) rotate(${x*30}deg) scale(1)`;
+    });
+});
+
+// ================= PORTAL PAGE TRANSITION =================
+document.querySelectorAll('.radial-item').forEach(item=>{
+    item.addEventListener('click',e=>{
+        e.preventDefault();
+        const href=item.getAttribute('href');
+        document.body.style.transition='all 1s';
+        document.body.style.filter='blur(10px)';
+        setTimeout(()=>{window.location.href=href},600);
+    });
+});
 </script>
 </body>
 </html>
