@@ -377,269 +377,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ishan Anand - Website</title>
-
+<title>Ishan Anand</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-    font-family:'Courier New',monospace;
-    background:#000;
-    color:#00ff00;
-    overflow:hidden;
-    height:100vh
+  font-family:'Courier New',monospace;
+  background:#000;color:#00ff00;
+  overflow:hidden;height:100vh;
 }
 
-#matrix-canvas{
-    position:fixed;inset:0;
-    z-index:1;pointer-events:none;opacity:.2
-}
-
+#matrix-canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
 .crt-effect{
-    position:fixed;inset:0;
-    pointer-events:none;z-index:9999;
-    background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
-    background-size:100% 4px;
-    animation:crt-flicker .15s infinite
+  position:fixed;inset:0;z-index:9999;
+  pointer-events:none;
+  background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.25) 50%);
+  background-size:100% 4px;
+  animation:crt-flicker .15s infinite
 }
-@keyframes crt-flicker{0%,100%{opacity:.97}50%{opacity:1}}
+@keyframes crt-flicker{50%{opacity:.97}}
 
 .container{
-    position:relative;z-index:10;
-    height:100vh;display:flex;
-    flex-direction:column;padding:2rem
+  position:relative;z-index:5;
+  height:100vh;padding:2rem;
+  display:flex;flex-direction:column
 }
-
-.header{text-align:center;margin-bottom:2rem}
+.header{text-align:center}
 .main-title{
-    font-size:3rem;
-    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:glow 2s infinite
+  font-size:3rem;
+  background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
-@keyframes glow{50%{filter:brightness(1.3)}}
 .subtitle{color:#00ffff}
 
 .nav-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:2rem;
-    max-width:1200px;
-    margin:auto;
-    flex:1;
-    align-items:center
+  flex:1;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:2rem;
+  max-width:1200px;
+  margin:auto;
+  align-items:center
 }
 
 .nav-card{
-    position:relative;
-    cursor:pointer;
-    transition:.4s ease;
-    padding:2rem 1rem;
-    text-align:center;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+  position:relative;
+  padding:2rem 1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:.4s;
 }
-
-.nav-card:hover{
-    transform:scale(1.1) translateY(-10px)
-}
+.nav-card:hover{transform:scale(1.1) translateY(-10px)}
 
 .ascii-art{
-    font-size:.7rem;
-    line-height:1.1;
-    white-space:pre;
-    font-weight:bold;
-    margin-bottom:1rem;
-    text-shadow:0 0 20px currentColor;
-    z-index:2;
+  font-size:.7rem;
+  line-height:1.1;
+  white-space:pre;
+  text-shadow:0 0 20px currentColor;
+  z-index:3;
 }
+.card-desc{opacity:.7}
 
-.card-desc{
-    opacity:.7;
-    font-style:italic;
-    z-index:2;
-}
-
-/* ================= ORBITING RADIAL MENU ================= */
-
+/* ================= RADIAL ORBITS ================= */
 .radial-menu{
-    position:absolute;
-    width:220px;height:220px;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%) scale(.3);
-    opacity:0;
-    pointer-events:none;
-    transition:.4s ease;
-    z-index:3;
+  position:absolute;width:240px;height:240px;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.2);
+  opacity:0;
+  pointer-events:none;
+  transition:.4s;
+  filter:drop-shadow(0 0 25px #0f0);
+}
+.nav-card:hover .radial-menu{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+  pointer-events:auto;
 }
 
-.nav-card:hover .radial-menu{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
-    pointer-events:auto;
-    animation:orbit 12s linear infinite;
-}
+.orbit-fast{animation:orbit 8s linear infinite}
+.orbit-slow{animation:orbit 14s linear infinite reverse}
+.orbit-medium{animation:orbit 11s ease-in-out infinite}
 
 @keyframes orbit{
-    from{transform:translate(-50%,-50%) rotate(0deg)}
-    to{transform:translate(-50%,-50%) rotate(360deg)}
+  from{transform:translate(-50%,-50%) rotate(0)}
+  to{transform:translate(-50%,-50%) rotate(360deg)}
 }
 
 .radial-item{
-    position:absolute;
-    top:50%;left:50%;
-    width:44px;height:44px;
-    border-radius:50%;
-    background:rgba(0,0,0,.85);
-    border:1px solid #00ff00;
-    box-shadow:0 0 12px #00ff00;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  position:absolute;
+  top:50%;left:50%;
+  width:46px;height:46px;
+  border-radius:50%;
+  background:rgba(0,0,0,.9);
+  border:1px solid #00ff00;
+  box-shadow:0 0 15px #00ff00;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.3s;
 }
-
 .radial-item img{
-    width:26px;height:26px;
-    object-fit:contain;
-    filter:drop-shadow(0 0 5px #00ff00);
-    animation:counterOrbit 12s linear infinite;
+  width:26px;height:26px;
+  filter:drop-shadow(0 0 8px #0f0);
 }
+.radial-item:hover{transform:scale(1.3) translate(-50%,-50%);box-shadow:0 0 30px #0f0}
 
-@keyframes counterOrbit{
-    from{transform:rotate(360deg)}
-    to{transform:rotate(0deg)}
-}
+.radial-item:nth-child(1){transform:rotate(0deg) translate(105px)}
+.radial-item:nth-child(2){transform:rotate(60deg) translate(105px)}
+.radial-item:nth-child(3){transform:rotate(120deg) translate(105px)}
+.radial-item:nth-child(4){transform:rotate(180deg) translate(105px)}
+.radial-item:nth-child(5){transform:rotate(240deg) translate(105px)}
+.radial-item:nth-child(6){transform:rotate(300deg) translate(105px)}
 
-.radial-item:hover{
-    box-shadow:0 0 25px #00ff00;
-    transform:scale(1.2) translate(-50%,-50%);
-}
+/* ================= AUDIO ================= */
+audio{display:none}
 
-/* Circular positions */
-.radial-item:nth-child(1){transform:rotate(0deg) translate(95px)}
-.radial-item:nth-child(2){transform:rotate(60deg) translate(95px)}
-.radial-item:nth-child(3){transform:rotate(120deg) translate(95px)}
-.radial-item:nth-child(4){transform:rotate(180deg) translate(95px)}
-.radial-item:nth-child(5){transform:rotate(240deg) translate(95px)}
-.radial-item:nth-child(6){transform:rotate(300deg) translate(95px)}
-
+/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
-    .nav-grid{grid-template-columns:1fr}
-    .radial-menu{width:180px;height:180px}
+  .nav-grid{grid-template-columns:1fr}
+  .ascii-art{font-size:0.45rem}
+  .radial-menu{width:180px;height:180px}
 }
 </style>
 </head>
 
 <body>
-
 <canvas id="matrix-canvas"></canvas>
 <div class="crt-effect"></div>
 
+<!-- SOUNDS -->
+<audio id="hoverSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/hover.mp3"></audio>
+<audio id="tickSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/tick.mp3"></audio>
+<audio id="clickSound" src="https://cdn.jsdelivr.net/gh/ishanmp3s/portfolio-sounds/click.mp3"></audio>
+
 <div class="container">
-<div class="header">
-<div class="main-title">ISHAN KUMAR ANAND</div>
-<div class="subtitle">AI ENGINEER</div>
-</div>
+  <div class="header">
+    <div class="main-title">ISHAN KUMAR ANAND</div>
+    <div class="subtitle">AI ENGINEER</div>
+  </div>
 
-<div class="nav-grid">
+  <div class="nav-grid">
+    <!-- EXPERIENCE -->
+    <div class="nav-card" onmouseenter="playHover()">
+      <div class="ascii-art" style="color:#ff0000;">EXPERIENCE</div>
+      <div class="card-desc">Professional Journey</div>
+      <div class="radial-menu orbit-fast">
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp1.png"></a>
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp2.png"></a>
+        <a href="experience.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/exp3.png"></a>
+      </div>
+    </div>
 
-<!-- EXPERIENCE -->
-<div class="nav-card" onclick="location.href='experience.html'">
-<div class="ascii-art" style="color:#ff0000;">
- ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗
- ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║
- █████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║
- ██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║
- ███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║
- ╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
-</div>
-<div class="card-desc">Professional Journey</div>
+    <!-- PROJECTS -->
+    <div class="nav-card" onmouseenter="playHover()">
+      <div class="ascii-art" style="color:#00ff00;">PROJECTS</div>
+      <div class="card-desc">Research & Innovation</div>
+      <div class="radial-menu orbit-medium">
+        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj1.png"></a>
+        <a href="projects.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/proj2.png"></a>
+      </div>
+    </div>
 
-<div class="radial-menu">
-<a href="experience.html" class="radial-item"><img src="img/exp1.png"></a>
-<a href="experience.html" class="radial-item"><img src="img/exp2.png"></a>
-<a href="experience.html" class="radial-item"><img src="img/exp3.png"></a>
-<a href="experience.html" class="radial-item"><img src="img/exp4.png"></a>
-</div>
-</div>
+    <!-- EDUCATION -->
+    <div class="nav-card" onmouseenter="playHover()">
+      <div class="ascii-art" style="color:#ffff00;">EDUCATION</div>
+      <div class="card-desc">Academic Background</div>
+      <div class="radial-menu orbit-slow">
+        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu1.png"></a>
+        <a href="education.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/edu2.png"></a>
+      </div>
+    </div>
 
-<!-- PROJECTS -->
-<div class="nav-card" onclick="location.href='projects.html'">
-<div class="ascii-art" style="color:#00ff00;">
- ██████╗ ██████╗  ██████╗      ██╗███████╗
- ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝
- ██████╔╝██████╔╝██║   ██║     ██║█████╗
- ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝
- ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗
- ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝
-</div>
-<div class="card-desc">Research & Innovation</div>
-
-<div class="radial-menu">
-<a href="projects.html" class="radial-item"><img src="img/proj1.png"></a>
-<a href="projects.html" class="radial-item"><img src="img/proj2.png"></a>
-<a href="projects.html" class="radial-item"><img src="img/proj3.png"></a>
-<a href="projects.html" class="radial-item"><img src="img/proj4.png"></a>
-</div>
-</div>
-
-<!-- EDUCATION -->
-<div class="nav-card" onclick="location.href='education.html'">
-<div class="ascii-art" style="color:#ffff00;">
- ███████╗██████╗ ██╗   ██╗ ██████╗
- ██╔════╝██╔══██╗██║   ██║██╔════╝
- █████╗  ██║  ██║██║   ██║██║
- ██╔══╝  ██║  ██║██║   ██║██║
- ███████╗██████╔╝╚██████╔╝╚██████╗
- ╚══════╝╚═════╝  ╚═════╝  ╚═════╝
-</div>
-<div class="card-desc">Academic Background</div>
-
-<div class="radial-menu">
-<a href="education.html" class="radial-item"><img src="img/edu1.png"></a>
-<a href="education.html" class="radial-item"><img src="img/edu2.png"></a>
-<a href="education.html" class="radial-item"><img src="img/edu3.png"></a>
-</div>
-</div>
-
-<!-- PUBLICATION -->
-<div class="nav-card" onclick="location.href='publication.html'">
-<div class="ascii-art" style="color:#ff00ff;">
- ██████╗ ██╗   ██╗██████╗ ██╗
- ██╔══██╗██║   ██║██╔══██╗██║
- ██████╔╝██║   ██║██████╔╝██║
- ██╔═══╝ ██║   ██║██╔══██╗██║
- ██║     ╚██████╔╝██████╔╝███████╗
- ╚═╝      ╚═════╝ ╚═════╝ ╚══════╝
-</div>
-<div class="card-desc">Research Papers</div>
-
-<div class="radial-menu">
-<a href="publication.html" class="radial-item"><img src="img/pub1.png"></a>
-<a href="publication.html" class="radial-item"><img src="img/pub2.png"></a>
-<a href="publication.html" class="radial-item"><img src="img/pub3.png"></a>
-</div>
-</div>
-
-</div>
+    <!-- PUBLICATION -->
+    <div class="nav-card" onmouseenter="playHover()">
+      <div class="ascii-art" style="color:#ff00ff;">PUBLICATION</div>
+      <div class="card-desc">Research Papers</div>
+      <div class="radial-menu orbit-medium">
+        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub1.png"></a>
+        <a href="publication.html" class="radial-item" onmouseenter="playTick()" onclick="playClick()"><img src="img/pub2.png"></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-const c=document.getElementById("matrix-canvas"),x=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-const ch="ISHAN ईशान 0123456789";
-const fs=16,cols=Math.floor(c.width/fs),d=Array(cols).fill(0);
-setInterval(()=>{
-x.fillStyle="rgba(0,0,0,.05)";
-x.fillRect(0,0,c.width,c.height);
-x.fillStyle="#0f0";x.font=fs+"px monospace";
-d.forEach((y,i)=>{
-x.fillText(ch[Math.random()*ch.length|0],i*fs,y*fs);
-d[i]=(y*fs>c.height&&Math.random()>.975)?0:y+1;
-});
-},50);
-</script>
+// ================= MATRIX RAIN WebGL PARTICLES =================
+const canvas=document.getElementById("matrix-canvas");
+const gl=canvas.getContext("webgl")||canvas.getContext("experimental-webgl");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
+const particles=[];
+for(let i=0;i<500;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    z:Math.random()*500,
+    speed:Math.random()*1+0.2
+  });
+}
+
+function drawMatrix(){
+  const ctx2d=canvas.getContext("2d");
+  ctx2d.fillStyle="rgba(0,0,0,0.05)";
+  ctx2d.fillRect(0,0,canvas.width,canvas.height);
+  ctx2d.fillStyle="#0f0";
+  ctx2d.font="14px monospace";
+  particles.forEach(p=>{
+    const size=(500-p.z)/100+2;
+    ctx2d.fillText("I",p.x,p.y);
+    p.y+=p.speed*5;
+    if(p.y>canvas.height){p.y=0;p.x=Math.random()*canvas.width;}
+  });
+  requestAnimationFrame(drawMatrix);
+}
+drawMatrix();
+
+// ================= AUDIO =================
+const hover=document.getElementById("hoverSound");
+const tick=document.getElementById("tickSound");
+const click=document.getElementById("clickSound");
+
+function playHover(){hover.volume=.15;hover.currentTime=0;hover.play();}
+function playTick(){tick.volume=.1;tick.currentTime=0;tick.play();}
+function playClick(){click.volume=.2;click.currentTime=0;click.play();}
+</script>
 </body>
 </html>
