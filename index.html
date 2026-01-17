@@ -1476,7 +1476,7 @@ document.addEventListener('mousemove', (e) => {
 </body>
 </html> -->
 
-
+<!-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2002,6 +2002,643 @@ function animate() {
 animate();
 
 // Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Anand - 3D Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
+}
+
+#globe-canvas {
+    position:fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    z-index:1;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+/* HUD Elements */
+#system-bar {
+    position:fixed; top:0; left:0; right:0; background:rgba(0,0,0,0.8); color:#0f0;
+    font-family:monospace; font-size:.8rem; padding:.8rem 1rem; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    border-bottom:1px solid #0f0;
+}
+
+.header-info {
+    position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    text-align:center; z-index:50; pointer-events:none;
+}
+
+.main-title {
+    font-size:2.5rem; font-weight:700;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    text-shadow:0 0 20px rgba(0,255,0,0.8);
+    margin-bottom:.5rem;
+    animation:glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { filter:brightness(1); }
+    50% { filter:brightness(1.3); }
+}
+
+.subtitle { 
+    color:#0f0; 
+    font-size:1.2rem; 
+    font-weight:600; 
+    text-shadow:0 0 10px #0f0;
+    letter-spacing:0.3rem;
+}
+
+/* Control Panel */
+.control-panel {
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.9);
+    border:1px solid #0f0;
+    border-radius:8px;
+    padding:1rem 2rem;
+    z-index:100;
+    display:flex;
+    gap:2rem;
+    box-shadow:0 0 20px rgba(0,255,0,0.3);
+}
+
+.control-btn {
+    background:transparent;
+    border:1px solid #0f0;
+    color:#0f0;
+    padding:0.5rem 1.5rem;
+    font-family:'JetBrains Mono', monospace;
+    cursor:pointer;
+    transition:all 0.3s;
+    font-size:0.9rem;
+    border-radius:4px;
+}
+
+.control-btn:hover {
+    background:#0f0;
+    color:#000;
+    box-shadow:0 0 15px #0f0;
+    transform:translateY(-2px);
+}
+
+.control-btn.active {
+    background:#0f0;
+    color:#000;
+}
+
+/* Info Panel */
+.info-panel {
+    position:fixed;
+    top:80px;
+    right:20px;
+    width:350px;
+    background:rgba(0,0,0,0.95);
+    border:1px solid #0f0;
+    border-radius:8px;
+    padding:1.5rem;
+    z-index:100;
+    max-height:70vh;
+    overflow-y:auto;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.3s;
+    box-shadow:0 0 30px rgba(0,255,0,0.4);
+}
+
+.info-panel.active {
+    opacity:1;
+    pointer-events:auto;
+}
+
+.info-panel h2 {
+    color:#00ffff;
+    margin-bottom:1rem;
+    font-size:1.3rem;
+    border-bottom:1px solid #0f0;
+    padding-bottom:0.5rem;
+}
+
+.info-panel h3 {
+    color:#ffff00;
+    margin-top:1rem;
+    margin-bottom:0.5rem;
+    font-size:1rem;
+}
+
+.info-panel p, .info-panel li {
+    color:#0f0;
+    font-size:0.85rem;
+    line-height:1.6;
+    margin-bottom:0.5rem;
+}
+
+.info-panel ul {
+    list-style:none;
+    padding-left:1rem;
+}
+
+.info-panel li:before {
+    content:"▹ ";
+    color:#00ffff;
+}
+
+/* Scrollbar styling */
+.info-panel::-webkit-scrollbar {
+    width:8px;
+}
+
+.info-panel::-webkit-scrollbar-track {
+    background:rgba(0,255,0,0.1);
+}
+
+.info-panel::-webkit-scrollbar-thumb {
+    background:#0f0;
+    border-radius:4px;
+}
+
+.corner {
+    position:fixed; width:20px; height:20px; border:1px solid #0f0; z-index:50;
+}
+.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
+.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
+.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
+.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+.side-dock {
+    position:fixed; top:50%; right:1rem; transform:translateY(-50%); 
+    display:flex; flex-direction:column; gap:1rem; z-index:100;
+}
+.side-dock a {
+    display:flex; align-items:center; gap:.5rem; font-size:.75rem; color:#0f0; 
+    text-decoration:none; padding:.5rem .8rem; border:1px solid #0f0; 
+    border-radius:4px; transition:.3s; background:rgba(0,0,0,0.8);
+}
+.side-dock a:hover { 
+    background:rgba(0,255,0,.2); 
+    box-shadow:0 0 15px #0f0; 
+    transform:translateX(-5px);
+}
+</style>
+</head>
+<body>
+
+<canvas id="globe-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<div id="system-bar">
+    <div>SYSTEM: ONLINE</div>
+    <div>MODE: 3D VISUALIZATION</div>
+    <div>FPS: <span id="fps">60</span></div>
+    <div>OBJECTS: <span id="obj-count">0</span></div>
+</div>
+
+<div class="corner top-left"></div>
+<div class="corner top-right"></div>
+<div class="corner bottom-left"></div>
+<div class="corner bottom-right"></div>
+
+<div class="header-info">
+    <div class="main-title">ISHAN KUMAR ANAND</div>
+    <div class="subtitle">AI ENGINEER</div>
+</div>
+
+<div class="side-dock">
+    <a href="https://github.com/Ishushan02" target="_blank">[GH] GitHub</a>
+    <a href="https://linkedin.com/in/ishushan" target="_blank">[IN] LinkedIn</a>
+    <a href="mailto:isanand@ucsd.edu">[ML] Email</a>
+</div>
+
+<div class="control-panel">
+    <button class="control-btn" data-section="experience">EXPERIENCE</button>
+    <button class="control-btn" data-section="projects">PROJECTS</button>
+    <button class="control-btn" data-section="education">EDUCATION</button>
+    <button class="control-btn" data-section="publication">PUBLICATION</button>
+</div>
+
+<div class="info-panel" id="info-experience">
+    <h2>EXPERIENCE</h2>
+    
+    <h3>Syncron</h3>
+    <p><strong>Role:</strong> AI Engineer</p>
+    <p>Working on cutting-edge AI solutions for supply chain optimization and predictive analytics.</p>
+    <ul>
+        <li>Developed ML models for demand forecasting</li>
+        <li>Implemented NLP solutions for automated documentation</li>
+        <li>Optimized cloud infrastructure for ML workflows</li>
+    </ul>
+    
+    <h3>Gnani.ai</h3>
+    <p><strong>Role:</strong> Machine Learning Engineer</p>
+    <p>Specialized in conversational AI and voice recognition systems.</p>
+    <ul>
+        <li>Built ASR systems with 95%+ accuracy</li>
+        <li>Deployed real-time voice processing pipelines</li>
+        <li>Contributed to multilingual NLP models</li>
+    </ul>
+    
+    <h3>Viga Entertainment</h3>
+    <p><strong>Role:</strong> AI Research Intern</p>
+    <p>Explored applications of AI in entertainment and gaming.</p>
+    <ul>
+        <li>Developed recommendation algorithms</li>
+        <li>Implemented computer vision for content analysis</li>
+        <li>Optimized deep learning model performance</li>
+    </ul>
+</div>
+
+<div class="info-panel" id="info-projects">
+    <h2>PROJECTS</h2>
+    
+    <h3>Neural Architecture Search</h3>
+    <p>Automated ML model design using evolutionary algorithms and reinforcement learning.</p>
+    
+    <h3>Real-time Object Detection</h3>
+    <p>Edge-optimized computer vision system for autonomous systems with sub-50ms latency.</p>
+    
+    <h3>Conversational AI Platform</h3>
+    <p>End-to-end dialogue system with context awareness and multi-turn capabilities.</p>
+    
+    <h3>Predictive Analytics Engine</h3>
+    <p>Time-series forecasting platform for business intelligence applications.</p>
+</div>
+
+<div class="info-panel" id="info-education">
+    <h2>EDUCATION</h2>
+    
+    <h3>University of California, San Diego</h3>
+    <p><strong>Degree:</strong> Master's in Computer Science</p>
+    <p><strong>Specialization:</strong> Machine Learning & AI</p>
+    <p><strong>Focus Areas:</strong></p>
+    <ul>
+        <li>Deep Learning & Neural Networks</li>
+        <li>Natural Language Processing</li>
+        <li>Computer Vision</li>
+        <li>Reinforcement Learning</li>
+    </ul>
+    
+    <h3>Bachelor's Degree</h3>
+    <p><strong>Field:</strong> Computer Science & Engineering</p>
+    <p>Strong foundation in algorithms, data structures, and software engineering principles.</p>
+</div>
+
+<div class="info-panel" id="info-publication">
+    <h2>PUBLICATIONS</h2>
+    
+    <h3>Deep Learning for Time Series Forecasting</h3>
+    <p><strong>Conference:</strong> International Conference on Machine Learning</p>
+    <p>Novel architecture combining LSTM and attention mechanisms for improved accuracy in financial predictions.</p>
+    
+    <h3>Efficient Neural Architecture Search</h3>
+    <p><strong>Journal:</strong> IEEE Transactions on Neural Networks</p>
+    <p>Proposed gradient-based NAS method reducing search time by 10x while maintaining performance.</p>
+    
+    <h3>Multilingual NLP Models</h3>
+    <p><strong>Workshop:</strong> ACL Workshop on Low-Resource Languages</p>
+    <p>Transfer learning approach for building NLP models with limited training data.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ================= THREE.JS SCENE SETUP =================
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.z = 8;
+
+// ================= CENTRAL GLOBE =================
+const globeGeometry = new THREE.SphereGeometry(1.2, 64, 64);
+const globeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.4
+});
+const centralGlobe = new THREE.Mesh(globeGeometry, globeMaterial);
+scene.add(centralGlobe);
+
+// Add dots to central globe
+const centralDots = [];
+for (let i = 0; i < 150; i++) {
+    const dotGeometry = new THREE.SphereGeometry(0.015, 8, 8);
+    const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
+    
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 1.2;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    centralGlobe.add(dot);
+    centralDots.push(dot);
+}
+
+// ================= SATELLITE SECTIONS =================
+const sections = {
+    experience: { color: 0x00ffff, orbitRadius: 4, items: ['Syncron', 'Gnani', 'Viga'] },
+    projects: { color: 0xff0000, orbitRadius: 4.5, items: ['NAS', 'ObjectDet', 'ConvAI'] },
+    education: { color: 0xffff00, orbitRadius: 5, items: ['UCSD', 'Bachelor'] },
+    publication: { color: 0xff00ff, orbitRadius: 5.5, items: ['TimeSeries', 'NAS', 'NLP'] }
+};
+
+const satellites = {};
+const orbitGroups = {};
+
+Object.keys(sections).forEach((sectionName, idx) => {
+    const section = sections[sectionName];
+    
+    // Create orbit group
+    const orbitGroup = new THREE.Group();
+    scene.add(orbitGroup);
+    orbitGroups[sectionName] = orbitGroup;
+    
+    // Main satellite sphere
+    const satGeometry = new THREE.SphereGeometry(0.4, 32, 32);
+    const satMaterial = new THREE.MeshBasicMaterial({
+        color: section.color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.6
+    });
+    const satellite = new THREE.Mesh(satGeometry, satMaterial);
+    
+    // Position on orbit
+    const angle = (idx / Object.keys(sections).length) * Math.PI * 2;
+    satellite.position.x = Math.cos(angle) * section.orbitRadius;
+    satellite.position.z = Math.sin(angle) * section.orbitRadius;
+    
+    orbitGroup.add(satellite);
+    
+    // Add glow sphere
+    const glowGeometry = new THREE.SphereGeometry(0.45, 16, 16);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: section.color,
+        transparent: true,
+        opacity: 0.2
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    satellite.add(glow);
+    
+    // Create orbit ring
+    const orbitPoints = [];
+    for (let i = 0; i <= 64; i++) {
+        const ringAngle = (i / 64) * Math.PI * 2;
+        orbitPoints.push(new THREE.Vector3(
+            Math.cos(ringAngle) * section.orbitRadius,
+            0,
+            Math.sin(ringAngle) * section.orbitRadius
+        ));
+    }
+    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+    const orbitMaterial = new THREE.LineBasicMaterial({
+        color: section.color,
+        transparent: true,
+        opacity: 0.3
+    });
+    const orbitRing = new THREE.Line(orbitGeometry, orbitMaterial);
+    orbitGroup.add(orbitRing);
+    
+    // Add sub-items orbiting the satellite
+    section.items.forEach((itemName, itemIdx) => {
+        const itemGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+        const itemMaterial = new THREE.MeshBasicMaterial({
+            color: section.color,
+            transparent: true,
+            opacity: 0.8
+        });
+        const item = new THREE.Mesh(itemGeometry, itemMaterial);
+        
+        const itemAngle = (itemIdx / section.items.length) * Math.PI * 2;
+        const itemRadius = 0.8;
+        item.position.x = Math.cos(itemAngle) * itemRadius;
+        item.position.y = Math.sin(itemAngle) * itemRadius;
+        
+        satellite.add(item);
+        
+        // Add connecting line
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            item.position
+        ]);
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: section.color,
+            transparent: true,
+            opacity: 0.4
+        });
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        satellite.add(line);
+    });
+    
+    satellites[sectionName] = { satellite, orbitGroup };
+});
+
+// ================= PARTICLE FIELD =================
+const particlesGeometry = new THREE.BufferGeometry();
+const particleCount = 2000;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 20;
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    color: 0x00ff00,
+    size: 0.03,
+    transparent: true,
+    opacity: 0.3
+});
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+// ================= ANIMATION =================
+let time = 0;
+let lastTime = performance.now();
+let frameCount = 0;
+
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    // FPS counter
+    frameCount++;
+    const currentTime = performance.now();
+    if (currentTime >= lastTime + 1000) {
+        document.getElementById('fps').textContent = frameCount;
+        frameCount = 0;
+        lastTime = currentTime;
+    }
+    
+    // Rotate central globe
+    centralGlobe.rotation.y += 0.003;
+    centralGlobe.rotation.x = Math.sin(time * 0.2) * 0.1;
+    
+    // Pulse central dots
+    centralDots.forEach((dot, i) => {
+        const scale = 1 + Math.sin(time * 2 + i * 0.1) * 0.3;
+        dot.scale.set(scale, scale, scale);
+    });
+    
+    // Rotate satellites in different axes
+    Object.keys(satellites).forEach((key, idx) => {
+        const sat = satellites[key];
+        
+        // Rotate orbit group around different axes
+        if (key === 'experience') {
+            sat.orbitGroup.rotation.y += 0.005;
+        } else if (key === 'projects') {
+            sat.orbitGroup.rotation.x += 0.004;
+            sat.orbitGroup.rotation.y += 0.003;
+        } else if (key === 'education') {
+            sat.orbitGroup.rotation.z += 0.006;
+            sat.orbitGroup.rotation.y += 0.002;
+        } else if (key === 'publication') {
+            sat.orbitGroup.rotation.x += 0.005;
+            sat.orbitGroup.rotation.z += 0.004;
+        }
+        
+        // Rotate satellite itself
+        sat.satellite.rotation.y += 0.02;
+        sat.satellite.rotation.x += 0.01;
+        
+        // Pulse glow
+        const glow = sat.satellite.children[0];
+        if (glow) {
+            const scale = 1 + Math.sin(time * 3 + idx) * 0.1;
+            glow.scale.set(scale, scale, scale);
+        }
+    });
+    
+    // Rotate particles
+    particles.rotation.y += 0.0003;
+    particles.rotation.x += 0.0002;
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Update object count
+document.getElementById('obj-count').textContent = scene.children.length;
+
+// ================= INTERACTION =================
+let isMouseDown = false;
+let previousMousePosition = { x: 0, y: 0 };
+
+canvas.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+});
+
+canvas.addEventListener('mouseup', () => {
+    isMouseDown = false;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (isMouseDown) {
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        
+        scene.rotation.y += deltaX * 0.005;
+        scene.rotation.x += deltaY * 0.005;
+        
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+});
+
+// Zoom with mouse wheel
+canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    camera.position.z += e.deltaY * 0.01;
+    camera.position.z = Math.max(5, Math.min(15, camera.position.z));
+});
+
+// ================= CONTROL PANEL =================
+const controlBtns = document.querySelectorAll('.control-btn');
+const infoPanels = document.querySelectorAll('.info-panel');
+
+controlBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const section = btn.dataset.section;
+        
+        // Toggle active state
+        const isActive = btn.classList.contains('active');
+        controlBtns.forEach(b => b.classList.remove('active'));
+        infoPanels.forEach(p => p.classList.remove('active'));
+        
+        if (!isActive) {
+            btn.classList.add('active');
+            document.getElementById(`info-${section}`).classList.add('active');
+            
+            // Highlight corresponding satellite
+            Object.keys(satellites).forEach(key => {
+                const sat = satellites[key].satellite;
+                if (key === section) {
+                    sat.material.opacity = 1;
+                    sat.scale.set(1.3, 1.3, 1.3);
+                } else {
+                    sat.material.opacity = 0.3;
+                    sat.scale.set(0.8, 0.8, 0.8);
+                }
+            });
+        } else {
+            // Reset all satellites
+            Object.keys(satellites).forEach(key => {
+                const sat = satellites[key].satellite;
+                sat.material.opacity = 0.6;
+                sat.scale.set(1, 1, 1);
+            });
+        }
+    });
+});
+
+// ================= WINDOW RESIZE =================
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
