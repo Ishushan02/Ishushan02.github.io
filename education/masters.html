@@ -339,10 +339,10 @@ body {
         <div class="courses-stream">
             <span class="course-tag">Deep Learning</span>
             <span class="course-tag">Natural Language Processing</span>
-            <span class="course-tag">[Additional Course]</span>
-            <span class="course-tag">[Additional Course]</span>
-            <span class="course-tag">[Additional Course]</span>
-            <span class="course-tag">[Additional Course]</span>
+            <span class="course-tag">Recommenender Systems</span>
+            <span class="course-tag">Machine Learning for Music</span>
+            <span class="course-tag">Computer Vision</span>
+            <span class="course-tag">Robotics</span>
         </div>
         <!-- <div class="placeholder-text">Additional courses to be added</div> -->
     </div>
@@ -357,10 +357,10 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.z = 5;
+camera.position.z = 4;
 
 // Create simple rotating globe in background
-const geometry = new THREE.SphereGeometry(2, 64, 64);
+const geometry = new THREE.SphereGeometry(3, 64, 64);
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     wireframe: true,
