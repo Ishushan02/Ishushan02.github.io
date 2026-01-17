@@ -145,6 +145,9 @@ body {
     padding:2rem;
     box-shadow:0 0 50px #00ff00;
     min-width:400px;
+    max-width:90vw;
+    max-height:80vh;
+    overflow-y:auto;
 }
 
 .submenu.active {
@@ -204,6 +207,124 @@ body {
 .close-submenu:hover {
     text-shadow:0 0 10px #00ff00;
     transform:scale(1.2);
+}
+
+/* ================= RESPONSIVE STYLES ================= */
+@media (max-width: 768px) {
+    .header {
+        top:1rem;
+        left:1rem;
+        right:1rem;
+    }
+    
+    .main-title {
+        font-size:1.5rem;
+        letter-spacing:1px;
+    }
+    
+    .subtitle {
+        font-size:0.8rem;
+        letter-spacing:2px;
+    }
+    
+    .social-sidebar {
+        right:1rem;
+        gap:1rem;
+    }
+    
+    .social-link {
+        width:40px;
+        height:40px;
+        padding:0.6rem;
+    }
+    
+    .social-link svg {
+        width:20px;
+        height:20px;
+    }
+    
+    .social-link::before {
+        display:none;
+    }
+    
+    .corner {
+        width:20px;
+        height:20px;
+    }
+    
+    .submenu {
+        min-width:auto;
+        width:90vw;
+        padding:1.5rem;
+    }
+    
+    .submenu-title {
+        font-size:1.5rem;
+        margin-bottom:1.5rem;
+    }
+    
+    .submenu-item {
+        padding:0.8rem 1.5rem;
+        font-size:0.95rem;
+    }
+    
+    .close-submenu {
+        font-size:1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        top:0.5rem;
+        left:0.5rem;
+        right:0.5rem;
+    }
+    
+    .main-title {
+        font-size:1.2rem;
+        letter-spacing:0.5px;
+    }
+    
+    .subtitle {
+        font-size:0.7rem;
+        letter-spacing:1px;
+    }
+    
+    .social-sidebar {
+        right:0.5rem;
+        gap:0.8rem;
+    }
+    
+    .social-link {
+        width:35px;
+        height:35px;
+        padding:0.5rem;
+    }
+    
+    .social-link svg {
+        width:18px;
+        height:18px;
+    }
+    
+    .corner {
+        width:15px;
+        height:15px;
+        border-width:1px;
+    }
+    
+    .submenu {
+        padding:1rem;
+    }
+    
+    .submenu-title {
+        font-size:1.2rem;
+        margin-bottom:1rem;
+    }
+    
+    .submenu-item {
+        padding:0.6rem 1rem;
+        font-size:0.85rem;
+    }
 }
 </style>
 </head>
@@ -413,9 +534,10 @@ Object.keys(menuData).forEach((key, index) => {
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-canvas.addEventListener('mousemove', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+// Handle both mouse and touch events
+function updateMousePosition(clientX, clientY) {
+    mouse.x = (clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
     
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(orbitingObjects, true);
@@ -438,13 +560,67 @@ canvas.addEventListener('mousemove', (event) => {
         rotationPaused = false;
         canvas.style.cursor = 'default';
     }
+}
+
+canvas.addEventListener('mousemove', (event) => {
+    updateMousePosition(event.clientX, event.clientY);
 });
 
-canvas.addEventListener('click', () => {
-    if (hoveredObject && hoveredObject.userData.key) {
-        showSubmenu(hoveredObject.userData.data);
+let touchStartX = 0;
+let touchStartY = 0;
+
+canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 0) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        updateMousePosition(touchStartX, touchStartY);
     }
+}, { passive: true });
+
+canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length > 0) {
+        updateMousePosition(event.touches[0].clientX, event.touches[0].clientY);
+    }
+}, { passive: true });
+
+function handleInteraction(clientX, clientY) {
+    mouse.x = (clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(orbitingObjects, true);
+    
+    if (intersects.length > 0) {
+        const object = intersects[0].object.parent;
+        if (object.userData.key && object.userData.data) {
+            showSubmenu(object.userData.data);
+            // Reset scale
+            object.scale.set(1, 1, 1);
+            hoveredObject = null;
+            rotationPaused = false;
+        }
+    }
+}
+
+canvas.addEventListener('click', (event) => {
+    handleInteraction(event.clientX, event.clientY);
 });
+
+canvas.addEventListener('touchend', (event) => {
+    if (event.changedTouches.length > 0) {
+        const touch = event.changedTouches[0];
+        const touchEndX = touch.clientX;
+        const touchEndY = touch.clientY;
+        
+        // Check if it's a tap (not a swipe)
+        const deltaX = Math.abs(touchEndX - touchStartX);
+        const deltaY = Math.abs(touchEndY - touchStartY);
+        
+        if (deltaX < 10 && deltaY < 10) {
+            handleInteraction(touchEndX, touchEndY);
+        }
+    }
+}, { passive: true });
 
 function showSubmenu(data) {
     const submenu = document.getElementById('submenu');
@@ -525,11 +701,10 @@ document.addEventListener('keydown', (e) => {
 </script>
 
 </body>
-</html>
- -->
+</html> -->
 
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -922,6 +1097,28 @@ const material = new THREE.MeshBasicMaterial({
 });
 const globe = new THREE.Mesh(geometry, material);
 scene.add(globe);
+
+// Add background stars
+const starGeometry = new THREE.BufferGeometry();
+const starVertices = [];
+const starCount = 2000;
+
+for (let i = 0; i < starCount; i++) {
+    const x = (Math.random() - 0.5) * 100;
+    const y = (Math.random() - 0.5) * 100;
+    const z = (Math.random() - 0.5) * 100;
+    starVertices.push(x, y, z);
+}
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const starMaterial = new THREE.PointsMaterial({ 
+    color: 0x00ff00, 
+    size: 0.1,
+    transparent: true,
+    opacity: 0.8
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
 
 // Add glowing dots on globe
 const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
