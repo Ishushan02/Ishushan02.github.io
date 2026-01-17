@@ -1248,69 +1248,29 @@ function updateTime() {
 updateTime();
 setInterval(updateTime, 1000);
 
-// GitHub commits in last 30 days (with Personal Access Token)
+// GitHub commits from stats.json (updated by GitHub Actions)
 async function fetchGitHubCommits() {
     try {
-        const username = 'Ishushan02';
+        // Fetch stats from your own repo's stats.json file
+        // This file is updated daily by GitHub Actions
+        const response = await fetch('stats.json');
         
-        // ============================================
-        // PASTE YOUR GITHUB TOKEN HERE:
-        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
-        // ============================================
-        
-        if (GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('github-commits').textContent = `${data.commits} commits`;
+        } else {
+            // Fallback if stats.json doesn't exist yet
             document.getElementById('github-commits').textContent = '36 repos';
-            return;
         }
-        
-        const headers = {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github.v3+json'
-        };
-        
-        // Get all repositories
-        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`, { headers });
-        
-        if (!reposResponse.ok) {
-            throw new Error('Failed to fetch repos');
-        }
-        
-        const repos = await reposResponse.json();
-        
-        // Calculate date 30 days ago
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        const since = thirtyDaysAgo.toISOString();
-        
-        let totalCommits = 0;
-        
-        // Fetch commits from each repo in the last 30 days
-        for (const repo of repos) {
-            try {
-                const commitsResponse = await fetch(
-                    `https://api.github.com/repos/${username}/${repo.name}/commits?since=${since}&author=${username}`,
-                    { headers }
-                );
-                
-                if (commitsResponse.ok) {
-                    const commits = await commitsResponse.json();
-                    totalCommits += commits.length;
-                }
-            } catch (error) {
-                console.error(`Error fetching commits for ${repo.name}:`, error);
-            }
-        }
-        
-        document.getElementById('github-commits').textContent = `${totalCommits} commits`;
     } catch (error) {
-        console.error('Error fetching GitHub data:', error);
+        console.error('Error fetching GitHub stats:', error);
         document.getElementById('github-commits').textContent = '36 repos';
     }
 }
 
 fetchGitHubCommits();
-// Refresh every 10 minutes
-setInterval(fetchGitHubCommits, 600000);
+// Refresh every 5 minutes to get latest stats
+setInterval(fetchGitHubCommits, 300000);
 
 const canvas = document.getElementById('globe-canvas');
 const scene = new THREE.Scene();
