@@ -910,9 +910,10 @@ function createShootingStar() {
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(6); // 2 vertices for a line
     
-    const startX = (Math.random() - 0.5) * 20;
-    const startY = 10 + Math.random() * 5;
-    const startZ = (Math.random() - 0.5) * 20;
+    // Start from left top corner
+    const startX = -25 - Math.random() * 5;
+    const startY = 15 + Math.random() * 10;
+    const startZ = -10 + Math.random() * 20;
     
     positions[0] = startX;
     positions[1] = startY;
@@ -926,33 +927,38 @@ function createShootingStar() {
     const material = new THREE.LineBasicMaterial({
         color: 0x00ff00,
         transparent: true,
-        opacity: 1
+        opacity: 1,
+        linewidth: 2
     });
     
     const line = new THREE.Line(geometry, material);
     
+    // Move from left to right, slightly downward
     const velocity = {
-        x: (Math.random() - 0.5) * 0.1,
-        y: -0.15 - Math.random() * 0.1,
-        z: (Math.random() - 0.5) * 0.1
+        x: 0.3 + Math.random() * 0.2,
+        y: -0.1 - Math.random() * 0.1,
+        z: (Math.random() - 0.5) * 0.05
     };
     
     shootingStars.push({
         mesh: line,
         velocity: velocity,
         life: 1.0,
-        tailLength: 0.5 + Math.random() * 1
+        tailLength: 1.5 + Math.random() * 1.5
     });
     
     scene.add(line);
 }
 
-// Create shooting stars periodically
+// Create shooting stars more frequently
 setInterval(() => {
-    if (Math.random() > 0.7) {
-        createShootingStar();
-    }
-}, 2000);
+    createShootingStar();
+}, 3000);
+
+// Create initial shooting stars
+for (let i = 0; i < 2; i++) {
+    setTimeout(() => createShootingStar(), i * 1000);
+}
 
 // Add glowing dots on globe
 const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
@@ -1205,9 +1211,11 @@ function animate() {
         star.life -= 0.01;
         star.mesh.material.opacity = star.life;
         
-        // Remove if faded or out of view
-        if (star.life <= 0 || positions[4] < -15) {
+        // Remove if faded or out of view (right side or bottom)
+        if (star.life <= 0 || positions[3] > 30 || positions[4] < -15) {
             scene.remove(star.mesh);
+            star.mesh.geometry.dispose();
+            star.mesh.material.dispose();
             shootingStars.splice(i, 1);
         }
     }
