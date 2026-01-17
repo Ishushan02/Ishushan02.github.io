@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education - University</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
+}
+
+#globe-canvas {
+    position:fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    z-index:1;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+.back-button {
+    position:fixed;
+    top:2rem;
+    left:2rem;
+    z-index:10;
+    color:#00ff00;
+    text-decoration:none;
+    font-size:1rem;
+    padding:0.8rem 1.5rem;
+    border:2px solid #00ff00;
+    border-radius:5px;
+    transition:all 0.3s;
+    text-shadow:0 0 10px #00ff00;
+    background:rgba(0,0,0,0.7);
+    cursor:pointer;
+}
+
+.back-button:hover {
+    background:rgba(0,255,0,0.2);
+    box-shadow:0 0 20px #00ff00;
+    transform:scale(1.05);
+}
+
+.content-container {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:5;
+    text-align:center;
+    max-width:90%;
+    pointer-events:none;
+}
+
+.university-logo {
+    width:150px;
+    height:150px;
+    margin:0 auto 2rem;
+    border:3px solid #00ff00;
+    border-radius:50%;
+    padding:1rem;
+    background:rgba(0,0,0,0.8);
+    box-shadow:0 0 30px #00ff00;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform:translateY(0px); }
+    50% { transform:translateY(-20px); }
+}
+
+.university-logo img {
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    filter:drop-shadow(0 0 10px #00ff00);
+}
+
+.degree-title {
+    font-size:2rem;
+    font-weight:700;
+    color:#00ff00;
+    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
+    margin-bottom:1rem;
+    letter-spacing:2px;
+    animation:glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00; }
+    50% { text-shadow:0 0 30px #00ff00, 0 0 60px #00ff00, 0 0 80px #00ff00; }
+}
+
+.degree-subtitle {
+    font-size:1.2rem;
+    color:#00ff00;
+    opacity:0.9;
+    margin-bottom:0.5rem;
+    letter-spacing:1px;
+}
+
+.info-grid {
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:2rem;
+    margin:2rem auto;
+    max-width:600px;
+}
+
+.info-item {
+    text-align:center;
+}
+
+.info-label {
+    font-size:0.8rem;
+    color:#00ff00;
+    opacity:0.7;
+    letter-spacing:2px;
+    margin-bottom:0.5rem;
+}
+
+.info-value {
+    font-size:1.3rem;
+    font-weight:700;
+    color:#00ff00;
+    text-shadow:0 0 15px #00ff00;
+}
+
+.coursework-section {
+    margin-top:3rem;
+}
+
+.coursework-title {
+    font-size:1.5rem;
+    color:#00ff00;
+    text-shadow:0 0 15px #00ff00;
+    margin-bottom:1.5rem;
+    letter-spacing:2px;
+}
+
+.courses-orbit {
+    position:relative;
+    height:200px;
+    margin:2rem auto;
+}
+
+.course-item {
+    position:absolute;
+    font-size:0.9rem;
+    color:#00ff00;
+    padding:0.5rem 1rem;
+    border:1px solid #00ff00;
+    border-radius:20px;
+    background:rgba(0,0,0,0.8);
+    box-shadow:0 0 15px #00ff00;
+    white-space:nowrap;
+    animation:orbit 20s linear infinite;
+}
+
+.course-item:nth-child(1) { animation-delay:0s; }
+.course-item:nth-child(2) { animation-delay:-5s; }
+.course-item:nth-child(3) { animation-delay:-10s; }
+.course-item:nth-child(4) { animation-delay:-15s; }
+
+@keyframes orbit {
+    from { 
+        transform:rotate(0deg) translateX(250px) rotate(0deg);
+        opacity:0.5;
+    }
+    50% {
+        opacity:1;
+    }
+    to { 
+        transform:rotate(360deg) translateX(250px) rotate(-360deg);
+        opacity:0.5;
+    }
+}
+
+.additional-courses {
+    font-size:0.85rem;
+    color:#00ff00;
+    opacity:0.7;
+    margin-top:1rem;
+    font-style:italic;
+}
+
+.corner {
+    position:fixed;
+    width:30px;
+    height:30px;
+    border:2px solid #00ff00;
+    z-index:10;
+    box-shadow:0 0 10px #00ff00;
+}
+.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
+.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
+.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
+.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+@media (max-width: 768px) {
+    .back-button {
+        top:1rem;
+        left:1rem;
+        font-size:0.85rem;
+        padding:0.6rem 1.2rem;
+    }
+    
+    .degree-title {
+        font-size:1.3rem;
+        letter-spacing:1px;
+    }
+    
+    .degree-subtitle {
+        font-size:0.9rem;
+    }
+    
+    .info-grid {
+        grid-template-columns:1fr;
+        gap:1.5rem;
+        max-width:300px;
+    }
+    
+    .info-value {
+        font-size:1.1rem;
+    }
+    
+    .coursework-title {
+        font-size:1.2rem;
+    }
+    
+    .university-logo {
+        width:120px;
+        height:120px;
+    }
+    
+    .courses-orbit {
+        height:150px;
+    }
+    
+    .course-item {
+        font-size:0.75rem;
+        padding:0.4rem 0.8rem;
+    }
+    
+    @keyframes orbit {
+        from { 
+            transform:rotate(0deg) translateX(150px) rotate(0deg);
+            opacity:0.5;
+        }
+        50% {
+            opacity:1;
+        }
+        to { 
+            transform:rotate(360deg) translateX(150px) rotate(-360deg);
+            opacity:0.5;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        top:0.5rem;
+        left:0.5rem;
+        font-size:0.75rem;
+        padding:0.5rem 1rem;
+    }
+    
+    .degree-title {
+        font-size:1rem;
+    }
+    
+    .degree-subtitle {
+        font-size:0.75rem;
+    }
+    
+    .info-label {
+        font-size:0.7rem;
+    }
+    
+    .info-value {
+        font-size:0.95rem;
+    }
+    
+    .coursework-title {
+        font-size:1rem;
+    }
+    
+    .university-logo {
+        width:100px;
+        height:100px;
+    }
+    
+    .corner {
+        width:20px;
+        height:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<canvas id="globe-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<div class="corner top-left"></div>
+<div class="corner top-right"></div>
+<div class="corner bottom-left"></div>
+<div class="corner bottom-right"></div>
+
+<a href="index.html" class="back-button">← BACK TO MAIN</a>
+
+<div class="content-container">
+    <div class="university-logo">
+        <img src="images/ucsd.jpg" alt="University Logo">
+    </div>
+    
+    <div class="degree-title">MASTER OF SCIENCE</div>
+    <div class="degree-subtitle">Computer Science and Engineering</div>
+    <div class="degree-subtitle" style="font-size:1rem; opacity:0.8;">Major in Artificial Intelligence</div>
+    
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">GPA</div>
+            <div class="info-value">3.71/4.0</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">DURATION</div>
+            <div class="info-value">2024 - 2026</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">START DATE</div>
+            <div class="info-value">SEP 2024</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">STATUS</div>
+            <div class="info-value">IN PROGRESS</div>
+        </div>
+    </div>
+    
+    <div class="coursework-section">
+        <div class="coursework-title">COURSEWORK</div>
+        <div class="courses-orbit">
+            <div class="course-item">Deep Learning</div>
+            <div class="course-item">Natural Language Processing</div>
+            <div class="course-item">[Additional Course 1]</div>
+            <div class="course-item">[Additional Course 2]</div>
+        </div>
+        <div class="additional-courses">+ More courses to be added</div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.z = 8;
+
+// Create massive translucent globe that contains everything
+const geometry = new THREE.SphereGeometry(6, 128, 128);
+const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15
+});
+
+const mainGlobe = new THREE.Mesh(geometry, material);
+scene.add(mainGlobe);
+
+// Create inner detail globe
+const innerGeometry = new THREE.SphereGeometry(5.5, 96, 96);
+const innerMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.08
+});
+
+const innerGlobe = new THREE.Mesh(innerGeometry, innerMaterial);
+scene.add(innerGlobe);
+
+// Add data streams (vertical lines inside the globe)
+const streamCount = 100;
+for (let i = 0; i < streamCount; i++) {
+    const streamGeometry = new THREE.BufferGeometry();
+    const streamVertices = [];
+    
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 4 + Math.random() * 1.5;
+    
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.sin(phi) * Math.sin(theta);
+    const z = radius * Math.cos(phi);
+    
+    streamVertices.push(x, y, z);
+    streamVertices.push(x * 1.1, y * 1.1, z * 1.1);
+    
+    streamGeometry.setAttribute('position', new THREE.Float32BufferAttribute(streamVertices, 3));
+    const streamMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x00ff00, 
+        transparent: true, 
+        opacity: 0.3 
+    });
+    const stream = new THREE.Line(streamGeometry, streamMaterial);
+    scene.add(stream);
+}
+
+// Add floating data particles inside globe
+const particleGeometry = new THREE.BufferGeometry();
+const particleVertices = [];
+const particleCount = 1000;
+
+for (let i = 0; i < particleCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = Math.random() * 5;
+    
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.sin(phi) * Math.sin(theta);
+    const z = radius * Math.cos(phi);
+    
+    particleVertices.push(x, y, z);
+}
+
+particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particleVertices, 3));
+const particleMaterial = new THREE.PointsMaterial({ 
+    color: 0x00ff00, 
+    size: 0.05,
+    transparent: true,
+    opacity: 0.6
+});
+const particles = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particles);
+
+// Add outer stars
+const starGeometry = new THREE.BufferGeometry();
+const starVertices = [];
+const starCount = 2000;
+
+for (let i = 0; i < starCount; i++) {
+    const x = (Math.random() - 0.5) * 150;
+    const y = (Math.random() - 0.5) * 150;
+    const z = (Math.random() - 0.5) * 150;
+    starVertices.push(x, y, z);
+}
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const starMaterial = new THREE.PointsMaterial({ 
+    color: 0x00ff00, 
+    size: 0.1,
+    transparent: true,
+    opacity: 0.6
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Add pulsing energy rings
+const ringCount = 5;
+for (let i = 0; i < ringCount; i++) {
+    const ringGeometry = new THREE.TorusGeometry(3 + i * 0.5, 0.02, 16, 100);
+    const ringMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
+        transparent: true,
+        opacity: 0.2
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI / 2;
+    ring.userData.offset = i * 0.5;
+    scene.add(ring);
+}
+
+// Animation
+let time = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    // Rotate main globe slowly
+    mainGlobe.rotation.y += 0.001;
+    mainGlobe.rotation.x = Math.sin(time * 0.2) * 0.05;
+    
+    // Counter-rotate inner globe
+    innerGlobe.rotation.y -= 0.0015;
+    innerGlobe.rotation.x = Math.cos(time * 0.3) * 0.05;
+    
+    // Animate particles
+    particles.rotation.y += 0.0005;
+    particles.rotation.x = Math.sin(time * 0.1) * 0.1;
+    
+    // Gentle camera movement
+    camera.position.x = Math.sin(time * 0.1) * 0.5;
+    camera.position.y = Math.cos(time * 0.15) * 0.3;
+    camera.lookAt(0, 0, 0);
+    
+    // Pulse rings
+    scene.children.forEach(child => {
+        if (child.userData.offset !== undefined) {
+            const scale = 1 + Math.sin(time * 2 + child.userData.offset) * 0.1;
+            child.scale.set(scale, scale, scale);
+            child.material.opacity = 0.1 + Math.sin(time * 2 + child.userData.offset) * 0.1;
+        }
+    });
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>
