@@ -392,6 +392,28 @@ const material = new THREE.MeshBasicMaterial({
 const globe = new THREE.Mesh(geometry, material);
 scene.add(globe);
 
+// Add background stars
+const starGeometry = new THREE.BufferGeometry();
+const starVertices = [];
+const starCount = 2000;
+
+for (let i = 0; i < starCount; i++) {
+    const x = (Math.random() - 0.5) * 100;
+    const y = (Math.random() - 0.5) * 100;
+    const z = (Math.random() - 0.5) * 100;
+    starVertices.push(x, y, z);
+}
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const starMaterial = new THREE.PointsMaterial({ 
+    color: 0x00ff00, 
+    size: 0.1,
+    transparent: true,
+    opacity: 0.8
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
 // Add glowing dots on globe
 const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
 const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -703,7 +725,6 @@ document.addEventListener('keydown', (e) => {
 </body>
 </html> -->
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -766,6 +787,16 @@ body {
     text-shadow:0 0 10px #00ff00;
     letter-spacing:4px;
     opacity:0.8;
+}
+
+.location-time {
+    color:#00ff00;
+    font-size:0.75rem;
+    font-weight:400;
+    text-shadow:0 0 5px #00ff00;
+    opacity:0.7;
+    margin-top:0.5rem;
+    letter-spacing:1px;
 }
 
 /* ================= SOCIAL LINKS SIDEBAR ================= */
@@ -836,6 +867,39 @@ body {
 .corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
 .corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
 .corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+/* ================= VISIT COUNTER ================= */
+.visit-counter {
+    position:fixed;
+    bottom:2rem;
+    right:2rem;
+    z-index:10;
+    background:rgba(0,0,0,0.8);
+    border:1px solid #00ff00;
+    border-radius:5px;
+    padding:1rem;
+    box-shadow:0 0 20px #00ff00;
+    min-width:150px;
+}
+
+.visit-counter-title {
+    color:#00ff00;
+    font-size:0.7rem;
+    text-align:center;
+    margin-bottom:0.5rem;
+    text-shadow:0 0 5px #00ff00;
+    opacity:0.8;
+    letter-spacing:2px;
+}
+
+.visit-count {
+    color:#00ff00;
+    font-size:1.5rem;
+    text-align:center;
+    font-weight:700;
+    text-shadow:0 0 10px #00ff00;
+    letter-spacing:1px;
+}
 
 /* ================= SUBMENU ================= */
 .submenu {
@@ -933,6 +997,11 @@ body {
         letter-spacing:2px;
     }
     
+    .location-time {
+        font-size:0.65rem;
+        margin-top:0.3rem;
+    }
+    
     .social-sidebar {
         right:1rem;
         gap:1rem;
@@ -956,6 +1025,21 @@ body {
     .corner {
         width:20px;
         height:20px;
+    }
+    
+    .visit-counter {
+        bottom:1rem;
+        right:1rem;
+        padding:0.8rem;
+        min-width:120px;
+    }
+    
+    .visit-counter-title {
+        font-size:0.6rem;
+    }
+    
+    .visit-count {
+        font-size:1.2rem;
     }
     
     .submenu {
@@ -996,6 +1080,11 @@ body {
         letter-spacing:1px;
     }
     
+    .location-time {
+        font-size:0.55rem;
+        margin-top:0.2rem;
+    }
+    
     .social-sidebar {
         right:0.5rem;
         gap:0.8rem;
@@ -1016,6 +1105,22 @@ body {
         width:15px;
         height:15px;
         border-width:1px;
+    }
+    
+    .visit-counter {
+        bottom:0.5rem;
+        right:0.5rem;
+        padding:0.6rem;
+        min-width:100px;
+    }
+    
+    .visit-counter-title {
+        font-size:0.55rem;
+        margin-bottom:0.3rem;
+    }
+    
+    .visit-count {
+        font-size:1rem;
     }
     
     .submenu {
@@ -1047,6 +1152,9 @@ body {
 <div class="header">
     <div class="main-title">ISHAN KUMAR ANAND</div>
     <div class="subtitle">AI ENGINEER</div>
+    <div class="location-time">
+        <span>San Diego</span> | <span id="live-time">00:00:00</span>
+    </div>
 </div>
 
 <div class="social-sidebar">
@@ -1070,6 +1178,11 @@ body {
     </a>
 </div>
 
+<div class="visit-counter">
+    <div class="visit-counter-title">TOTAL VISITS</div>
+    <div class="visit-count" id="visit-count">0</div>
+</div>
+
 <div id="submenu" class="submenu">
     <button class="close-submenu" onclick="closeSubmenu()">✕</button>
     <div class="submenu-title" id="submenu-title"></div>
@@ -1078,6 +1191,28 @@ body {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+// Live time update
+function updateTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+// Visit counter
+function updateVisitCount() {
+    let visits = parseInt(localStorage.getItem('visitCount') || '0');
+    visits++;
+    localStorage.setItem('visitCount', visits);
+    document.getElementById('visit-count').textContent = visits.toLocaleString();
+}
+
+updateVisitCount();
+
 const canvas = document.getElementById('globe-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
