@@ -497,6 +497,7 @@ document.addEventListener('keydown', (e) => {
 </html> -->
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -534,15 +535,96 @@ body {
 }
 @keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
 
+/* ================= HEADER ================= */
+.header {
+    position:fixed;
+    top:2rem;
+    left:2rem;
+    z-index:10;
+    text-align:left;
+}
 
+.main-title {
+    font-size:2.5rem;
+    font-weight:700;
+    color:#00ff00;
+    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
+    margin-bottom:0.3rem;
+    letter-spacing:2px;
+}
+
+.subtitle {
+    color:#00ff00;
+    font-size:1.2rem;
+    font-weight:400;
+    text-shadow:0 0 10px #00ff00;
+    letter-spacing:4px;
+    opacity:0.8;
+}
+
+/* ================= SOCIAL LINKS SIDEBAR ================= */
+.social-sidebar {
+    position:fixed;
+    right:2rem;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:10;
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+}
+
+.social-link {
+    color:#00ff00;
+    text-decoration:none;
+    font-size:0.85rem;
+    padding:0.8rem;
+    border:1px solid #00ff00;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.3s;
+    text-shadow:0 0 5px #00ff00;
+    background:rgba(0,0,0,0.5);
+    position:relative;
+}
+
+.social-link:hover {
+    background:rgba(0,255,0,0.1);
+    box-shadow:0 0 20px #00ff00;
+    transform:scale(1.1);
+}
+
+.social-link::before {
+    content:attr(data-label);
+    position:absolute;
+    right:60px;
+    background:rgba(0,0,0,0.9);
+    padding:0.5rem 1rem;
+    border:1px solid #00ff00;
+    border-radius:4px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:all 0.3s;
+}
+
+.social-link:hover::before {
+    opacity:1;
+    right:65px;
+}
 
 /* ================= CORNER ACCENTS ================= */
 .corner {
     position:fixed;
-    width:20px;
-    height:20px;
-    border:1px solid #0f0;
+    width:30px;
+    height:30px;
+    border:2px solid #00ff00;
     z-index:10;
+    box-shadow:0 0 10px #00ff00;
 }
 .corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
 .corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
@@ -558,22 +640,29 @@ body {
     z-index:100;
     display:none;
     background:rgba(0,0,0,0.95);
-    border:2px solid #0f0;
+    border:2px solid #00ff00;
     border-radius:10px;
     padding:2rem;
-    box-shadow:0 0 50px #0f0;
+    box-shadow:0 0 50px #00ff00;
+    min-width:400px;
 }
 
 .submenu.active {
     display:block;
+    animation:slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform:translate(-50%, -50%) scale(0.8); opacity:0; }
+    to { transform:translate(-50%, -50%) scale(1); opacity:1; }
 }
 
 .submenu-title {
     font-size:2rem;
-    color:#0f0;
+    color:#00ff00;
     text-align:center;
     margin-bottom:2rem;
-    text-shadow:0 0 10px #0f0;
+    text-shadow:0 0 10px #00ff00;
 }
 
 .submenu-items {
@@ -583,19 +672,20 @@ body {
 }
 
 .submenu-item {
-    color:#0f0;
+    color:#00ff00;
     text-decoration:none;
     padding:1rem 2rem;
-    border:1px solid #0f0;
+    border:1px solid #00ff00;
     border-radius:5px;
     text-align:center;
     transition:all 0.3s;
     font-size:1.1rem;
+    background:rgba(0,0,0,0.5);
 }
 
 .submenu-item:hover {
     background:rgba(0,255,0,0.2);
-    box-shadow:0 0 20px #0f0;
+    box-shadow:0 0 20px #00ff00;
     transform:scale(1.05);
 }
 
@@ -603,7 +693,7 @@ body {
     position:absolute;
     top:1rem;
     right:1rem;
-    color:#0f0;
+    color:#00ff00;
     font-size:1.5rem;
     cursor:pointer;
     border:none;
@@ -612,7 +702,7 @@ body {
 }
 
 .close-submenu:hover {
-    text-shadow:0 0 10px #0f0;
+    text-shadow:0 0 10px #00ff00;
     transform:scale(1.2);
 }
 </style>
@@ -627,7 +717,31 @@ body {
 <div class="corner bottom-left"></div>
 <div class="corner bottom-right"></div>
 
+<div class="header">
+    <div class="main-title">ISHAN KUMAR ANAND</div>
+    <div class="subtitle">AI ENGINEER</div>
+</div>
 
+<div class="social-sidebar">
+    <a href="https://github.com/Ishushan02" target="_blank" class="social-link" data-label="GitHub">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+    </a>
+    <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-link" data-label="LinkedIn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+        </svg>
+    </a>
+    <a href="mailto:isanand@ucsd.edu" class="social-link" data-label="Email">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+        </svg>
+    </a>
+</div>
 
 <div id="submenu" class="submenu">
     <button class="close-submenu" onclick="closeSubmenu()">✕</button>
@@ -675,54 +789,6 @@ for (let i = 0; i < dotCount; i++) {
     globe.add(dot);
 }
 
-// Create dot-based text for name and title
-function createDotText(text, y) {
-    const group = new THREE.Group();
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = 1200;
-    canvas.height = 200;
-    
-    context.fillStyle = '#ffffff';
-    context.font = 'bold 80px JetBrains Mono';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText(text, 600, 100);
-    
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const particles = [];
-    
-    for (let x = 0; x < canvas.width; x += 8) {
-        for (let y = 0; y < canvas.height; y += 8) {
-            const index = (y * canvas.width + x) * 4;
-            const alpha = imageData.data[index + 3];
-            
-            if (alpha > 128) {
-                const dotGeo = new THREE.SphereGeometry(0.015, 8, 8);
-                const dotMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-                const dot = new THREE.Mesh(dotGeo, dotMat);
-                
-                dot.position.x = (x - 600) * 0.005;
-                dot.position.y = y * 0.005;
-                dot.position.z = 0;
-                
-                group.add(dot);
-                particles.push(dot);
-            }
-        }
-    }
-    
-    group.position.y = y;
-    group.position.z = 5;
-    
-    return { group, particles };
-}
-
-const nameText = createDotText('ISHAN KUMAR ANAND', 2);
-const titleText = createDotText('AI ENGINEER', 1.2);
-scene.add(nameText.group);
-scene.add(titleText.group);
-
 // Menu data
 const menuData = {
     experience: {
@@ -767,82 +833,6 @@ const orbitRadius = 3.5;
 const orbitSpeed = 0.3;
 let rotationPaused = false;
 let hoveredObject = null;
-
-// Social links data
-const socialLinks = [
-    { name: "GITHUB", url: "https://github.com/Ishushan02", icon: "GitHub" },
-    { name: "LINKEDIN", url: "https://linkedin.com/in/ishushan", icon: "LinkedIn" },
-    { name: "EMAIL", url: "mailto:isanand@ucsd.edu", icon: "Email" }
-];
-
-// Create social link globes (orbiting in reverse)
-const socialOrbitRadius = 3;
-const socialObjects = [];
-
-socialLinks.forEach((link, index) => {
-    const group = new THREE.Group();
-    
-    // Create small wireframe globe for social links
-    const socialGlobeGeometry = new THREE.SphereGeometry(0.3, 24, 24);
-    const socialGlobeMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.4
-    });
-    const socialGlobe = new THREE.Mesh(socialGlobeGeometry, socialGlobeMaterial);
-    group.add(socialGlobe);
-    
-    // Add dots on social globe
-    const socialDotGeometry = new THREE.SphereGeometry(0.008, 6, 6);
-    const socialDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const socialDotCount = 30;
-    
-    for (let i = 0; i < socialDotCount; i++) {
-        const dot = new THREE.Mesh(socialDotGeometry, socialDotMaterial);
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const radius = 0.3;
-        
-        dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
-        dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
-        dot.position.z = radius * Math.cos(phi);
-        
-        socialGlobe.add(dot);
-    }
-    
-    // Create text sprite for social links
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = 256;
-    canvas.height = 256;
-    
-    context.fillStyle = '#00ff00';
-    context.font = 'bold 80px JetBrains Mono';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText(link.icon, 128, 128);
-    
-    const texture = new THREE.CanvasTexture(canvas);
-    const spriteMaterial = new THREE.SpriteMaterial({ 
-        map: texture,
-        transparent: true
-    });
-    const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(0.5, 0.5, 1);
-    
-    group.add(sprite);
-    
-    group.userData = {
-        type: 'social',
-        angle: (index / socialLinks.length) * Math.PI * 2,
-        url: link.url,
-        socialGlobe: socialGlobe
-    };
-    
-    scene.add(group);
-    socialObjects.push(group);
-});
 
 Object.keys(menuData).forEach((key, index) => {
     const data = menuData[key];
@@ -928,15 +918,13 @@ canvas.addEventListener('mousemove', (event) => {
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects([...orbitingObjects, ...socialObjects], true);
+    const intersects = raycaster.intersectObjects(orbitingObjects, true);
     
     if (intersects.length > 0) {
         const object = intersects[0].object.parent;
-        if (object.userData.key || object.userData.type === 'social') {
+        if (object.userData.key) {
             hoveredObject = object;
-            if (object.userData.key) {
-                rotationPaused = true;
-            }
+            rotationPaused = true;
             canvas.style.cursor = 'pointer';
             
             // Scale up hovered object
@@ -953,12 +941,8 @@ canvas.addEventListener('mousemove', (event) => {
 });
 
 canvas.addEventListener('click', () => {
-    if (hoveredObject) {
-        if (hoveredObject.userData.type === 'social') {
-            window.open(hoveredObject.userData.url, '_blank');
-        } else if (hoveredObject.userData.key) {
-            showSubmenu(hoveredObject.userData.data);
-        }
+    if (hoveredObject && hoveredObject.userData.key) {
+        showSubmenu(hoveredObject.userData.data);
     }
 });
 
@@ -995,16 +979,6 @@ function animate() {
     globe.rotation.y += 0.002;
     globe.rotation.x = Math.sin(time * 0.3) * 0.1;
     
-    // Animate dot text particles
-    nameText.particles.forEach((dot, i) => {
-        const pulse = Math.sin(time * 2 + i * 0.1) * 0.2 + 1;
-        dot.scale.set(pulse, pulse, pulse);
-    });
-    titleText.particles.forEach((dot, i) => {
-        const pulse = Math.sin(time * 2 + i * 0.1 + Math.PI) * 0.2 + 1;
-        dot.scale.set(pulse, pulse, pulse);
-    });
-    
     // Orbit menu symbols around globe
     if (!rotationPaused) {
         orbitingObjects.forEach((obj) => {
@@ -1029,23 +1003,6 @@ function animate() {
             hoveredObject.userData.smallGlobe.rotation.y += 0.01;
         }
     }
-    
-    // Orbit social links in reverse direction
-    socialObjects.forEach((obj) => {
-        obj.userData.angle -= orbitSpeed * 0.012; // Reverse and slightly different speed
-        
-        const x = Math.cos(obj.userData.angle) * socialOrbitRadius;
-        const z = Math.sin(obj.userData.angle) * socialOrbitRadius;
-        const y = Math.sin(obj.userData.angle * 3) * 0.3; // Different wave pattern
-        
-        obj.position.set(x, y, z);
-        obj.lookAt(camera.position);
-        
-        // Rotate social globe
-        if (obj.userData.socialGlobe) {
-            obj.userData.socialGlobe.rotation.y -= 0.015; // Rotate in reverse
-        }
-    });
     
     renderer.render(scene, camera);
 }
