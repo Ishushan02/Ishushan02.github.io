@@ -529,7 +529,7 @@ document.addEventListener('keydown', (e) => {
  -->
 
 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1097,24 +1097,61 @@ canvas.addEventListener('mousemove', (event) => {
     updateMousePosition(event.clientX, event.clientY);
 });
 
+let touchStartX = 0;
+let touchStartY = 0;
+
+canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 0) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        updateMousePosition(touchStartX, touchStartY);
+    }
+}, { passive: true });
+
 canvas.addEventListener('touchmove', (event) => {
-    event.preventDefault();
     if (event.touches.length > 0) {
         updateMousePosition(event.touches[0].clientX, event.touches[0].clientY);
     }
-});
+}, { passive: true });
 
-function handleInteraction() {
-    if (hoveredObject && hoveredObject.userData.key) {
-        showSubmenu(hoveredObject.userData.data);
+function handleInteraction(clientX, clientY) {
+    mouse.x = (clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(orbitingObjects, true);
+    
+    if (intersects.length > 0) {
+        const object = intersects[0].object.parent;
+        if (object.userData.key && object.userData.data) {
+            showSubmenu(object.userData.data);
+            // Reset scale
+            object.scale.set(1, 1, 1);
+            hoveredObject = null;
+            rotationPaused = false;
+        }
     }
 }
 
-canvas.addEventListener('click', handleInteraction);
-canvas.addEventListener('touchend', (event) => {
-    event.preventDefault();
-    handleInteraction();
+canvas.addEventListener('click', (event) => {
+    handleInteraction(event.clientX, event.clientY);
 });
+
+canvas.addEventListener('touchend', (event) => {
+    if (event.changedTouches.length > 0) {
+        const touch = event.changedTouches[0];
+        const touchEndX = touch.clientX;
+        const touchEndY = touch.clientY;
+        
+        // Check if it's a tap (not a swipe)
+        const deltaX = Math.abs(touchEndX - touchStartX);
+        const deltaY = Math.abs(touchEndY - touchStartY);
+        
+        if (deltaX < 10 && deltaY < 10) {
+            handleInteraction(touchEndX, touchEndY);
+        }
+    }
+}, { passive: true });
 
 function showSubmenu(data) {
     const submenu = document.getElementById('submenu');
