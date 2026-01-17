@@ -1223,7 +1223,7 @@ body {
         <span class="status-value">ONLINE<span class="status-online"></span></span>
     </div>
     <div class="status-item">
-        <span class="status-label">COMMITS (30d)</span>
+        <span class="status-label">GITHUB</span>
         <span class="status-value" id="github-commits">Loading...</span>
     </div>
 </div>
@@ -1248,44 +1248,68 @@ function updateTime() {
 updateTime();
 setInterval(updateTime, 1000);
 
-// GitHub commits in last 30 days (using public events API)
+// GitHub commits in last 30 days (with Personal Access Token)
 async function fetchGitHubCommits() {
     try {
         const username = 'Ishushan02';
+        
+        // ============================================
+        // PASTE YOUR GITHUB TOKEN HERE:
+        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
+        // ============================================
+        
+        if (GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
+            document.getElementById('github-commits').textContent = '36 repos';
+            return;
+        }
+        
+        const headers = {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+        };
+        
+        // Get all repositories
+        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`, { headers });
+        
+        if (!reposResponse.ok) {
+            throw new Error('Failed to fetch repos');
+        }
+        
+        const repos = await reposResponse.json();
+        
+        // Calculate date 30 days ago
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const since = thirtyDaysAgo.toISOString();
+        
         let totalCommits = 0;
         
-        // Fetch recent public events (up to 10 pages, 300 events max)
-        for (let page = 1; page <= 10; page++) {
-            const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=100&page=${page}`);
-            
-            if (!response.ok) break;
-            
-            const events = await response.json();
-            if (events.length === 0) break;
-            
-            // Count PushEvents (commits) from last 30 days
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            for (const event of events) {
-                const eventDate = new Date(event.created_at);
-                if (eventDate < thirtyDaysAgo) continue;
+        // Fetch commits from each repo in the last 30 days
+        for (const repo of repos) {
+            try {
+                const commitsResponse = await fetch(
+                    `https://api.github.com/repos/${username}/${repo.name}/commits?since=${since}&author=${username}`,
+                    { headers }
+                );
                 
-                if (event.type === 'PushEvent' && event.payload.commits) {
-                    totalCommits += event.payload.commits.length;
+                if (commitsResponse.ok) {
+                    const commits = await commitsResponse.json();
+                    totalCommits += commits.length;
                 }
+            } catch (error) {
+                console.error(`Error fetching commits for ${repo.name}:`, error);
             }
         }
         
-        document.getElementById('github-commits').textContent = totalCommits > 0 ? totalCommits : '0';
+        document.getElementById('github-commits').textContent = `${totalCommits} commits`;
     } catch (error) {
-        console.error('Error fetching GitHub commits:', error);
-        document.getElementById('github-commits').textContent = '--';
+        console.error('Error fetching GitHub data:', error);
+        document.getElementById('github-commits').textContent = '36 repos';
     }
 }
 
 fetchGitHubCommits();
-// Refresh commits every 10 minutes
+// Refresh every 10 minutes
 setInterval(fetchGitHubCommits, 600000);
 
 const canvas = document.getElementById('globe-canvas');
