@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -248,8 +248,6 @@ body {
     <div class="submenu-title" id="submenu-title"></div>
     <div class="submenu-items" id="submenu-items"></div>
 </div>
-
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -529,4 +527,343 @@ document.addEventListener('keydown', (e) => {
 </body>
 </html>
 
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 
+<!-- MOBILE SAFE VIEWPORT -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Ishan Anand - Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
+}
+
+/* ================= CANVAS ================= */
+#globe-canvas {
+    position:fixed;
+    inset:0;
+    z-index:1;
+}
+
+/* ================= CRT EFFECT ================= */
+.crt-effect {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+/* ================= HEADER ================= */
+.header {
+    position:fixed;
+    top:2rem;
+    left:2rem;
+    z-index:10;
+}
+
+.main-title {
+    font-size:2.5rem;
+    font-weight:700;
+    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
+}
+
+.subtitle {
+    font-size:1.2rem;
+    letter-spacing:4px;
+    opacity:0.8;
+}
+
+/* ================= SOCIAL ================= */
+.social-sidebar {
+    position:fixed;
+    right:2rem;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:10;
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+}
+
+.social-link {
+    color:#00ff00;
+    text-decoration:none;
+    border:1px solid #00ff00;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.5);
+    transition:.3s;
+}
+.social-link:hover {
+    box-shadow:0 0 20px #00ff00;
+    transform:scale(1.1);
+}
+
+/* ================= CORNERS ================= */
+.corner {
+    position:fixed;
+    width:30px;
+    height:30px;
+    border:2px solid #00ff00;
+    z-index:10;
+}
+.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
+.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
+.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
+.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+/* ================= SUBMENU ================= */
+.submenu {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    display:none;
+    z-index:100;
+    background:rgba(0,0,0,.95);
+    border:2px solid #00ff00;
+    padding:2rem;
+    border-radius:10px;
+    width:400px;
+    max-width:90%;
+}
+.submenu.active { display:block; }
+
+.submenu-title {
+    font-size:2rem;
+    text-align:center;
+    margin-bottom:1.5rem;
+}
+
+.submenu-items {
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+}
+
+.submenu-item {
+    color:#00ff00;
+    text-decoration:none;
+    border:1px solid #00ff00;
+    padding:1rem;
+    text-align:center;
+}
+.submenu-item:hover {
+    background:rgba(0,255,0,.2);
+}
+
+.close-submenu {
+    position:absolute;
+    top:1rem;
+    right:1rem;
+    background:none;
+    border:none;
+    color:#00ff00;
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px) {
+
+.header {
+    top:1rem;
+    left:1rem;
+    right:1rem;
+    text-align:center;
+}
+
+.main-title { font-size:1.6rem; }
+.subtitle { font-size:.9rem; letter-spacing:2px; }
+
+.social-sidebar {
+    right:1rem;
+    gap:1rem;
+}
+.social-link {
+    width:42px;
+    height:42px;
+}
+
+.corner {
+    width:20px;
+    height:20px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="globe-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<div class="corner top-left"></div>
+<div class="corner top-right"></div>
+<div class="corner bottom-left"></div>
+<div class="corner bottom-right"></div>
+
+<div class="header">
+    <div class="main-title">ISHAN KUMAR ANAND</div>
+    <div class="subtitle">AI ENGINEER</div>
+</div>
+
+<div class="social-sidebar">
+    <a href="https://github.com/Ishushan02" class="social-link" target="_blank">GH</a>
+    <a href="https://linkedin.com/in/ishushan" class="social-link" target="_blank">IN</a>
+    <a href="mailto:isanand@ucsd.edu" class="social-link">EM</a>
+</div>
+
+<div id="submenu" class="submenu">
+    <button class="close-submenu" onclick="closeSubmenu()">✕</button>
+    <div id="submenu-title" class="submenu-title"></div>
+    <div id="submenu-items" class="submenu-items"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const isMobile = window.innerWidth < 768;
+
+const canvas = document.getElementById("globe-canvas");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+camera.position.z = isMobile ? 6 : 5;
+
+const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+
+/* MAIN GLOBE */
+const globe = new THREE.Mesh(
+    new THREE.SphereGeometry(2, isMobile?32:64, isMobile?32:64),
+    new THREE.MeshBasicMaterial({color:0x00ff00, wireframe:true, opacity:.3, transparent:true})
+);
+scene.add(globe);
+
+/* DOTS */
+const dotCount = isMobile?150:300;
+const dotGeo = new THREE.SphereGeometry(.02,8,8);
+const dotMat = new THREE.MeshBasicMaterial({color:0x00ff00});
+
+for(let i=0;i<dotCount;i++){
+    const d=new THREE.Mesh(dotGeo,dotMat);
+    const a=Math.random()*Math.PI*2;
+    const b=Math.acos(2*Math.random()-1);
+    d.position.set(
+        2*Math.sin(b)*Math.cos(a),
+        2*Math.sin(b)*Math.sin(a),
+        2*Math.cos(b)
+    );
+    globe.add(d);
+}
+
+/* MENU DATA */
+const menuData = {
+ experience:{title:"EXPERIENCE",items:[{name:"Syncron"},{name:"Gnani.ai"}]},
+ projects:{title:"PROJECTS",items:[{name:"AI Systems"}]},
+ education:{title:"EDUCATION",items:[{name:"UCSD"}]},
+ publication:{title:"PUBLICATION",items:[{name:"Research"}]}
+};
+
+const orbitObjects=[];
+const orbitRadius=isMobile?2.5:3.5;
+let hovered=null;
+
+Object.keys(menuData).forEach((k,i)=>{
+    const g=new THREE.Group();
+    g.userData={key:k,data:menuData[k],angle:i*Math.PI/2};
+    scene.add(g);
+    orbitObjects.push(g);
+});
+
+/* RAYCAST */
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+
+function checkInteraction(x,y){
+    mouse.x=x; mouse.y=y;
+    raycaster.setFromCamera(mouse,camera);
+    const hit=raycaster.intersectObjects(orbitObjects,true);
+    if(hit.length) showSubmenu(hit[0].object.parent.userData.data);
+}
+
+canvas.addEventListener("click",e=>{
+    checkInteraction(
+        (e.clientX/innerWidth)*2-1,
+        -(e.clientY/innerHeight)*2+1
+    );
+});
+
+canvas.addEventListener("touchstart",e=>{
+    const t=e.touches[0];
+    checkInteraction(
+        (t.clientX/innerWidth)*2-1,
+        -(t.clientY/innerHeight)*2+1
+    );
+},{passive:false});
+
+/* SUBMENU */
+function showSubmenu(data){
+    document.getElementById("submenu-title").textContent=data.title;
+    const items=document.getElementById("submenu-items");
+    items.innerHTML="";
+    data.items.forEach(i=>{
+        const a=document.createElement("a");
+        a.className="submenu-item";
+        a.textContent=i.name;
+        items.appendChild(a);
+    });
+    document.getElementById("submenu").classList.add("active");
+}
+function closeSubmenu(){
+    document.getElementById("submenu").classList.remove("active");
+}
+
+/* ANIMATE */
+function animate(){
+    requestAnimationFrame(animate);
+    globe.rotation.y+=.002;
+    orbitObjects.forEach(o=>{
+        o.userData.angle+=.005;
+        o.position.set(
+            Math.cos(o.userData.angle)*orbitRadius,
+            Math.sin(o.userData.angle)*(isMobile?.2:.5),
+            Math.sin(o.userData.angle)*orbitRadius
+        );
+        o.lookAt(camera.position);
+    });
+    renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+
+</body>
+</html>
