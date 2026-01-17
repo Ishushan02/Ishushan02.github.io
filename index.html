@@ -519,6 +519,9 @@ arrangeRadial("pubMenu");
 
 </body>
 </html> -->
+
+<!-- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -715,7 +718,6 @@ body {
 </div>
 
 <div class="nav-grid">
-<!-- NAV CARDS REMAIN UNCHANGED -->
 <div class="nav-card">
     <div class="ascii-art" style="color:#00FFFF;">
 ███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
@@ -766,7 +768,6 @@ body {
     </div>
 </div>
 
-<!-- PUBLICATION -->
 <div class="nav-card">
     <div class="ascii-art" style="color:#bf00ff;">
 ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
@@ -916,6 +917,562 @@ arrangeRadial("expMenu");
 arrangeRadial("projMenu");
 arrangeRadial("eduMenu");
 arrangeRadial("pubMenu");
+</script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Anand - Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    height:100vh;
+}
+
+#globe-canvas {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+}
+
+.overlay {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:2;
+    pointer-events:none;
+}
+
+.hud-container {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:10;
+    pointer-events:all;
+}
+
+/* Center Info Panel */
+.center-panel {
+    text-align:center;
+    background:rgba(0,0,0,0.85);
+    border:2px solid #00ff00;
+    border-radius:20px;
+    padding:2rem 3rem;
+    box-shadow:0 0 40px rgba(0,255,0,0.5), inset 0 0 40px rgba(0,255,0,0.1);
+    backdrop-filter:blur(10px);
+    margin-bottom:2rem;
+}
+
+.name-title {
+    font-size:2.5rem;
+    font-weight:700;
+    background:linear-gradient(45deg,#00ff00,#00ffff,#00ff00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:0.5rem;
+    text-shadow:0 0 20px #00ff00;
+    animation:glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%, 100% { filter:brightness(1); }
+    50% { filter:brightness(1.3); }
+}
+
+.role {
+    color:#00ff00;
+    font-size:1.2rem;
+    margin-bottom:1.5rem;
+    opacity:0.9;
+    letter-spacing:3px;
+}
+
+.social-links {
+    display:flex;
+    justify-content:center;
+    gap:2rem;
+    margin-top:1rem;
+}
+
+.social-links a {
+    color:#00ff00;
+    text-decoration:none;
+    font-size:0.9rem;
+    padding:0.5rem 1rem;
+    border:1px solid #00ff00;
+    border-radius:5px;
+    transition:all 0.3s;
+}
+
+.social-links a:hover {
+    background:rgba(0,255,0,0.2);
+    box-shadow:0 0 20px rgba(0,255,0,0.6);
+    transform:translateY(-2px);
+}
+
+/* Orbital Navigation */
+.orbital-nav {
+    position:relative;
+    width:500px;
+    height:500px;
+    margin:0 auto;
+}
+
+.nav-orbit {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    pointer-events:none;
+}
+
+.nav-item {
+    position:absolute;
+    width:120px;
+    height:120px;
+    background:rgba(0,0,0,0.9);
+    border:2px solid #00ff00;
+    border-radius:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all 0.4s ease;
+    box-shadow:0 0 20px rgba(0,255,0,0.4);
+    pointer-events:all;
+    text-decoration:none;
+    color:#00ff00;
+}
+
+.nav-item:hover {
+    transform:scale(1.2);
+    box-shadow:0 0 40px rgba(0,255,0,0.8);
+    background:rgba(0,255,0,0.1);
+}
+
+.nav-icon {
+    font-size:2rem;
+    margin-bottom:0.5rem;
+}
+
+.nav-label {
+    font-size:0.75rem;
+    text-align:center;
+    font-weight:600;
+}
+
+/* Position items in orbit */
+.nav-item:nth-child(1) {
+    top:-180px;
+    left:50%;
+    transform:translate(-50%, 0);
+}
+
+.nav-item:nth-child(2) {
+    top:50%;
+    right:-180px;
+    transform:translate(0, -50%);
+}
+
+.nav-item:nth-child(3) {
+    bottom:-180px;
+    left:50%;
+    transform:translate(-50%, 0);
+}
+
+.nav-item:nth-child(4) {
+    top:50%;
+    left:-180px;
+    transform:translate(0, -50%);
+}
+
+/* Scanlines effect */
+.scanlines {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    pointer-events:none;
+    z-index:999;
+    opacity:0.1;
+}
+
+/* HUD Elements */
+.hud-corner {
+    position:fixed;
+    color:#00ff00;
+    font-size:0.8rem;
+    opacity:0.7;
+    z-index:5;
+    font-family:monospace;
+}
+
+.hud-top-left {
+    top:20px;
+    left:20px;
+}
+
+.hud-top-right {
+    top:20px;
+    right:20px;
+    text-align:right;
+}
+
+.hud-bottom-left {
+    bottom:20px;
+    left:20px;
+}
+
+.hud-bottom-right {
+    bottom:20px;
+    right:20px;
+    text-align:right;
+}
+
+/* Pulse animation for nav items */
+@keyframes pulse-ring {
+    0% {
+        box-shadow:0 0 0 0 rgba(0,255,0,0.7);
+    }
+    100% {
+        box-shadow:0 0 0 20px rgba(0,255,0,0);
+    }
+}
+
+.nav-item::before {
+    content:'';
+    position:absolute;
+    top:-2px;
+    left:-2px;
+    right:-2px;
+    bottom:-2px;
+    border-radius:50%;
+    border:2px solid #00ff00;
+    opacity:0;
+    animation:pulse-ring 2s infinite;
+}
+
+.nav-item:hover::before {
+    animation:none;
+}
+
+/* Connection lines */
+.connection-line {
+    position:absolute;
+    height:2px;
+    background:linear-gradient(90deg, transparent, #00ff00, transparent);
+    opacity:0.3;
+    pointer-events:none;
+}
+
+.line1 {
+    width:180px;
+    top:50%;
+    left:50%;
+    transform-origin:left center;
+    transform:translate(0, -50%) rotate(-90deg);
+}
+
+.line2 {
+    width:180px;
+    top:50%;
+    left:50%;
+    transform-origin:left center;
+    transform:translate(0, -50%) rotate(0deg);
+}
+
+.line3 {
+    width:180px;
+    top:50%;
+    left:50%;
+    transform-origin:left center;
+    transform:translate(0, -50%) rotate(90deg);
+}
+
+.line4 {
+    width:180px;
+    top:50%;
+    left:50%;
+    transform-origin:left center;
+    transform:translate(0, -50%) rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .orbital-nav {
+        width:400px;
+        height:400px;
+    }
+    .nav-item {
+        width:90px;
+        height:90px;
+    }
+    .nav-item:nth-child(1) { top:-140px; }
+    .nav-item:nth-child(2) { right:-140px; }
+    .nav-item:nth-child(3) { bottom:-140px; }
+    .nav-item:nth-child(4) { left:-140px; }
+    .name-title { font-size:1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="globe-canvas"></canvas>
+<div class="scanlines"></div>
+
+<!-- HUD Elements -->
+<div class="hud-corner hud-top-left">
+    [SYSTEM]<br>
+    STATUS: ONLINE<br>
+    LATENCY: 24ms
+</div>
+
+<div class="hud-corner hud-top-right">
+    [LOCATION]<br>
+    YOUR_CITY<br>
+    CONN: SECURE
+</div>
+
+<div class="hud-corner hud-bottom-left">
+    [AI_ENGINE]<br>
+    MODE: ACTIVE<br>
+    v4.2.1
+</div>
+
+<div class="hud-corner hud-bottom-right">
+    [TIME]<br>
+    <span id="time-display"></span><br>
+    UTC-8
+</div>
+
+<!-- Main Content -->
+<div class="hud-container">
+    <div class="center-panel">
+        <div class="name-title">ISHAN KUMAR ANAND</div>
+        <div class="role">AI ENGINEER</div>
+        <div class="social-links">
+            <a href="https://github.com/Ishushan02" target="_blank">GITHUB</a>
+            <a href="https://linkedin.com/in/ishushan" target="_blank">LINKEDIN</a>
+            <a href="mailto:isanand@ucsd.edu">EMAIL</a>
+        </div>
+    </div>
+
+    <div class="orbital-nav">
+        <div class="nav-orbit">
+            <div class="connection-line line1"></div>
+            <div class="connection-line line2"></div>
+            <div class="connection-line line3"></div>
+            <div class="connection-line line4"></div>
+        </div>
+
+        <a href="experience.html" class="nav-item">
+            <div class="nav-icon">💼</div>
+            <div class="nav-label">EXPERIENCE</div>
+        </a>
+
+        <a href="projects.html" class="nav-item">
+            <div class="nav-icon">🚀</div>
+            <div class="nav-label">PROJECTS</div>
+        </a>
+
+        <a href="education.html" class="nav-item">
+            <div class="nav-icon">🎓</div>
+            <div class="nav-label">EDUCATION</div>
+        </a>
+
+        <a href="publication.html" class="nav-item">
+            <div class="nav-icon">📄</div>
+            <div class="nav-label">PUBLICATIONS</div>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Time display
+function updateTime() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+    document.getElementById('time-display').textContent = timeStr;
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+// 3D Globe Setup
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.z = 4;
+
+// Main Globe
+const globeGeometry = new THREE.SphereGeometry(2, 64, 64);
+const globeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15
+});
+const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+scene.add(globe);
+
+// Add latitude/longitude lines
+const latLongGroup = new THREE.Group();
+for (let i = 0; i < 12; i++) {
+    const curve = new THREE.EllipseCurve(0, 0, 2, 2, 0, 2 * Math.PI, false, 0);
+    const points = curve.getPoints(100);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ 
+        color: 0x00ff00, 
+        transparent: true, 
+        opacity: 0.2 
+    });
+    const line = new THREE.Line(geometry, material);
+    line.rotation.y = (i / 12) * Math.PI;
+    line.rotation.x = Math.PI / 2;
+    latLongGroup.add(line);
+}
+scene.add(latLongGroup);
+
+// Data points on globe
+const dotGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const dots = [];
+const locations = [
+    { lat: 37.7749, lng: -122.4194 }, // SF
+    { lat: 40.7128, lng: -74.0060 },  // NYC
+    { lat: 51.5074, lng: -0.1278 },   // London
+    { lat: 35.6762, lng: 139.6503 },  // Tokyo
+    { lat: 28.6139, lng: 77.2090 },   // Delhi
+    { lat: -33.8688, lng: 151.2093 }, // Sydney
+    { lat: 1.3521, lng: 103.8198 },   // Singapore
+];
+
+locations.forEach(loc => {
+    const phi = (90 - loc.lat) * (Math.PI / 180);
+    const theta = (loc.lng + 180) * (Math.PI / 180);
+    const radius = 2;
+    
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial.clone());
+    dot.position.x = -(radius * Math.sin(phi) * Math.cos(theta));
+    dot.position.y = radius * Math.cos(phi);
+    dot.position.z = radius * Math.sin(phi) * Math.sin(theta);
+    
+    globe.add(dot);
+    dots.push(dot);
+});
+
+// Connect dots with lines
+for (let i = 0; i < dots.length; i++) {
+    for (let j = i + 1; j < dots.length; j++) {
+        const points = [dots[i].position, dots[j].position];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.1
+        });
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        globe.add(line);
+    }
+}
+
+// Outer ring
+const ringGeometry = new THREE.TorusGeometry(2.5, 0.01, 16, 100);
+const ringMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0x00ff00, 
+    transparent: true, 
+    opacity: 0.3 
+});
+const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+ring.rotation.x = Math.PI / 2;
+scene.add(ring);
+
+// Particle field
+const particlesGeometry = new THREE.BufferGeometry();
+const particleCount = 2000;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 15;
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    color: 0x00ff00,
+    size: 0.02,
+    transparent: true,
+    opacity: 0.6,
+    blending: THREE.AdditiveBlending
+});
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+// Animation
+let time = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    globe.rotation.y += 0.001;
+    latLongGroup.rotation.y += 0.001;
+    ring.rotation.z += 0.002;
+    
+    dots.forEach((dot, i) => {
+        const scale = 1 + Math.sin(time * 3 + i * 0.5) * 0.5;
+        dot.scale.set(scale, scale, scale);
+    });
+    
+    particles.rotation.y += 0.0003;
+    particles.rotation.x = Math.sin(time * 0.1) * 0.1;
+    
+    camera.position.x = Math.sin(time * 0.1) * 0.5;
+    camera.position.y = Math.cos(time * 0.15) * 0.3;
+    camera.lookAt(scene.position);
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Mouse interaction
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    globe.rotation.x = mouseY * 0.1;
+    globe.rotation.y += mouseX * 0.001;
+});
 </script>
 
 </body>
