@@ -868,37 +868,67 @@ body {
 .corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
 .corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
 
-/* ================= VISIT COUNTER ================= */
-.visit-counter {
+/* ================= SYSTEM STATUS PANEL ================= */
+.system-status {
     position:fixed;
     bottom:2rem;
     right:2rem;
     z-index:10;
-    background:rgba(0,0,0,0.8);
+    background:rgba(0,0,0,0.9);
     border:1px solid #00ff00;
     border-radius:5px;
     padding:1rem;
     box-shadow:0 0 20px #00ff00;
-    min-width:150px;
+    min-width:200px;
 }
 
-.visit-counter-title {
+.system-status-title {
     color:#00ff00;
-    font-size:0.7rem;
+    font-size:0.75rem;
     text-align:center;
-    margin-bottom:0.5rem;
+    margin-bottom:0.8rem;
     text-shadow:0 0 5px #00ff00;
-    opacity:0.8;
+    font-weight:700;
     letter-spacing:2px;
+    border-bottom:1px solid rgba(0,255,0,0.3);
+    padding-bottom:0.5rem;
 }
 
-.visit-count {
+.status-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.6rem;
+    font-size:0.7rem;
+}
+
+.status-label {
     color:#00ff00;
-    font-size:1.5rem;
-    text-align:center;
-    font-weight:700;
-    text-shadow:0 0 10px #00ff00;
+    opacity:0.7;
     letter-spacing:1px;
+}
+
+.status-value {
+    color:#00ff00;
+    font-weight:700;
+    text-shadow:0 0 5px #00ff00;
+    letter-spacing:0.5px;
+}
+
+.status-online {
+    display:inline-block;
+    width:8px;
+    height:8px;
+    background:#00ff00;
+    border-radius:50%;
+    margin-left:5px;
+    box-shadow:0 0 10px #00ff00;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity:1; }
+    50% { opacity:0.5; }
 }
 
 /* ================= SUBMENU ================= */
@@ -1027,19 +1057,21 @@ body {
         height:20px;
     }
     
-    .visit-counter {
+    .system-status {
         bottom:1rem;
         right:1rem;
         padding:0.8rem;
-        min-width:120px;
+        min-width:180px;
     }
     
-    .visit-counter-title {
-        font-size:0.6rem;
+    .system-status-title {
+        font-size:0.65rem;
+        margin-bottom:0.6rem;
     }
     
-    .visit-count {
-        font-size:1.2rem;
+    .status-item {
+        font-size:0.65rem;
+        margin-bottom:0.5rem;
     }
     
     .submenu {
@@ -1107,20 +1139,26 @@ body {
         border-width:1px;
     }
     
-    .visit-counter {
+    .system-status {
         bottom:0.5rem;
         right:0.5rem;
         padding:0.6rem;
-        min-width:100px;
+        min-width:160px;
     }
     
-    .visit-counter-title {
-        font-size:0.55rem;
-        margin-bottom:0.3rem;
+    .system-status-title {
+        font-size:0.6rem;
+        margin-bottom:0.5rem;
     }
     
-    .visit-count {
-        font-size:1rem;
+    .status-item {
+        font-size:0.6rem;
+        margin-bottom:0.4rem;
+    }
+    
+    .status-online {
+        width:6px;
+        height:6px;
     }
     
     .submenu {
@@ -1178,9 +1216,16 @@ body {
     </a>
 </div>
 
-<div class="visit-counter">
-    <div class="visit-counter-title">TOTAL VISITS</div>
-    <div class="visit-count" id="visit-count">0</div>
+<div class="system-status">
+    <div class="system-status-title">SYSTEM STATUS</div>
+    <div class="status-item">
+        <span class="status-label">STATUS</span>
+        <span class="status-value">ONLINE<span class="status-online"></span></span>
+    </div>
+    <div class="status-item">
+        <span class="status-label">COMMITS (30d)</span>
+        <span class="status-value" id="github-commits">Loading...</span>
+    </div>
 </div>
 
 <div id="submenu" class="submenu">
@@ -1203,15 +1248,45 @@ function updateTime() {
 updateTime();
 setInterval(updateTime, 1000);
 
-// Visit counter
-function updateVisitCount() {
-    let visits = parseInt(localStorage.getItem('visitCount') || '0');
-    visits++;
-    localStorage.setItem('visitCount', visits);
-    document.getElementById('visit-count').textContent = visits.toLocaleString();
+// GitHub commits in last 30 days (using public events API)
+async function fetchGitHubCommits() {
+    try {
+        const username = 'Ishushan02';
+        let totalCommits = 0;
+        
+        // Fetch recent public events (up to 10 pages, 300 events max)
+        for (let page = 1; page <= 10; page++) {
+            const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=100&page=${page}`);
+            
+            if (!response.ok) break;
+            
+            const events = await response.json();
+            if (events.length === 0) break;
+            
+            // Count PushEvents (commits) from last 30 days
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            for (const event of events) {
+                const eventDate = new Date(event.created_at);
+                if (eventDate < thirtyDaysAgo) continue;
+                
+                if (event.type === 'PushEvent' && event.payload.commits) {
+                    totalCommits += event.payload.commits.length;
+                }
+            }
+        }
+        
+        document.getElementById('github-commits').textContent = totalCommits > 0 ? totalCommits : '0';
+    } catch (error) {
+        console.error('Error fetching GitHub commits:', error);
+        document.getElementById('github-commits').textContent = '--';
+    }
 }
 
-updateVisitCount();
+fetchGitHubCommits();
+// Refresh commits every 10 minutes
+setInterval(fetchGitHubCommits, 600000);
 
 const canvas = document.getElementById('globe-canvas');
 const scene = new THREE.Scene();
