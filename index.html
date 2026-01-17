@@ -923,7 +923,7 @@ arrangeRadial("pubMenu");
 </html> -->
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1241,7 +1241,6 @@ body {
 <canvas id="globe-canvas"></canvas>
 <div class="scanlines"></div>
 
-<!-- HUD Elements -->
 <div class="hud-corner hud-top-left">
     [SYSTEM]<br>
     STATUS: ONLINE<br>
@@ -1266,7 +1265,6 @@ body {
     UTC-8
 </div>
 
-<!-- Main Content -->
 <div class="hud-container">
     <div class="center-panel">
         <div class="name-title">ISHAN KUMAR ANAND</div>
@@ -1472,6 +1470,542 @@ document.addEventListener('mousemove', (e) => {
     mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     globe.rotation.x = mouseY * 0.1;
     globe.rotation.y += mouseX * 0.001;
+});
+</script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ishan Anand - Website</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow:hidden;
+    line-height:1.6;
+    height:100vh;
+}
+
+#globe-canvas {
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:1;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+/* ================= HUD / SYSTEM INFO ================= */
+#system-bar {
+    position:fixed; top:0; left:0; right:0; background:rgba(0,0,0,0.8); color:#0f0;
+    font-family:monospace; font-size:.8rem; padding:.6rem 1rem; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    border-bottom:1px solid #0f0;
+}
+
+/* ================= HEADER ================= */
+.header { 
+    position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    text-align:center; z-index:10; pointer-events:none;
+}
+.main-title {
+    font-size:2.5rem; margin-bottom:.5rem; font-weight:700;
+    background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff0000);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    filter: drop-shadow(0 0 10px #00ff00);
+    position:relative;
+}
+.main-title span.glitch {
+    position:absolute; left:0; top:0; opacity:0.7;
+    animation:glitch 1s infinite;
+}
+@keyframes glitch {
+    0% { transform:translate(0,0); opacity:0.7; }
+    20% { transform:translate(-2px,2px); opacity:0.8; }
+    40% { transform:translate(2px,-2px); opacity:0.6; }
+    60% { transform:translate(-1px,1px); opacity:0.7; }
+    80% { transform:translate(1px,-1px); opacity:0.8; }
+    100% { transform:translate(0,0); opacity:0.7; }
+}
+.subtitle { 
+    color:#0f0; font-size:1.2rem; font-weight:600; 
+    text-shadow:0 0 10px #0f0; margin-top:1rem;
+}
+
+/* ================= FLOATING SIDE DOCK ================= */
+.side-dock {
+    position:fixed; top:50%; right:1rem; transform:translateY(-50%); 
+    display:flex; flex-direction:column; gap:1rem; z-index:100;
+}
+.side-dock a {
+    display:flex; align-items:center; gap:.5rem; font-size:.75rem; color:#0f0; 
+    text-decoration:none; padding:.5rem .8rem; border:1px solid #0f0; 
+    border-radius:4px; transition:.3s; background:rgba(0,0,0,0.8);
+}
+.side-dock a:hover { 
+    background:rgba(0,255,0,.2); box-shadow:0 0 15px #0f0; 
+    transform:translateX(-5px);
+}
+
+/* ================= CORNER ACCENTS ================= */
+.corner {
+    position:fixed; width:30px; height:30px; border:2px solid #0f0; z-index:100;
+}
+.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
+.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
+.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
+.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
+
+/* ================= INFO PANEL ================= */
+.info-panel {
+    position:fixed; bottom:1rem; left:1rem; 
+    background:rgba(0,0,0,0.9); border:1px solid #0f0;
+    padding:1rem; border-radius:8px; z-index:100;
+    max-width:300px; font-size:.75rem;
+    box-shadow:0 0 20px rgba(0,255,0,0.3);
+}
+.info-panel h3 {
+    color:#00ffff; margin-bottom:.5rem; font-size:.9rem;
+}
+.info-panel p {
+    color:#0f0; line-height:1.4; margin-bottom:.3rem;
+}
+
+/* ================= CONTROLS ================= */
+.controls {
+    position:fixed; bottom:1rem; right:1rem;
+    background:rgba(0,0,0,0.9); border:1px solid #0f0;
+    padding:1rem; border-radius:8px; z-index:100;
+    font-size:.75rem;
+    box-shadow:0 0 20px rgba(0,255,0,0.3);
+}
+.controls h3 {
+    color:#00ffff; margin-bottom:.5rem;
+}
+.controls p {
+    color:#0f0; margin-bottom:.3rem;
+}
+</style>
+</head>
+<body>
+
+<canvas id="globe-canvas"></canvas>
+<div class="crt-effect"></div>
+
+<div id="system-bar">
+    <div>SYSTEM: SOLAR NAVIGATION ACTIVE</div>
+    <div>SATELLITES: 4 TRACKED</div>
+    <div>STATUS: ONLINE</div>
+    <div>CLICK TO EXPLORE</div>
+</div>
+
+<div class="corner top-left"></div>
+<div class="corner top-right"></div>
+<div class="corner bottom-left"></div>
+<div class="corner bottom-right"></div>
+
+<div class="header">
+    <div class="main-title">ISHAN KUMAR ANAND<span class="glitch">ISHAN KUMAR ANAND</span></div>
+    <div class="subtitle">AI ENGINEER</div>
+</div>
+
+<div class="side-dock">
+    <a href="https://github.com/Ishushan02" target="_blank">[GH] GitHub</a>
+    <a href="https://linkedin.com/in/ishushan" target="_blank">[IN] LinkedIn</a>
+    <a href="mailto:isanand@ucsd.edu">[ML] Email</a>
+</div>
+
+<div class="info-panel">
+    <h3>⚡ NAVIGATION</h3>
+    <p>• Drag to rotate view</p>
+    <p>• Scroll to zoom</p>
+    <p>• Click satellites to explore</p>
+</div>
+
+<div class="controls">
+    <h3>📡 SATELLITES</h3>
+    <p style="color:#00FFFF;">● EXPERIENCE</p>
+    <p style="color:#ff0000;">● PROJECTS</p>
+    <p style="color:#fff75f;">● EDUCATION</p>
+    <p style="color:#bf00ff;">● PUBLICATIONS</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.z = 8;
+
+// ================= CENTRAL GLOBE =================
+const globeGeometry = new THREE.SphereGeometry(1.2, 64, 64);
+const globeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.4
+});
+const centralGlobe = new THREE.Mesh(globeGeometry, globeMaterial);
+scene.add(centralGlobe);
+
+// Add glowing core
+const coreGeometry = new THREE.SphereGeometry(1.0, 32, 32);
+const coreMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    transparent: true,
+    opacity: 0.15
+});
+const core = new THREE.Mesh(coreGeometry, coreMaterial);
+centralGlobe.add(core);
+
+// Add dots on central globe
+const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+const centralDots = [];
+for (let i = 0; i < 100; i++) {
+    const dot = new THREE.Mesh(dotGeometry, new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 1.2;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    centralGlobe.add(dot);
+    centralDots.push(dot);
+}
+
+// ================= SATELLITE SYSTEM =================
+const satellites = [];
+const satelliteData = [
+    { 
+        name: 'EXPERIENCE', 
+        color: 0x00FFFF, 
+        distance: 4, 
+        speed: 0.3,
+        items: [
+            { name: 'Syncron', url: 'experience/syncron.html' },
+            { name: 'Gnani.ai', url: 'experience/gnani.html' },
+            { name: 'Viga', url: 'experience/viga.html' }
+        ]
+    },
+    { 
+        name: 'PROJECTS', 
+        color: 0xff0000, 
+        distance: 5, 
+        speed: -0.25,
+        items: [
+            { name: 'Project 1', url: 'projects.html' },
+            { name: 'Project 2', url: 'projects.html' },
+            { name: 'Project 3', url: 'projects.html' }
+        ]
+    },
+    { 
+        name: 'EDUCATION', 
+        color: 0xfff75f, 
+        distance: 4.5, 
+        speed: 0.35,
+        items: [
+            { name: 'University 1', url: 'education.html' },
+            { name: 'University 2', url: 'education.html' }
+        ]
+    },
+    { 
+        name: 'PUBLICATIONS', 
+        color: 0xbf00ff, 
+        distance: 5.5, 
+        speed: -0.28,
+        items: [
+            { name: 'Paper 1', url: 'publication.html' },
+            { name: 'Paper 2', url: 'publication.html' }
+        ]
+    }
+];
+
+// Create satellites with orbiting items
+satelliteData.forEach((data, index) => {
+    // Create satellite group
+    const satelliteGroup = new THREE.Group();
+    
+    // Main satellite sphere
+    const satGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+    const satMaterial = new THREE.MeshBasicMaterial({
+        color: data.color,
+        transparent: true,
+        opacity: 0.8
+    });
+    const satellite = new THREE.Mesh(satGeometry, satMaterial);
+    
+    // Satellite glow
+    const glowGeometry = new THREE.SphereGeometry(0.35, 32, 32);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: data.color,
+        transparent: true,
+        opacity: 0.3
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    satellite.add(glow);
+    
+    // Add label
+    const canvas2d = document.createElement('canvas');
+    const context = canvas2d.getContext('2d');
+    canvas2d.width = 256;
+    canvas2d.height = 64;
+    context.fillStyle = '#000000';
+    context.fillRect(0, 0, 256, 64);
+    context.font = 'bold 20px JetBrains Mono';
+    context.fillStyle = '#' + data.color.toString(16).padStart(6, '0');
+    context.textAlign = 'center';
+    context.fillText(data.name, 128, 35);
+    
+    const texture = new THREE.CanvasTexture(canvas2d);
+    const labelGeometry = new THREE.PlaneGeometry(1, 0.25);
+    const labelMaterial = new THREE.MeshBasicMaterial({ 
+        map: texture, 
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+    const label = new THREE.Mesh(labelGeometry, labelMaterial);
+    label.position.y = 0.5;
+    satellite.add(label);
+    
+    satelliteGroup.add(satellite);
+    
+    // Create orbit ring
+    const orbitGeometry = new THREE.RingGeometry(data.distance - 0.05, data.distance + 0.05, 128);
+    const orbitMaterial = new THREE.MeshBasicMaterial({
+        color: data.color,
+        transparent: true,
+        opacity: 0.15,
+        side: THREE.DoubleSide
+    });
+    const orbitRing = new THREE.Mesh(orbitGeometry, orbitMaterial);
+    orbitRing.rotation.x = Math.PI / 2;
+    scene.add(orbitRing);
+    
+    // Create items orbiting around each satellite
+    const itemGroup = new THREE.Group();
+    const itemRadius = 0.8;
+    
+    data.items.forEach((item, itemIndex) => {
+        const itemGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+        const itemMaterial = new THREE.MeshBasicMaterial({
+            color: data.color,
+            transparent: true,
+            opacity: 0.9
+        });
+        const itemSphere = new THREE.Mesh(itemGeometry, itemMaterial);
+        
+        // Position items in orbit around satellite
+        const angle = (itemIndex / data.items.length) * Math.PI * 2;
+        itemSphere.position.x = Math.cos(angle) * itemRadius;
+        itemSphere.position.z = Math.sin(angle) * itemRadius;
+        
+        // Store URL for click handling
+        itemSphere.userData = { url: item.url, name: item.name };
+        
+        itemGroup.add(itemSphere);
+        
+        // Create connection line from satellite to item
+        const points = [new THREE.Vector3(0, 0, 0), itemSphere.position.clone()];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: data.color,
+            transparent: true,
+            opacity: 0.3
+        });
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        itemGroup.add(line);
+    });
+    
+    satellite.add(itemGroup);
+    
+    // Position satellite in orbit
+    const angle = (index / satelliteData.length) * Math.PI * 2;
+    satelliteGroup.position.x = Math.cos(angle) * data.distance;
+    satelliteGroup.position.z = Math.sin(angle) * data.distance;
+    
+    scene.add(satelliteGroup);
+    
+    satellites.push({
+        group: satelliteGroup,
+        satellite: satellite,
+        itemGroup: itemGroup,
+        data: data,
+        angle: angle,
+        orbitRing: orbitRing
+    });
+});
+
+// Connection lines from center to satellites
+satellites.forEach(sat => {
+    const points = [
+        new THREE.Vector3(0, 0, 0),
+        sat.group.position.clone()
+    ];
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const lineMaterial = new THREE.LineBasicMaterial({
+        color: sat.data.color,
+        transparent: true,
+        opacity: 0.2
+    });
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
+    sat.connectionLine = line;
+});
+
+// Add ambient particles
+const particlesGeometry = new THREE.BufferGeometry();
+const particleCount = 1500;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 20;
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    color: 0x00ff00,
+    size: 0.03,
+    transparent: true,
+    opacity: 0.4
+});
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+// ================= MOUSE INTERACTION =================
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+
+canvas.addEventListener('click', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    
+    // Check satellite clicks
+    satellites.forEach(sat => {
+        const intersects = raycaster.intersectObject(sat.satellite, true);
+        if (intersects.length > 0) {
+            alert(`Exploring ${sat.data.name}\n\nItems:\n${sat.data.items.map(i => '• ' + i.name).join('\n')}`);
+        }
+        
+        // Check item clicks
+        sat.itemGroup.children.forEach(child => {
+            if (child.userData && child.userData.url) {
+                const itemIntersects = raycaster.intersectObject(child);
+                if (itemIntersects.length > 0) {
+                    if (confirm(`Navigate to ${child.userData.name}?`)) {
+                        window.location.href = child.userData.url;
+                    }
+                }
+            }
+        });
+    });
+});
+
+canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        
+        scene.rotation.y += deltaX * 0.005;
+        scene.rotation.x += deltaY * 0.005;
+        
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+canvas.addEventListener('wheel', (e) => {
+    camera.position.z += e.deltaY * 0.01;
+    camera.position.z = Math.max(5, Math.min(15, camera.position.z));
+});
+
+// ================= ANIMATION =================
+let time = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    // Rotate central globe
+    centralGlobe.rotation.y += 0.003;
+    
+    // Pulse core
+    const scale = 1 + Math.sin(time * 2) * 0.05;
+    core.scale.set(scale, scale, scale);
+    
+    // Animate central dots
+    centralDots.forEach((dot, i) => {
+        const s = 1 + Math.sin(time * 3 + i * 0.2) * 0.4;
+        dot.scale.set(s, s, s);
+    });
+    
+    // Orbit satellites
+    satellites.forEach((sat, index) => {
+        sat.angle += sat.data.speed * 0.01;
+        
+        sat.group.position.x = Math.cos(sat.angle) * sat.data.distance;
+        sat.group.position.z = Math.sin(sat.angle) * sat.data.distance;
+        
+        // Rotate satellite to face camera
+        sat.satellite.lookAt(camera.position);
+        
+        // Rotate items around satellite
+        sat.itemGroup.rotation.y += 0.02;
+        
+        // Update connection line
+        const points = [
+            new THREE.Vector3(0, 0, 0),
+            sat.group.position.clone()
+        ];
+        sat.connectionLine.geometry.setFromPoints(points);
+        
+        // Pulse orbit ring
+        sat.orbitRing.material.opacity = 0.15 + Math.sin(time * 2 + index) * 0.05;
+    });
+    
+    // Rotate particles slowly
+    particles.rotation.y += 0.0003;
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
 
