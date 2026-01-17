@@ -3,7 +3,7 @@ name: Update GitHub Stats
 
 'on':
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -47,5 +47,5 @@ jobs:
           git config user.email "actions@github.com"
           git add stats.json
           git diff --staged
-          git commit -m "Update stats [skip ci]" || echo "No changes"
+          git commit -m "Commit stats update every 6 hours" || echo "No changes"
           git push
