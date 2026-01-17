@@ -519,7 +519,6 @@ arrangeRadial("pubMenu");
 
 </body>
 </html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -540,17 +539,9 @@ body {
     height:100vh;
 }
 
-/* ================= MATRIX CANVAS ================= */
-#matrix-canvas {
+/* ================= 3D GLOBE CANVAS ================= */
+#globe-canvas {
     position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;
-}
-
-/* Fade gradient to bottom for visual depth */
-#matrix-canvas::after {
-    content:'';
-    position:absolute; bottom:0; left:0; width:100%; height:40%;
-    background:linear-gradient(rgba(0,0,0,0), #000);
-    pointer-events:none;
 }
 
 .crt-effect {
@@ -692,7 +683,7 @@ body {
 </head>
 <body>
 
-<canvas id="matrix-canvas"></canvas>
+<canvas id="globe-canvas"></canvas>
 <div class="crt-effect"></div>
 
 <div id="system-bar">
@@ -721,8 +712,6 @@ body {
 <div class="header">
 <div class="main-title">ISHAN KUMAR ANAND<span class="glitch">ISHAN KUMAR ANAND</span></div>
 <div class="subtitle">AI ENGINEER</div>
-
-
 </div>
 
 <div class="nav-grid">
@@ -797,36 +786,132 @@ body {
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const canvas=document.getElementById("matrix-canvas"),ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-// const chars="ABCDEF ईशान GHIJKLMNOPQRSTU ईशान VWXYZ0123456789@#$%^&*()_+-=[]{}|;: ईशान",fs=10;
-const chars=' ईशान Ishan ABCDEFGHIJKLMNOPQRS ईशान TUV अ W X आ F G इ F Gई  HEY THERE उ ऊ ऋ ए ऐ ओ औ अं WXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः क ख ग ग घ ङ च छ ज ज झ ञ ट ट. ठ ड ढ ण त थ द. द ध न प फ ब ब भ. म य र ल व श ष स. ह क् ष त् र ज्ञ アイウエオカキクケコサシスセソタチツテ ईशान トナニヌネノハヒフヘホマミ ईशान ムメモヤユヨラリルレロワヲン I S H A N';fs=10;
-const cols=Math.floor(canvas.width/fs),drops=Array(cols).fill(0);
-setInterval(()=>{
-    ctx.fillStyle="rgba(0,0,0,.05)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.font=fs+"px monospace";
-    drops.forEach((y,i)=>{
-        ctx.fillStyle="#008000";  // Darker green for less brightness
-        ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y*fs);
-        drops[i]=(y*fs>canvas.height&&Math.random()>.975)?0:y+1;
-    });
-},50);
-window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+// ================= 3D GLOBE SETUP =================
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
-/* Dynamic orbit items */
-function arrangeRadial(menuId,radius=105){
-    const menu=document.getElementById(menuId);
-    const items=menu.querySelectorAll('.radial-item');
-    const count=items.length;
-    items.forEach((item,i)=>{
-        const angle=(i/count)*2*Math.PI;
-        const x=Math.cos(angle)*radius;
-        const y=Math.sin(angle)*radius;
-        item.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.z = 3;
+
+// Create globe with wireframe
+const geometry = new THREE.SphereGeometry(1.5, 64, 64);
+const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+});
+const globe = new THREE.Mesh(geometry, material);
+scene.add(globe);
+
+// Add glowing dots on the globe
+const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const dots = [];
+const dotCount = 200;
+
+for (let i = 0; i < dotCount; i++) {
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 1.5;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    globe.add(dot);
+    dots.push(dot);
+}
+
+// Add connecting lines between nearby dots
+const lineMaterial = new THREE.LineBasicMaterial({
+    color: 0x00ff00,
+    transparent: true,
+    opacity: 0.15
+});
+
+const connections = [];
+for (let i = 0; i < dots.length; i++) {
+    for (let j = i + 1; j < dots.length; j++) {
+        if (dots[i].position.distanceTo(dots[j].position) < 0.5) {
+            const points = [dots[i].position, dots[j].position];
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(lineGeometry, lineMaterial);
+            globe.add(line);
+            connections.push(line);
+        }
+    }
+}
+
+// Add particle field around globe
+const particlesGeometry = new THREE.BufferGeometry();
+const particleCount = 1000;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 10;
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    color: 0x00ff00,
+    size: 0.02,
+    transparent: true,
+    opacity: 0.5
+});
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+// Animation
+let time = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    // Rotate globe
+    globe.rotation.y += 0.002;
+    globe.rotation.x = Math.sin(time * 0.3) * 0.1;
+    
+    // Animate particles
+    particles.rotation.y += 0.0005;
+    
+    // Pulse dots
+    dots.forEach((dot, i) => {
+        const scale = 1 + Math.sin(time * 2 + i * 0.1) * 0.3;
+        dot.scale.set(scale, scale, scale);
+    });
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ================= RADIAL MENU SETUP =================
+function arrangeRadial(menuId, radius=105) {
+    const menu = document.getElementById(menuId);
+    const items = menu.querySelectorAll('.radial-item');
+    const count = items.length;
+    items.forEach((item, i) => {
+        const angle = (i / count) * 2 * Math.PI;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        item.style.transform = `translate(-50%,-50%) translate(${x}px,${y}px)`;
     });
 }
+
 arrangeRadial("expMenu");
 arrangeRadial("projMenu");
 arrangeRadial("eduMenu");
