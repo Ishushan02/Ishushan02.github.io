@@ -1,35 +1,51 @@
+---
 name: Update GitHub Stats
 
-on:
+'on':
   schedule:
-    - cron: '*/5 * * * *'  # Runs every 5 minutes
-  workflow_dispatch:  # Allows manual trigger
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   update-stats:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Fetch GitHub Stats
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "Starting stats fetch..."
+
           # Calculate 30 days ago
           SINCE=$(date -d '30 days ago' --iso-8601)
-          
+          echo "Fetching commits since: $SINCE"
+
           # Count commits across all repos
-          COMMITS=$(curl -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/search/commits?q=author:Ishushan02+committer-date:>=$SINCE" \
-            -H "Accept: application/vnd.github.cloak-preview" | jq '.total_count')
-          
+          RESPONSE=$(curl -s \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.cloak-preview" \
+            "https://api.github.com/search/commits?q=author:Ishushan02+committer-date:>=$SINCE")
+
+          echo "API Response: $RESPONSE"
+
+          COMMITS=$(echo $RESPONSE | jq '.total_count')
+          echo "Total commits found: $COMMITS"
+
           # Create JSON file
-          echo "{\"commits\": $COMMITS, \"updated\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > stats.json
-      
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "{\"commits\": $COMMITS, \"updated\": " \
+            "\"$TIMESTAMP\"}" > stats.json
+
+          echo "Created stats.json:"
+          cat stats.json
+
       - name: Commit and Push
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add stats.json
-          git commit -m "Update stats" || exit 0
+          git diff --staged
+          git commit -m "Update stats [skip ci]" || echo "No changes"
           git push
