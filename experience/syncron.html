@@ -105,34 +105,37 @@ body {
 /* ================= TECH STACK FOOTER ================= */
 .tech-stack {
     position:fixed;
-    bottom:2rem;
-    left:50%;
-    transform:translateX(-50%);
+    bottom:1.5rem;
+    left:2rem;
+    right:2rem;
     z-index:10;
-    background:rgba(0,0,0,0.7);
-    border:1px solid #00ff00;
-    border-radius:10px;
-    padding:1rem 2rem;
-    display:flex;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-rows:repeat(2, 1fr);
     gap:0.8rem;
-    justify-content:center;
+    justify-items:center;
     align-items:center;
-    max-height:120px;
-    overflow:hidden;
-    max-width:90vw;
-    box-shadow:0 0 20px rgba(0,255,0,0.3);
 }
 
 .tech-item {
     color:#00ff00;
-    font-size:0.7rem;
-    padding:0.4rem 0.8rem;
+    font-size:0.65rem;
+    padding:0.35rem 0.7rem;
     border:1px solid #00ff00;
     border-radius:4px;
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.7);
     text-shadow:0 0 5px #00ff00;
     white-space:nowrap;
+    transition:all 0.3s;
+    width:100%;
+    text-align:center;
+}
+
+.tech-item:hover {
+    background:rgba(0,255,0,0.2);
+    box-shadow:0 0 25px #00ff00;
+    transform:scale(1.05);
+    text-shadow:0 0 15px #00ff00;
 }
 
 /* ================= DETAIL MODAL ================= */
@@ -335,13 +338,16 @@ body {
     }
     
     .tech-stack {
-        padding:0.8rem 1rem;
+        bottom:1rem;
+        left:1rem;
+        right:1rem;
         gap:0.5rem;
+        grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));
     }
     
     .tech-item {
-        font-size:0.65rem;
-        padding:0.3rem 0.6rem;
+        font-size:0.6rem;
+        padding:0.3rem 0.5rem;
     }
     
     .detail-modal {
@@ -400,13 +406,16 @@ body {
     }
     
     .tech-stack {
-        padding:0.6rem 0.5rem;
+        bottom:0.5rem;
+        left:0.5rem;
+        right:0.5rem;
         gap:0.4rem;
+        grid-template-columns:repeat(auto-fit, minmax(60px, 1fr));
     }
     
     .tech-item {
-        font-size:0.6rem;
-        padding:0.25rem 0.5rem;
+        font-size:0.55rem;
+        padding:0.25rem 0.4rem;
     }
 }
 </style>
@@ -518,7 +527,7 @@ const techStack = [
     "Python", "TensorFlow", "PyTorch", "JavaScript", "React", "Node.js",
     "NLP", "Computer Vision", "LLMs", "AWS", "Docker", "Kubernetes",
     "MongoDB", "PostgreSQL", "Redis", "FastAPI", "Flask", "Git",
-    "CI/CD", "Microservices", "REST APIs", "GraphQL"
+    // "CI/CD", "Microservices", "REST APIs", "GraphQL"
 ];
 
 // Populate tech stack
@@ -809,12 +818,12 @@ function animate() {
     
     // Rotate central globe
     if (centerGlobe.userData.sphere) {
-        centerGlobe.userData.sphere.rotation.y += 0.005;
+        centerGlobe.userData.sphere.rotation.y += 0.002;
     }
     
     // Orbit company globes
     companyGlobes.forEach((globe) => {
-        globe.userData.angle += 0.008;
+        globe.userData.angle += 0.003;
         
         const x = Math.cos(globe.userData.angle) * orbitRadius;
         const z = Math.sin(globe.userData.angle) * orbitRadius;
@@ -824,7 +833,7 @@ function animate() {
         globe.lookAt(camera.position);
         
         if (globe.userData.sphere) {
-            globe.userData.sphere.rotation.y += 0.01;
+            globe.userData.sphere.rotation.y += 0.005;
         }
     });
     
