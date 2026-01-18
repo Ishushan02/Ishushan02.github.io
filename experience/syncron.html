@@ -429,7 +429,7 @@ const experienceData = {
         label: "Syncron",
         role: "AI Engineer",
         period: "2023 - Present",
-        orbitRadius: 5,
+        orbitRadius: 7,
         color: 0x00ff00,
         speed: 0.5,
         rotationDirection: 1, // clockwise
@@ -452,7 +452,7 @@ const experienceData = {
         label: "Gnani.ai",
         role: "Machine Learning Engineer",
         period: "2021 - 2023",
-        orbitRadius: 7,
+        orbitRadius: 10,
         color: 0x00cc00,
         speed: 0.3,
         rotationDirection: -1, // anti-clockwise
@@ -475,7 +475,7 @@ const experienceData = {
         label: "VigaET",
         role: "AI/ML Developer",
         period: "2019 - 2021",
-        orbitRadius: 9,
+        orbitRadius: 14,
         color: 0x009900,
         speed: 0.2,
         rotationDirection: 1, // clockwise
@@ -633,7 +633,7 @@ Object.keys(experienceData).forEach((key, index) => {
         transparent: true
     });
     const planetSprite = new THREE.Sprite(planetSpriteMaterial);
-    planetSprite.scale.set(5, 1.5, 1);
+    planetSprite.scale.set(3, 1.5, 1);
     planetGroup.add(planetSprite);
     
     // Create orbit ring
