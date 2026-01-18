@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Syncron - Experience</title>
+<title>Experience - Ishan Kumar Anand</title>
 
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
@@ -18,7 +18,7 @@ body {
     height:100vh;
 }
 
-#globe-canvas {
+#solar-canvas {
     position:fixed; 
     top:0; 
     left:0; 
@@ -35,474 +35,762 @@ body {
 }
 @keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
 
-/* ================= HEADER ================= */
-.header {
+.back-button {
     position:fixed;
     top:2rem;
     left:2rem;
     z-index:10;
-    text-align:left;
-    max-width:50%;
-}
-
-.main-title {
-    font-size:2rem;
-    font-weight:700;
     color:#00ff00;
-    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
-    margin-bottom:0.5rem;
-    letter-spacing:2px;
-}
-
-.subtitle {
-    color:#00ff00;
+    text-decoration:none;
+    padding:1rem 2rem;
+    border:2px solid #00ff00;
+    border-radius:5px;
     font-size:1rem;
-    font-weight:400;
-    text-shadow:0 0 10px #00ff00;
-    letter-spacing:2px;
-    opacity:0.8;
-    margin-bottom:0.3rem;
+    transition:all 0.3s;
+    background:rgba(0,0,0,0.8);
+    box-shadow:0 0 10px #00ff00;
+    cursor:pointer;
 }
 
-.duration {
+.back-button:hover {
+    background:rgba(0,255,0,0.2);
+    box-shadow:0 0 30px #00ff00;
+    transform:scale(1.05);
+}
+
+.title {
+    position:fixed;
+    top:2rem;
+    right:2rem;
+    z-index:10;
+    font-size:2rem;
     color:#00ff00;
-    font-size:0.85rem;
-    font-weight:400;
-    text-shadow:0 0 5px #00ff00;
-    opacity:0.7;
+    text-shadow:0 0 20px #00ff00;
+    letter-spacing:3px;
+}
+
+.info-panel {
+    position:fixed;
+    bottom:2rem;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:10;
+    background:rgba(0,0,0,0.9);
+    border:2px solid #00ff00;
+    border-radius:10px;
+    padding:1.5rem 2rem;
+    box-shadow:0 0 30px #00ff00;
+    text-align:center;
+    min-width:400px;
+}
+
+.info-text {
+    color:#00ff00;
+    font-size:0.9rem;
+    opacity:0.8;
     letter-spacing:1px;
 }
 
-.experience-content {
-    margin-top:2rem;
-    color:#00ff00;
-    font-size:0.9rem;
-    line-height:1.8;
-    opacity:0.9;
-    max-width:600px;
+/* Detail Modal */
+.detail-modal {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    z-index:100;
+    display:none;
+    overflow-y:auto;
+    padding:2rem;
 }
 
-.experience-content h3 {
-    font-size:1.1rem;
-    margin-top:1.5rem;
-    margin-bottom:0.5rem;
+.detail-modal.active {
+    display:block;
+    animation:fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+}
+
+.detail-container {
+    max-width:1200px;
+    margin:0 auto;
+    background:rgba(0,0,0,0.8);
+    border:2px solid #00ff00;
+    border-radius:10px;
+    padding:3rem;
+    box-shadow:0 0 50px #00ff00;
+}
+
+.detail-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:2rem;
+    padding-bottom:1rem;
+    border-bottom:2px solid #00ff00;
+}
+
+.detail-title {
+    font-size:2.5rem;
+    color:#00ff00;
+    text-shadow:0 0 20px #00ff00;
+}
+
+.close-detail {
+    font-size:2rem;
+    color:#00ff00;
+    cursor:pointer;
+    border:none;
+    background:none;
+    transition:all 0.3s;
+}
+
+.close-detail:hover {
+    text-shadow:0 0 20px #00ff00;
+    transform:scale(1.2);
+}
+
+.detail-tabs {
+    display:flex;
+    gap:1rem;
+    margin-bottom:2rem;
+    border-bottom:1px solid rgba(0,255,0,0.3);
+}
+
+.detail-tab {
+    padding:1rem 2rem;
+    color:#00ff00;
+    background:none;
+    border:none;
+    border-bottom:2px solid transparent;
+    cursor:pointer;
+    font-family:'JetBrains Mono', monospace;
+    font-size:1rem;
+    transition:all 0.3s;
+    opacity:0.6;
+}
+
+.detail-tab.active {
+    opacity:1;
+    border-bottom-color:#00ff00;
     text-shadow:0 0 10px #00ff00;
 }
 
-.experience-content ul {
-    margin-left:1.5rem;
-    margin-top:0.5rem;
+.detail-tab:hover {
+    opacity:1;
 }
 
-.experience-content li {
-    margin-bottom:0.5rem;
+.tab-content {
+    display:none;
 }
 
-/* ================= SOCIAL LINKS SIDEBAR ================= */
-.social-sidebar {
-    position:fixed;
-    right:2rem;
-    bottom:2rem;
-    z-index:10;
+.tab-content.active {
+    display:block;
+    animation:slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+}
+
+.timeline-item {
     display:flex;
-    flex-direction:row;
     gap:1rem;
-}
-
-.social-link {
-    color:#00ff00;
-    text-decoration:none;
-    font-size:0.85rem;
-    padding:0.8rem;
-    border:1px solid #00ff00;
-    border-radius:50%;
-    width:50px;
-    height:50px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:all 0.3s;
-    text-shadow:0 0 5px #00ff00;
-    background:rgba(0,0,0,0.5);
+    margin-bottom:1.5rem;
+    padding-left:2rem;
     position:relative;
 }
 
-.social-link:hover {
-    background:rgba(0,255,0,0.1);
-    box-shadow:0 0 20px #00ff00;
-    transform:scale(1.1);
-}
-
-.social-link::before {
-    content:attr(data-label);
+.timeline-item::before {
+    content:'';
     position:absolute;
-    bottom:60px;
-    background:rgba(0,0,0,0.9);
-    padding:0.5rem 1rem;
-    border:1px solid #00ff00;
-    border-radius:4px;
-    white-space:nowrap;
-    opacity:0;
-    pointer-events:none;
-    transition:all 0.3s;
-}
-
-.social-link:hover::before {
-    opacity:1;
-    bottom:65px;
-}
-
-/* ================= CORNER ACCENTS ================= */
-.corner {
-    position:fixed;
-    width:30px;
-    height:30px;
-    border:2px solid #00ff00;
-    z-index:10;
+    left:0;
+    top:0.5rem;
+    width:10px;
+    height:10px;
+    background:#00ff00;
+    border-radius:50%;
     box-shadow:0 0 10px #00ff00;
 }
-.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
-.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
-.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
-.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; }
 
-/* ================= RESPONSIVE STYLES ================= */
-@media (max-width: 768px) {
-    .header {
-        top:1rem;
-        left:1rem;
-        right:1rem;
-        max-width:80%;
-    }
-    
-    .main-title {
-        font-size:1.5rem;
-        letter-spacing:1px;
-    }
-    
-    .subtitle {
-        font-size:0.85rem;
-        letter-spacing:1px;
-    }
-    
-    .duration {
-        font-size:0.75rem;
-    }
-    
-    .experience-content {
-        font-size:0.8rem;
-        margin-top:1.5rem;
-    }
-    
-    .experience-content h3 {
-        font-size:1rem;
-    }
-    
-    .social-sidebar {
-        right:1rem;
-        bottom:1rem;
-        gap:0.8rem;
-    }
-    
-    .social-link {
-        width:40px;
-        height:40px;
-        padding:0.6rem;
-    }
-    
-    .social-link svg {
-        width:20px;
-        height:20px;
-    }
-    
-    .corner {
-        width:20px;
-        height:20px;
-    }
+.timeline-date {
+    min-width:150px;
+    color:#00ff00;
+    opacity:0.8;
 }
 
-@media (max-width: 480px) {
-    .header {
-        top:0.5rem;
-        left:0.5rem;
-        right:0.5rem;
-        max-width:90%;
-    }
-    
-    .main-title {
-        font-size:1.2rem;
-        letter-spacing:0.5px;
-    }
-    
-    .subtitle {
-        font-size:0.75rem;
-        letter-spacing:1px;
-    }
-    
-    .duration {
-        font-size:0.65rem;
-    }
-    
-    .experience-content {
-        font-size:0.7rem;
-        margin-top:1rem;
-    }
-    
-    .experience-content h3 {
+.timeline-description {
+    color:#00ff00;
+    line-height:1.8;
+}
+
+.tech-stack {
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin-top:1rem;
+}
+
+.tech-item {
+    padding:0.5rem 1rem;
+    border:1px solid #00ff00;
+    border-radius:5px;
+    color:#00ff00;
+    font-size:0.9rem;
+    background:rgba(0,255,0,0.05);
+}
+
+.recommendation-card {
+    background:rgba(0,255,0,0.05);
+    border:1px solid #00ff00;
+    border-radius:10px;
+    padding:2rem;
+    margin-bottom:2rem;
+}
+
+.recommender-header {
+    display:flex;
+    gap:2rem;
+    align-items:center;
+    margin-bottom:1.5rem;
+}
+
+.recommender-photo {
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    border:2px solid #00ff00;
+    box-shadow:0 0 20px #00ff00;
+    background:#00ff00;
+}
+
+.recommender-info {
+    flex:1;
+}
+
+.recommender-name {
+    font-size:1.3rem;
+    color:#00ff00;
+    margin-bottom:0.3rem;
+    text-shadow:0 0 10px #00ff00;
+}
+
+.recommender-title {
+    color:#00ff00;
+    opacity:0.7;
+    font-size:0.9rem;
+}
+
+.recommendation-text {
+    color:#00ff00;
+    line-height:1.8;
+    font-style:italic;
+    opacity:0.9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .back-button {
+        top:1rem;
+        left:1rem;
+        padding:0.8rem 1.5rem;
         font-size:0.9rem;
-        margin-top:1rem;
     }
     
-    .social-sidebar {
-        right:0.5rem;
-        bottom:0.5rem;
-        gap:0.6rem;
+    .title {
+        top:1rem;
+        right:1rem;
+        font-size:1.5rem;
     }
     
-    .social-link {
-        width:35px;
-        height:35px;
-        padding:0.5rem;
+    .info-panel {
+        bottom:1rem;
+        min-width:90%;
+        padding:1rem;
     }
     
-    .social-link svg {
-        width:18px;
-        height:18px;
+    .info-text {
+        font-size:0.8rem;
     }
     
-    .corner {
-        width:15px;
-        height:15px;
-        border-width:1px;
+    .detail-container {
+        padding:2rem 1.5rem;
+    }
+    
+    .detail-title {
+        font-size:1.8rem;
+    }
+    
+    .detail-tabs {
+        flex-wrap:wrap;
+    }
+    
+    .detail-tab {
+        padding:0.8rem 1.5rem;
+        font-size:0.9rem;
+    }
+    
+    .timeline-item {
+        flex-direction:column;
+    }
+    
+    .recommender-header {
+        flex-direction:column;
+        text-align:center;
     }
 }
 </style>
 </head>
 <body>
 
-<canvas id="globe-canvas"></canvas>
+<canvas id="solar-canvas"></canvas>
 <div class="crt-effect"></div>
 
-<div class="corner top-left"></div>
-<div class="corner top-right"></div>
-<div class="corner bottom-left"></div>
-<div class="corner bottom-right"></div>
+<a href="index.html" class="back-button">← BACK TO HOME</a>
+<div class="title">EXPERIENCE</div>
 
-<div class="header">
-    <div class="main-title">AI ENGINEER</div>
-    <div class="subtitle">SYNCRON</div>
-    <div class="duration">June 2023 - Present</div>
-    
-    <div class="experience-content">
-        <h3>Key Responsibilities:</h3>
-        <ul>
-            <li>Developed and deployed AI/ML models for enterprise solutions</li>
-            <li>Implemented natural language processing pipelines</li>
-            <li>Optimized model performance and scalability</li>
-            <li>Collaborated with cross-functional teams on AI initiatives</li>
-        </ul>
-        
-        <h3>Technologies:</h3>
-        <ul>
-            <li>Python, TensorFlow, PyTorch</li>
-            <li>Cloud platforms (AWS/Azure/GCP)</li>
-            <li>Docker, Kubernetes</li>
-            <li>Machine Learning frameworks</li>
-        </ul>
-    </div>
+<div class="info-panel">
+    <div class="info-text">CLICK ON A PLANET TO EXPLORE • HOVER TO HIGHLIGHT</div>
 </div>
 
-<div class="social-sidebar">
-    <a href="https://github.com/Ishushan02" target="_blank" class="social-link" data-label="GitHub">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-    </a>
-    <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-link" data-label="LinkedIn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-            <rect x="2" y="9" width="4" height="12"/>
-            <circle cx="4" cy="4" r="2"/>
-        </svg>
-    </a>
-    <a href="mailto:isanand@ucsd.edu" class="social-link" data-label="Email">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-        </svg>
-    </a>
+<div id="detail-modal" class="detail-modal">
+    <div class="detail-container">
+        <div class="detail-header">
+            <h2 class="detail-title" id="detail-company-name"></h2>
+            <button class="close-detail" onclick="closeDetail()">✕</button>
+        </div>
+        
+        <div class="detail-tabs">
+            <button class="detail-tab active" onclick="switchTab(event, 'overview')">OVERVIEW</button>
+            <button class="detail-tab" onclick="switchTab(event, 'timeline')">TIMELINE</button>
+            <button class="detail-tab" onclick="switchTab(event, 'techstack')">TECH STACK</button>
+            <button class="detail-tab" onclick="switchTab(event, 'recommendation')">RECOMMENDATION</button>
+        </div>
+        
+        <div id="overview" class="tab-content active">
+            <p id="company-overview" style="color:#00ff00; line-height:1.8;"></p>
+        </div>
+        
+        <div id="timeline" class="tab-content">
+            <div id="company-timeline"></div>
+        </div>
+        
+        <div id="techstack" class="tab-content">
+            <div class="tech-stack" id="company-techstack"></div>
+        </div>
+        
+        <div id="recommendation" class="tab-content">
+            <div id="company-recommendation"></div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const canvas = document.getElementById('globe-canvas');
+// Experience data
+const experienceData = {
+    syncron: {
+        name: "Syncron",
+        role: "AI Engineer",
+        period: "2023 - Present",
+        orbitRadius: 4,
+        color: 0x00ff00,
+        speed: 0.5,
+        overview: "Leading AI initiatives at Syncron, focusing on developing cutting-edge machine learning solutions for supply chain optimization and predictive maintenance.",
+        timeline: [
+            { date: "Jan 2024 - Present", description: "Led development of predictive analytics platform using advanced ML models" },
+            { date: "Jun 2023 - Dec 2023", description: "Implemented NLP solutions for automated documentation and customer support" },
+            { date: "Jan 2023 - May 2023", description: "Developed computer vision systems for quality control automation" }
+        ],
+        techStack: ["Python", "TensorFlow", "PyTorch", "AWS", "Docker", "Kubernetes", "FastAPI", "React", "PostgreSQL", "Redis"],
+        recommendation: {
+            name: "John Anderson",
+            title: "Senior Engineering Manager, Syncron",
+            photo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%2300ff00'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='30' fill='%23000' font-family='monospace'%3EJA%3C/text%3E%3C/svg%3E",
+            message: "Ishan has been an exceptional addition to our AI team. His ability to translate complex business requirements into elegant technical solutions is remarkable. He consistently delivers high-quality work and has become a key contributor to our most critical projects."
+        }
+    },
+    gnani: {
+        name: "Gnani.ai",
+        role: "Machine Learning Engineer",
+        period: "2021 - 2023",
+        orbitRadius: 6,
+        color: 0x00cc00,
+        speed: 0.3,
+        overview: "Developed conversational AI solutions and voice recognition systems, working on enterprise-scale deployments for major clients across multiple industries.",
+        timeline: [
+            { date: "Jan 2022 - Dec 2023", description: "Built and deployed voice recognition models achieving 95%+ accuracy" },
+            { date: "Jun 2021 - Dec 2021", description: "Developed chatbot frameworks for customer service automation" },
+            { date: "Jan 2021 - May 2021", description: "Researched and implemented state-of-the-art NLP techniques" }
+        ],
+        techStack: ["Python", "TensorFlow", "Keras", "NLP", "Speech Recognition", "Flask", "MongoDB", "RabbitMQ", "Jenkins"],
+        recommendation: {
+            name: "Sarah Chen",
+            title: "VP of Engineering, Gnani.ai",
+            photo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%2300ff00'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='30' fill='%23000' font-family='monospace'%3ESC%3C/text%3E%3C/svg%3E",
+            message: "Working with Ishan was a privilege. His deep understanding of NLP and voice technologies, combined with his pragmatic approach to solving real-world problems, made him invaluable to our team. He has a rare combination of theoretical knowledge and practical implementation skills."
+        }
+    },
+    viga: {
+        name: "Viga Entertainment",
+        role: "AI/ML Developer",
+        period: "2019 - 2021",
+        orbitRadius: 8,
+        color: 0x009900,
+        speed: 0.2,
+        overview: "Pioneered AI-driven gaming experiences and recommendation systems, working on innovative projects at the intersection of entertainment and artificial intelligence.",
+        timeline: [
+            { date: "Jan 2020 - Dec 2021", description: "Developed recommendation engine serving 1M+ users" },
+            { date: "Jun 2019 - Dec 2019", description: "Built ML models for user behavior prediction and engagement optimization" },
+            { date: "Jan 2019 - May 2019", description: "Created data pipelines for real-time analytics" }
+        ],
+        techStack: ["Python", "Scikit-learn", "Pandas", "NumPy", "MySQL", "Redis", "Django", "JavaScript", "Unity ML-Agents"],
+        recommendation: {
+            name: "Michael Roberts",
+            title: "CTO, Viga Entertainment",
+            photo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%2300ff00'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='30' fill='%23000' font-family='monospace'%3EMR%3C/text%3E%3C/svg%3E",
+            message: "Ishan brought fresh perspectives to our team and helped us leverage AI in ways we hadn't imagined. His enthusiasm for learning and his ability to quickly adapt to new technologies made him a standout performer. He was instrumental in launching several successful AI-powered features."
+        }
+    }
+};
+
+const canvas = document.getElementById('solar-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.z = 5;
+camera.position.z = 15;
 
-// Add background stars
+// Central sun - "EXPERIENCE"
+const sunGeometry = new THREE.SphereGeometry(2, 64, 64);
+const sunMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.6
+});
+const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+scene.add(sun);
+
+// Add dots on sun
+const sunDotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+const sunDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const sunDotCount = 300;
+
+for (let i = 0; i < sunDotCount; i++) {
+    const dot = new THREE.Mesh(sunDotGeometry, sunDotMaterial);
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 2;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    sun.add(dot);
+}
+
+// Add "EXPERIENCE" text to center
+const canvas2d = document.createElement('canvas');
+const context = canvas2d.getContext('2d');
+canvas2d.width = 512;
+canvas2d.height = 256;
+
+context.fillStyle = '#00ff00';
+context.font = 'bold 50px JetBrains Mono';
+context.textAlign = 'center';
+context.textBaseline = 'middle';
+context.fillText('EXPERIENCE', 256, 128);
+
+const texture = new THREE.CanvasTexture(canvas2d);
+const spriteMaterial = new THREE.SpriteMaterial({ 
+    map: texture,
+    transparent: true
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(4, 2, 1);
+sprite.position.set(0, 0, 0);
+scene.add(sprite);
+
+// Background stars
 const starGeometry = new THREE.BufferGeometry();
 const starVertices = [];
-const starCount = 2000;
+const starCount = 3000;
 
 for (let i = 0; i < starCount; i++) {
-    const x = (Math.random() - 0.5) * 100;
-    const y = (Math.random() - 0.5) * 100;
-    const z = (Math.random() - 0.5) * 100;
+    const x = (Math.random() - 0.5) * 200;
+    const y = (Math.random() - 0.5) * 200;
+    const z = (Math.random() - 0.5) * 200;
     starVertices.push(x, y, z);
 }
 
 starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
 const starMaterial = new THREE.PointsMaterial({ 
     color: 0x00ff00, 
-    size: 0.1,
+    size: 0.15,
     transparent: true,
-    opacity: 0.8
+    opacity: 0.6
 });
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
-// Create orbiting globe with "Recommendation" text
-const orbitGroup = new THREE.Group();
+// Create planets (companies)
+const planets = [];
+let selectedPlanet = null;
 
-const orbitGlobeGeometry = new THREE.SphereGeometry(0.6, 32, 32);
-const orbitGlobeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.4
+Object.keys(experienceData).forEach((key, index) => {
+    const data = experienceData[key];
+    
+    const planetGroup = new THREE.Group();
+    
+    // Create planet sphere
+    const planetGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const planetMaterial = new THREE.MeshBasicMaterial({
+        color: data.color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5
+    });
+    const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+    planetGroup.add(planet);
+    
+    // Add dots on planet
+    const planetDotGeometry = new THREE.SphereGeometry(0.015, 8, 8);
+    const planetDotMaterial = new THREE.MeshBasicMaterial({ color: data.color });
+    const planetDotCount = 100;
+    
+    for (let i = 0; i < planetDotCount; i++) {
+        const dot = new THREE.Mesh(planetDotGeometry, planetDotMaterial);
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const radius = 1;
+        
+        dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        dot.position.z = radius * Math.cos(phi);
+        
+        planet.add(dot);
+    }
+    
+    // Create orbit ring
+    const orbitGeometry = new THREE.RingGeometry(data.orbitRadius - 0.05, data.orbitRadius + 0.05, 64);
+    const orbitMaterial = new THREE.MeshBasicMaterial({
+        color: data.color,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.2
+    });
+    const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+    orbit.rotation.x = Math.PI / 2;
+    scene.add(orbit);
+    
+    planetGroup.userData = {
+        key: key,
+        data: data,
+        angle: (index / Object.keys(experienceData).length) * Math.PI * 2,
+        orbitRadius: data.orbitRadius,
+        speed: data.speed,
+        planet: planet,
+        material: planetMaterial,
+        originalOpacity: 0.5
+    };
+    
+    scene.add(planetGroup);
+    planets.push(planetGroup);
 });
-const orbitGlobe = new THREE.Mesh(orbitGlobeGeometry, orbitGlobeMaterial);
-orbitGroup.add(orbitGlobe);
 
-// Add dots on orbiting globe
-const orbitDotGeometry = new THREE.SphereGeometry(0.012, 8, 8);
-const orbitDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const orbitDotCount = 60;
+// Raycaster for interaction
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredPlanet = null;
 
-for (let i = 0; i < orbitDotCount; i++) {
-    const dot = new THREE.Mesh(orbitDotGeometry, orbitDotMaterial);
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const radius = 0.6;
+function updateMousePosition(clientX, clientY) {
+    mouse.x = (clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
     
-    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
-    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
-    dot.position.z = radius * Math.cos(phi);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(planets.map(p => p.children[0]));
     
-    orbitGlobe.add(dot);
+    if (intersects.length > 0) {
+        const object = intersects[0].object.parent;
+        if (object.userData.key) {
+            hoveredPlanet = object;
+            canvas.style.cursor = 'pointer';
+            
+            // Brighten hovered planet
+            object.userData.material.opacity = 0.9;
+            object.scale.set(1.2, 1.2, 1.2);
+        }
+    } else {
+        if (hoveredPlanet) {
+            hoveredPlanet.userData.material.opacity = hoveredPlanet.userData.originalOpacity;
+            hoveredPlanet.scale.set(1, 1, 1);
+        }
+        hoveredPlanet = null;
+        canvas.style.cursor = 'default';
+    }
 }
 
-// Create "Recommendation" text sprite
-const canvas1 = document.createElement('canvas');
-const context1 = canvas1.getContext('2d');
-canvas1.width = 512;
-canvas1.height = 512;
-
-context1.fillStyle = '#00ff00';
-context1.font = 'bold 45px JetBrains Mono';
-context1.textAlign = 'center';
-context1.textBaseline = 'middle';
-context1.fillText('RECOM-', 256, 230);
-context1.fillText('MENDATION', 256, 282);
-
-const texture1 = new THREE.CanvasTexture(canvas1);
-const spriteMaterial1 = new THREE.SpriteMaterial({ 
-    map: texture1,
-    transparent: true
+canvas.addEventListener('mousemove', (event) => {
+    updateMousePosition(event.clientX, event.clientY);
 });
-const sprite1 = new THREE.Sprite(spriteMaterial1);
-sprite1.scale.set(1.2, 1.2, 1.2);
-orbitGroup.add(sprite1);
 
-scene.add(orbitGroup);
-
-// Create top-right Syncron globe
-const syncronGroup = new THREE.Group();
-
-const syncronGlobeGeometry = new THREE.SphereGeometry(0.4, 32, 32);
-const syncronGlobeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.4
+canvas.addEventListener('click', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(planets.map(p => p.children[0]));
+    
+    if (intersects.length > 0) {
+        const object = intersects[0].object.parent;
+        if (object.userData.key) {
+            showDetail(object.userData.data);
+        }
+    }
 });
-const syncronGlobe = new THREE.Mesh(syncronGlobeGeometry, syncronGlobeMaterial);
-syncronGroup.add(syncronGlobe);
 
-// Add dots on Syncron globe
-const syncronDotGeometry = new THREE.SphereGeometry(0.008, 8, 8);
-const syncronDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const syncronDotCount = 40;
+// Touch support
+let touchStartX = 0;
+let touchStartY = 0;
 
-for (let i = 0; i < syncronDotCount; i++) {
-    const dot = new THREE.Mesh(syncronDotGeometry, syncronDotMaterial);
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const radius = 0.4;
+canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 0) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        updateMousePosition(touchStartX, touchStartY);
+    }
+}, { passive: true });
+
+canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length > 0) {
+        updateMousePosition(event.touches[0].clientX, event.touches[0].clientY);
+    }
+}, { passive: true });
+
+canvas.addEventListener('touchend', (event) => {
+    if (event.changedTouches.length > 0) {
+        const touch = event.changedTouches[0];
+        const touchEndX = touch.clientX;
+        const touchEndY = touch.clientY;
+        
+        const deltaX = Math.abs(touchEndX - touchStartX);
+        const deltaY = Math.abs(touchEndY - touchStartY);
+        
+        if (deltaX < 10 && deltaY < 10) {
+            mouse.x = (touchEndX / window.innerWidth) * 2 - 1;
+            mouse.y = -(touchEndY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(planets.map(p => p.children[0]));
+            
+            if (intersects.length > 0) {
+                const object = intersects[0].object.parent;
+                if (object.userData.key) {
+                    showDetail(object.userData.data);
+                }
+            }
+        }
+    }
+}, { passive: true });
+
+// Detail modal functions
+function showDetail(data) {
+    document.getElementById('detail-company-name').textContent = data.name;
+    document.getElementById('company-overview').textContent = data.overview;
     
-    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
-    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
-    dot.position.z = radius * Math.cos(phi);
+    // Timeline
+    const timelineContainer = document.getElementById('company-timeline');
+    timelineContainer.innerHTML = '';
+    data.timeline.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'timeline-item';
+        div.innerHTML = `
+            <div class="timeline-date">${item.date}</div>
+            <div class="timeline-description">${item.description}</div>
+        `;
+        timelineContainer.appendChild(div);
+    });
     
-    syncronGlobe.add(dot);
+    // Tech Stack
+    const techContainer = document.getElementById('company-techstack');
+    techContainer.innerHTML = '';
+    data.techStack.forEach(tech => {
+        const div = document.createElement('div');
+        div.className = 'tech-item';
+        div.textContent = tech;
+        techContainer.appendChild(div);
+    });
+    
+    // Recommendation
+    const recContainer = document.getElementById('company-recommendation');
+    recContainer.innerHTML = `
+        <div class="recommendation-card">
+            <div class="recommender-header">
+                <img src="${data.recommendation.photo}" alt="${data.recommendation.name}" class="recommender-photo">
+                <div class="recommender-info">
+                    <div class="recommender-name">${data.recommendation.name}</div>
+                    <div class="recommender-title">${data.recommendation.title}</div>
+                </div>
+            </div>
+            <div class="recommendation-text">"${data.recommendation.message}"</div>
+        </div>
+    `;
+    
+    document.getElementById('detail-modal').classList.add('active');
 }
 
-// Create "Syncron" text sprite
-const canvas2 = document.createElement('canvas');
-const context2 = canvas2.getContext('2d');
-canvas2.width = 512;
-canvas2.height = 512;
+function closeDetail() {
+    document.getElementById('detail-modal').classList.remove('active');
+}
 
-context2.fillStyle = '#00ff00';
-context2.font = 'bold 55px JetBrains Mono';
-context2.textAlign = 'center';
-context2.textBaseline = 'middle';
-context2.fillText('SYNCRON', 256, 256);
-
-const texture2 = new THREE.CanvasTexture(canvas2);
-const spriteMaterial2 = new THREE.SpriteMaterial({ 
-    map: texture2,
-    transparent: true
-});
-const sprite2 = new THREE.Sprite(spriteMaterial2);
-sprite2.scale.set(0.8, 0.8, 0.8);
-syncronGroup.add(sprite2);
-
-// Position Syncron globe in top-right (in screen space this appears top-right)
-syncronGroup.position.set(3.5, 2, 0);
-scene.add(syncronGroup);
+function switchTab(event, tabName) {
+    // Hide all tabs
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Remove active class from all buttons
+    const buttons = document.querySelectorAll('.detail-tab');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
 
 // Animation
 let time = 0;
-const orbitRadius = 3;
-let orbitAngle = 0;
-
 function animate() {
     requestAnimationFrame(animate);
     time += 0.01;
     
-    // Rotate orbiting globe
-    orbitGlobe.rotation.y += 0.01;
-    orbitGlobe.rotation.x = Math.sin(time * 0.3) * 0.1;
+    // Rotate sun
+    sun.rotation.y += 0.005;
+    sun.rotation.x = Math.sin(time * 0.2) * 0.1;
     
-    // Orbit the recommendation globe
-    orbitAngle += 0.008;
-    const x = Math.cos(orbitAngle) * orbitRadius;
-    const z = Math.sin(orbitAngle) * orbitRadius;
-    const y = Math.sin(orbitAngle * 2) * 0.5;
+    // Orbit planets
+    planets.forEach((planetGroup) => {
+        planetGroup.userData.angle += planetGroup.userData.speed * 0.01;
+        
+        const x = Math.cos(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
+        const z = Math.sin(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
+        const y = Math.sin(planetGroup.userData.angle * 0.5) * 0.5;
+        
+        planetGroup.position.set(x, y, z);
+        
+        // Rotate planet
+        planetGroup.userData.planet.rotation.y += 0.01;
+    });
     
-    orbitGroup.position.set(x, y, z);
-    orbitGroup.lookAt(camera.position);
-    
-    // Rotate Syncron globe
-    syncronGlobe.rotation.y += 0.01;
-    syncronGlobe.rotation.x = Math.sin(time * 0.2) * 0.1;
-    syncronGroup.lookAt(camera.position);
+    // Rotate stars slowly
+    stars.rotation.y += 0.0002;
     
     renderer.render(scene, camera);
 }
@@ -514,6 +802,13 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Close modal on Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeDetail();
+    }
 });
 </script>
 
