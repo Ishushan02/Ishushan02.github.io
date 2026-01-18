@@ -105,37 +105,65 @@ body {
 /* ================= TECH STACK FOOTER ================= */
 .tech-stack {
     position:fixed;
-    bottom:1.5rem;
-    left:2rem;
-    right:2rem;
+    bottom:2rem;
+    left:50%;
+    transform:translateX(-50%);
     z-index:10;
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(80px, 1fr));
-    grid-template-rows:repeat(2, 1fr);
+    display:flex;
+    flex-wrap:wrap;
     gap:0.8rem;
-    justify-items:center;
+    justify-content:center;
     align-items:center;
+    max-width:85vw;
 }
 
 .tech-item {
     color:#00ff00;
-    font-size:0.65rem;
-    padding:0.35rem 0.7rem;
+    font-size:0.7rem;
+    padding:0.4rem 0.9rem;
     border:1px solid #00ff00;
     border-radius:4px;
     background:rgba(0,0,0,0.7);
     text-shadow:0 0 5px #00ff00;
     white-space:nowrap;
     transition:all 0.3s;
-    width:100%;
-    text-align:center;
+    animation:float 3s ease-in-out infinite;
+    position:relative;
+}
+
+.tech-item:nth-child(odd) {
+    animation-delay:0s;
+}
+
+.tech-item:nth-child(even) {
+    animation-delay:1.5s;
+}
+
+.tech-item:nth-child(3n) {
+    animation-delay:0.5s;
+}
+
+.tech-item:nth-child(5n) {
+    animation-delay:1s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform:translateY(0) scale(1);
+        box-shadow:0 0 5px rgba(0,255,0,0.3);
+    }
+    50% {
+        transform:translateY(-5px) scale(1.02);
+        box-shadow:0 0 15px rgba(0,255,0,0.5);
+    }
 }
 
 .tech-item:hover {
     background:rgba(0,255,0,0.2);
     box-shadow:0 0 25px #00ff00;
-    transform:scale(1.05);
+    transform:scale(1.1) translateY(-3px) !important;
     text-shadow:0 0 15px #00ff00;
+    animation:none;
 }
 
 /* ================= DETAIL MODAL ================= */
@@ -339,15 +367,13 @@ body {
     
     .tech-stack {
         bottom:1rem;
-        left:1rem;
-        right:1rem;
-        gap:0.5rem;
-        grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));
+        gap:0.6rem;
+        max-width:90vw;
     }
     
     .tech-item {
-        font-size:0.6rem;
-        padding:0.3rem 0.5rem;
+        font-size:0.65rem;
+        padding:0.35rem 0.7rem;
     }
     
     .detail-modal {
@@ -406,16 +432,14 @@ body {
     }
     
     .tech-stack {
-        bottom:0.5rem;
-        left:0.5rem;
-        right:0.5rem;
-        gap:0.4rem;
-        grid-template-columns:repeat(auto-fit, minmax(60px, 1fr));
+        bottom:0.8rem;
+        gap:0.5rem;
+        max-width:95vw;
     }
     
     .tech-item {
-        font-size:0.55rem;
-        padding:0.25rem 0.4rem;
+        font-size:0.6rem;
+        padding:0.3rem 0.6rem;
     }
 }
 </style>
@@ -527,7 +551,7 @@ const techStack = [
     "Python", "TensorFlow", "PyTorch", "JavaScript", "React", "Node.js",
     "NLP", "Computer Vision", "LLMs", "AWS", "Docker", "Kubernetes",
     "MongoDB", "PostgreSQL", "Redis", "FastAPI", "Flask", "Git",
-    // "CI/CD", "Microservices", "REST APIs", "GraphQL"
+    "CI/CD", "Microservices", "REST APIs", "GraphQL"
 ];
 
 // Populate tech stack
