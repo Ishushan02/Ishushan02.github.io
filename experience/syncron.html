@@ -349,7 +349,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.set(3, 0, 5);
+camera.position.set(5.5, 0, 5);
 
 // Create main globe
 const geometry = new THREE.SphereGeometry(2.5, 64, 64);
@@ -543,8 +543,9 @@ function closeRecommendation() {
 
 // Animation
 let time = 0;
-const orbitRadius = 6;
-const orbitSpeed = 0.5;
+const orbitRadiusX = 4;
+const orbitRadiusY = 3;
+const orbitSpeed = 0.8;
 
 function animate() {
     requestAnimationFrame(animate);
@@ -557,13 +558,13 @@ function animate() {
     // Rotate small globe
     smallGlobe.rotation.y += 0.01;
     
-    // Orbit the recommendation sphere around the screen (circular path in 3D space)
+    // Orbit the recommendation sphere in a simple circular path on screen
     const angle = time * orbitSpeed * 0.1;
     
-    // Create a circular orbit path around the camera's view
-    const x = Math.cos(angle) * orbitRadius;
-    const y = Math.sin(angle) * orbitRadius * 0.5;
-    const z = 5 + Math.sin(angle * 0.5) * 1.5;
+    // Simple 2D circular orbit in screen space
+    const x = Math.cos(angle) * orbitRadiusX + 1;
+    const y = Math.sin(angle) * orbitRadiusY;
+    const z = 5;
     
     orbitGroup.position.set(x, y, z);
     
