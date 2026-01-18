@@ -352,39 +352,43 @@ body {
 <div class="crt-effect"></div>
 
 <a href="index.html" class="back-button">← BACK TO HOME</a>
-<div class="title">EXPERIENCE</div>
 
 <div class="info-panel">
-    <div class="info-text">CLICK ON A PLANET TO EXPLORE • HOVER TO HIGHLIGHT</div>
+    <div class="info-text" style="font-size:1rem; margin-bottom:1rem; font-weight:700; text-shadow:0 0 10px #00ff00;">MY TECH STACK</div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.8rem; justify-content:center;">
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">Python</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">TensorFlow</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">PyTorch</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">NLP</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">Computer Vision</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">AWS</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">Docker</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">Kubernetes</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">React</span>
+        <span style="padding:0.4rem 0.8rem; border:1px solid #00ff00; border-radius:3px; font-size:0.75rem; background:rgba(0,255,0,0.1);">FastAPI</span>
+    </div>
 </div>
 
 <div id="detail-modal" class="detail-modal">
     <div class="detail-container">
         <div class="detail-header">
-            <h2 class="detail-title" id="detail-company-name"></h2>
+            <div>
+                <h2 class="detail-title" id="detail-company-name"></h2>
+                <div style="display:flex; gap:2rem; align-items:center; margin-top:1rem;">
+                    <div style="font-size:1.3rem; color:#00ff00; text-shadow:0 0 10px #00ff00;" id="detail-role"></div>
+                    <div style="font-size:1.1rem; color:#00ff00; opacity:0.7; letter-spacing:1px;" id="detail-period"></div>
+                </div>
+            </div>
             <button class="close-detail" onclick="closeDetail()">✕</button>
         </div>
         
-        <div class="detail-tabs">
-            <button class="detail-tab active" onclick="switchTab(event, 'overview')">OVERVIEW</button>
-            <button class="detail-tab" onclick="switchTab(event, 'timeline')">TIMELINE</button>
-            <button class="detail-tab" onclick="switchTab(event, 'techstack')">TECH STACK</button>
-            <button class="detail-tab" onclick="switchTab(event, 'recommendation')">RECOMMENDATION</button>
+        <div style="margin-bottom:2rem; padding:1.5rem; background:rgba(0,255,0,0.05); border:1px solid rgba(0,255,0,0.3); border-radius:8px;">
+            <h3 style="color:#00ff00; font-size:1.2rem; margin-bottom:1rem; text-shadow:0 0 10px #00ff00;">WHAT I DID</h3>
+            <div id="company-responsibilities"></div>
         </div>
         
-        <div id="overview" class="tab-content active">
-            <p id="company-overview" style="color:#00ff00; line-height:1.8;"></p>
-        </div>
-        
-        <div id="timeline" class="tab-content">
-            <div id="company-timeline"></div>
-        </div>
-        
-        <div id="techstack" class="tab-content">
-            <div class="tech-stack" id="company-techstack"></div>
-        </div>
-        
-        <div id="recommendation" class="tab-content">
+        <div>
+            <h3 style="color:#00ff00; font-size:1.2rem; margin-bottom:1rem; text-shadow:0 0 10px #00ff00;">RECOMMENDATION</h3>
             <div id="company-recommendation"></div>
         </div>
     </div>
@@ -396,11 +400,13 @@ body {
 const experienceData = {
     syncron: {
         name: "Syncron",
+        label: "Syncron",
         role: "AI Engineer",
         period: "2023 - Present",
         orbitRadius: 4,
         color: 0x00ff00,
         speed: 0.5,
+        rotationDirection: 1, // clockwise
         overview: "Leading AI initiatives at Syncron, focusing on developing cutting-edge machine learning solutions for supply chain optimization and predictive maintenance.",
         timeline: [
             { date: "Jan 2024 - Present", description: "Led development of predictive analytics platform using advanced ML models" },
@@ -417,11 +423,13 @@ const experienceData = {
     },
     gnani: {
         name: "Gnani.ai",
+        label: "Gnani.ai",
         role: "Machine Learning Engineer",
         period: "2021 - 2023",
         orbitRadius: 6,
         color: 0x00cc00,
         speed: 0.3,
+        rotationDirection: -1, // anti-clockwise
         overview: "Developed conversational AI solutions and voice recognition systems, working on enterprise-scale deployments for major clients across multiple industries.",
         timeline: [
             { date: "Jan 2022 - Dec 2023", description: "Built and deployed voice recognition models achieving 95%+ accuracy" },
@@ -438,11 +446,13 @@ const experienceData = {
     },
     viga: {
         name: "Viga Entertainment",
+        label: "VigaET",
         role: "AI/ML Developer",
         period: "2019 - 2021",
         orbitRadius: 8,
         color: 0x009900,
         speed: 0.2,
+        rotationDirection: 1, // clockwise
         overview: "Pioneered AI-driven gaming experiences and recommendation systems, working on innovative projects at the intersection of entertainment and artificial intelligence.",
         timeline: [
             { date: "Jan 2020 - Dec 2021", description: "Developed recommendation engine serving 1M+ users" },
@@ -551,7 +561,7 @@ Object.keys(experienceData).forEach((key, index) => {
     const planetGroup = new THREE.Group();
     
     // Create planet sphere
-    const planetGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const planetGeometry = new THREE.SphereGeometry(1.5, 32, 32);
     const planetMaterial = new THREE.MeshBasicMaterial({
         color: data.color,
         wireframe: true,
@@ -562,15 +572,15 @@ Object.keys(experienceData).forEach((key, index) => {
     planetGroup.add(planet);
     
     // Add dots on planet
-    const planetDotGeometry = new THREE.SphereGeometry(0.015, 8, 8);
+    const planetDotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
     const planetDotMaterial = new THREE.MeshBasicMaterial({ color: data.color });
-    const planetDotCount = 100;
+    const planetDotCount = 150;
     
     for (let i = 0; i < planetDotCount; i++) {
         const dot = new THREE.Mesh(planetDotGeometry, planetDotMaterial);
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
-        const radius = 1;
+        const radius = 1.5;
         
         dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
         dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
@@ -578,6 +588,27 @@ Object.keys(experienceData).forEach((key, index) => {
         
         planet.add(dot);
     }
+    
+    // Add company name text to planet
+    const planetCanvas = document.createElement('canvas');
+    const planetContext = planetCanvas.getContext('2d');
+    planetCanvas.width = 512;
+    planetCanvas.height = 256;
+    
+    planetContext.fillStyle = data.color === 0x00ff00 ? '#00ff00' : (data.color === 0x00cc00 ? '#00cc00' : '#009900');
+    planetContext.font = 'bold 40px JetBrains Mono';
+    planetContext.textAlign = 'center';
+    planetContext.textBaseline = 'middle';
+    planetContext.fillText(data.label, 256, 128);
+    
+    const planetTexture = new THREE.CanvasTexture(planetCanvas);
+    const planetSpriteMaterial = new THREE.SpriteMaterial({ 
+        map: planetTexture,
+        transparent: true
+    });
+    const planetSprite = new THREE.Sprite(planetSpriteMaterial);
+    planetSprite.scale.set(3, 1.5, 1);
+    planetGroup.add(planetSprite);
     
     // Create orbit ring
     const orbitGeometry = new THREE.RingGeometry(data.orbitRadius - 0.05, data.orbitRadius + 0.05, 64);
@@ -597,6 +628,7 @@ Object.keys(experienceData).forEach((key, index) => {
         angle: (index / Object.keys(experienceData).length) * Math.PI * 2,
         orbitRadius: data.orbitRadius,
         speed: data.speed,
+        rotationDirection: data.rotationDirection,
         planet: planet,
         material: planetMaterial,
         originalOpacity: 0.5
@@ -704,29 +736,17 @@ canvas.addEventListener('touchend', (event) => {
 // Detail modal functions
 function showDetail(data) {
     document.getElementById('detail-company-name').textContent = data.name;
-    document.getElementById('company-overview').textContent = data.overview;
+    document.getElementById('detail-role').textContent = data.role;
+    document.getElementById('detail-period').textContent = data.period;
     
-    // Timeline
-    const timelineContainer = document.getElementById('company-timeline');
-    timelineContainer.innerHTML = '';
+    // Responsibilities
+    const responsibilitiesContainer = document.getElementById('company-responsibilities');
+    responsibilitiesContainer.innerHTML = '';
     data.timeline.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'timeline-item';
-        div.innerHTML = `
-            <div class="timeline-date">${item.date}</div>
-            <div class="timeline-description">${item.description}</div>
-        `;
-        timelineContainer.appendChild(div);
-    });
-    
-    // Tech Stack
-    const techContainer = document.getElementById('company-techstack');
-    techContainer.innerHTML = '';
-    data.techStack.forEach(tech => {
-        const div = document.createElement('div');
-        div.className = 'tech-item';
-        div.textContent = tech;
-        techContainer.appendChild(div);
+        div.style.cssText = 'margin-bottom:1rem; color:#00ff00; line-height:1.8;';
+        div.innerHTML = `<strong style="opacity:0.8;">${item.date}:</strong> ${item.description}`;
+        responsibilitiesContainer.appendChild(div);
     });
     
     // Recommendation
@@ -751,20 +771,6 @@ function closeDetail() {
     document.getElementById('detail-modal').classList.remove('active');
 }
 
-function switchTab(event, tabName) {
-    // Hide all tabs
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    
-    // Remove active class from all buttons
-    const buttons = document.querySelectorAll('.detail-tab');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
-    // Show selected tab
-    document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
-}
-
 // Animation
 let time = 0;
 function animate() {
@@ -777,7 +783,7 @@ function animate() {
     
     // Orbit planets
     planets.forEach((planetGroup) => {
-        planetGroup.userData.angle += planetGroup.userData.speed * 0.01;
+        planetGroup.userData.angle += planetGroup.userData.speed * 0.01 * planetGroup.userData.rotationDirection;
         
         const x = Math.cos(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
         const z = Math.sin(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
@@ -786,7 +792,14 @@ function animate() {
         planetGroup.position.set(x, y, z);
         
         // Rotate planet
-        planetGroup.userData.planet.rotation.y += 0.01;
+        planetGroup.userData.planet.rotation.y += 0.01 * planetGroup.userData.rotationDirection;
+        
+        // Keep sprite facing camera
+        planetGroup.children.forEach(child => {
+            if (child instanceof THREE.Sprite) {
+                child.lookAt(camera.position);
+            }
+        });
     });
     
     // Rotate stars slowly
