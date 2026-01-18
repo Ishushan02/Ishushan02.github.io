@@ -349,9 +349,9 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.set(5.5, 0, 5);
+camera.position.set(0, 0, 5);
 
-// Create main globe
+// Create main globe - positioned to show only half on left side
 const geometry = new THREE.SphereGeometry(2.5, 64, 64);
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
@@ -361,6 +361,7 @@ const material = new THREE.MeshBasicMaterial({
 });
 
 const globe = new THREE.Mesh(geometry, material);
+globe.position.set(-2.5, 0, 0); // Position globe so only right half is visible
 scene.add(globe);
 
 // Add background stars
@@ -543,9 +544,7 @@ function closeRecommendation() {
 
 // Animation
 let time = 0;
-const orbitRadiusX = 4;
-const orbitRadiusY = 3;
-const orbitSpeed = 0.8;
+const orbitSpeed = 0.6;
 
 function animate() {
     requestAnimationFrame(animate);
@@ -558,13 +557,18 @@ function animate() {
     // Rotate small globe
     smallGlobe.rotation.y += 0.01;
     
-    // Orbit the recommendation sphere in a simple circular path on screen
+    // Orbit the recommendation sphere from bottom-left to top-right corner
     const angle = time * orbitSpeed * 0.1;
     
-    // Simple 2D circular orbit in screen space
-    const x = Math.cos(angle) * orbitRadiusX + 1;
-    const y = Math.sin(angle) * orbitRadiusY;
-    const z = 5;
+    // Create a diagonal path from bottom-left to top-right
+    // Using sine wave to create smooth circular motion along diagonal
+    const progress = (Math.sin(angle) + 1) / 2; // Normalize to 0-1
+    
+    // Bottom-left corner: x=-4, y=-2.5
+    // Top-right corner: x=4, y=2.5
+    const x = -4 + (progress * 8);
+    const y = -2.5 + (progress * 5);
+    const z = 4;
     
     orbitGroup.position.set(x, y, z);
     
