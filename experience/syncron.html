@@ -109,6 +109,76 @@ body {
     text-shadow:0 0 15px #00ff00;
 }
 
+/* Top Header Panel */
+.top-header {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:10;
+    padding:1.5rem 2rem;
+    background:linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
+    border-bottom:1px solid rgba(0,255,0,0.2);
+}
+
+.header-content {
+    max-width:1400px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.career-stats {
+    display:flex;
+    gap:3rem;
+}
+
+.stat-item {
+    text-align:center;
+}
+
+.stat-value {
+    font-size:2rem;
+    color:#00ff00;
+    font-weight:700;
+    text-shadow:0 0 15px #00ff00;
+    display:block;
+    margin-bottom:0.3rem;
+}
+
+.stat-label {
+    font-size:0.75rem;
+    color:#00ff00;
+    opacity:0.7;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.system-info {
+    display:flex;
+    gap:2rem;
+    align-items:center;
+}
+
+.info-item {
+    font-size:0.8rem;
+    color:#00ff00;
+    opacity:0.8;
+    letter-spacing:1px;
+}
+
+.status-indicator {
+    display:inline-block;
+    width:8px;
+    height:8px;
+    background:#00ff00;
+    border-radius:50%;
+    margin-left:5px;
+    box-shadow:0 0 10px #00ff00;
+    animation:pulse 2s infinite;
+}
+
 /* Detail Modal */
 .detail-modal {
     position:fixed;
@@ -342,6 +412,37 @@ body {
         font-size:0.75rem;
     }
     
+    .top-header {
+        padding:1rem;
+    }
+    
+    .header-content {
+        flex-direction:column;
+        gap:1.5rem;
+    }
+    
+    .career-stats {
+        gap:1.5rem;
+    }
+    
+    .stat-value {
+        font-size:1.5rem;
+    }
+    
+    .stat-label {
+        font-size:0.65rem;
+    }
+    
+    .system-info {
+        gap:1rem;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    
+    .info-item {
+        font-size:0.7rem;
+    }
+    
     .detail-container {
         padding:2rem 1.5rem;
     }
@@ -375,10 +476,37 @@ body {
 <canvas id="solar-canvas"></canvas>
 <div class="crt-effect"></div>
 
+<div class="top-header">
+    <div class="header-content">
+        <div class="career-stats">
+            <div class="stat-item">
+                <span class="stat-value">5+</span>
+                <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">3</span>
+                <span class="stat-label">Companies</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">50+</span>
+                <span class="stat-label">Projects</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">12+</span>
+                <span class="stat-label">Technologies</span>
+            </div>
+        </div>
+        <div class="system-info">
+            <div class="info-item">CAREER MODE<span class="status-indicator"></span></div>
+            <div class="info-item">SCROLL TO EXPLORE</div>
+            <div class="info-item" id="visit-time"></div>
+        </div>
+    </div>
+</div>
+
 <a href="index.html" class="back-button">← BACK TO HOME</a>
 
 <div class="info-panel">
-    <div class="info-text">MY TECH STACK</div>
     <div>
         <span class="tech-tag">Python</span>
         <span class="tech-tag">TensorFlow</span>
@@ -422,6 +550,18 @@ body {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+// Update visit time
+function updateVisitTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('visit-time').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+updateVisitTime();
+setInterval(updateVisitTime, 1000);
+
 // Experience data
 const experienceData = {
     syncron: {
@@ -429,7 +569,7 @@ const experienceData = {
         label: "Syncron",
         role: "AI Engineer",
         period: "2023 - Present",
-        orbitRadius: 7,
+        orbitRadius: 4,
         color: 0x00ff00,
         speed: 0.5,
         rotationDirection: 1, // clockwise
@@ -452,7 +592,7 @@ const experienceData = {
         label: "Gnani.ai",
         role: "Machine Learning Engineer",
         period: "2021 - 2023",
-        orbitRadius: 10,
+        orbitRadius: 6,
         color: 0x00cc00,
         speed: 0.3,
         rotationDirection: -1, // anti-clockwise
@@ -475,7 +615,7 @@ const experienceData = {
         label: "VigaET",
         role: "AI/ML Developer",
         period: "2019 - 2021",
-        orbitRadius: 14,
+        orbitRadius: 8,
         color: 0x009900,
         speed: 0.2,
         rotationDirection: 1, // clockwise
@@ -502,7 +642,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.z = 15;
+camera.position.z = 20;
 
 // Central sun - "EXPERIENCE"
 const sunGeometry = new THREE.SphereGeometry(5, 64, 64);
@@ -516,15 +656,15 @@ const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sun);
 
 // Add dots on sun
-const sunDotGeometry = new THREE.SphereGeometry(0.03, 8, 8);
+const sunDotGeometry = new THREE.SphereGeometry(0.05, 8, 8);
 const sunDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const sunDotCount = 300;
+const sunDotCount = 800;
 
 for (let i = 0; i < sunDotCount; i++) {
     const dot = new THREE.Mesh(sunDotGeometry, sunDotMaterial);
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
-    const radius = 3;
+    const radius = 5;
     
     dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
     dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
@@ -551,7 +691,7 @@ const spriteMaterial = new THREE.SpriteMaterial({
     transparent: true
 });
 const sprite = new THREE.Sprite(spriteMaterial);
-sprite.scale.set(6, 3, 1);
+sprite.scale.set(10, 5, 1);
 sprite.position.set(0, 0, 0);
 scene.add(sprite);
 
@@ -587,7 +727,7 @@ Object.keys(experienceData).forEach((key, index) => {
     const planetGroup = new THREE.Group();
     
     // Create planet sphere
-    const planetGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+    const planetGeometry = new THREE.SphereGeometry(2, 32, 32);
     const planetMaterial = new THREE.MeshBasicMaterial({
         color: data.color,
         wireframe: true,
@@ -598,15 +738,15 @@ Object.keys(experienceData).forEach((key, index) => {
     planetGroup.add(planet);
     
     // Add dots on planet
-    const planetDotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+    const planetDotGeometry = new THREE.SphereGeometry(0.025, 8, 8);
     const planetDotMaterial = new THREE.MeshBasicMaterial({ color: data.color });
-    const planetDotCount = 150;
+    const planetDotCount = 200;
     
     for (let i = 0; i < planetDotCount; i++) {
         const dot = new THREE.Mesh(planetDotGeometry, planetDotMaterial);
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
-        const radius = 1.5;
+        const radius = 2;
         
         dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
         dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
@@ -633,7 +773,7 @@ Object.keys(experienceData).forEach((key, index) => {
         transparent: true
     });
     const planetSprite = new THREE.Sprite(planetSpriteMaterial);
-    planetSprite.scale.set(3, 1.5, 1);
+    planetSprite.scale.set(4, 2, 1);
     planetGroup.add(planetSprite);
     
     // Create orbit ring
