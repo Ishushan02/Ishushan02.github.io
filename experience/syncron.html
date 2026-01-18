@@ -112,71 +112,57 @@ body {
 /* Top Header Panel */
 .top-header {
     position:fixed;
-    top:0;
-    left:0;
-    right:0;
+    top:2rem;
+    right:2rem;
     z-index:10;
-    padding:1.5rem 2rem;
-    background:linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
-    border-bottom:1px solid rgba(0,255,0,0.2);
-}
-
-.header-content {
-    max-width:1400px;
-    margin:0 auto;
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.career-stats {
-    display:flex;
-    gap:3rem;
-}
-
-.stat-item {
-    text-align:center;
-}
-
-.stat-value {
-    font-size:2rem;
-    color:#00ff00;
-    font-weight:700;
-    text-shadow:0 0 15px #00ff00;
-    display:block;
-    margin-bottom:0.3rem;
-}
-
-.stat-label {
-    font-size:0.75rem;
-    color:#00ff00;
-    opacity:0.7;
-    letter-spacing:2px;
-    text-transform:uppercase;
-}
-
-.system-info {
-    display:flex;
+    flex-direction:row;
     gap:2rem;
-    align-items:center;
 }
 
-.info-item {
-    font-size:0.8rem;
+.social-link {
     color:#00ff00;
-    opacity:0.8;
-    letter-spacing:1px;
+    text-decoration:none;
+    font-size:0.85rem;
+    padding:0.8rem;
+    border:1px solid #00ff00;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.3s;
+    text-shadow:0 0 5px #00ff00;
+    background:rgba(0,0,0,0.5);
+    position:relative;
 }
 
-.status-indicator {
-    display:inline-block;
-    width:8px;
-    height:8px;
-    background:#00ff00;
-    border-radius:50%;
-    margin-left:5px;
-    box-shadow:0 0 10px #00ff00;
-    animation:pulse 2s infinite;
+.social-link:hover {
+    background:rgba(0,255,0,0.1);
+    box-shadow:0 0 20px #00ff00;
+    transform:scale(1.1);
+}
+
+.social-link::before {
+    content:attr(data-label);
+    position:absolute;
+    bottom:60px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.9);
+    padding:0.5rem 1rem;
+    border:1px solid #00ff00;
+    border-radius:4px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:all 0.3s;
+}
+
+.social-link:hover::before {
+    opacity:1;
+    bottom:65px;
 }
 
 /* Detail Modal */
@@ -413,34 +399,23 @@ body {
     }
     
     .top-header {
-        padding:1rem;
-    }
-    
-    .header-content {
-        flex-direction:column;
-        gap:1.5rem;
-    }
-    
-    .career-stats {
-        gap:1.5rem;
-    }
-    
-    .stat-value {
-        font-size:1.5rem;
-    }
-    
-    .stat-label {
-        font-size:0.65rem;
-    }
-    
-    .system-info {
+        right:1rem;
         gap:1rem;
-        flex-wrap:wrap;
-        justify-content:center;
     }
     
-    .info-item {
-        font-size:0.7rem;
+    .social-link {
+        width:40px;
+        height:40px;
+        padding:0.6rem;
+    }
+    
+    .social-link svg {
+        width:20px;
+        height:20px;
+    }
+    
+    .social-link::before {
+        display:none;
     }
     
     .detail-container {
@@ -477,31 +452,24 @@ body {
 <div class="crt-effect"></div>
 
 <div class="top-header">
-    <div class="header-content">
-        <div class="career-stats">
-            <div class="stat-item">
-                <span class="stat-value">5+</span>
-                <span class="stat-label">Years Experience</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">3</span>
-                <span class="stat-label">Companies</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">50+</span>
-                <span class="stat-label">Projects</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">12+</span>
-                <span class="stat-label">Technologies</span>
-            </div>
-        </div>
-        <div class="system-info">
-            <div class="info-item">CAREER MODE<span class="status-indicator"></span></div>
-            <div class="info-item">SCROLL TO EXPLORE</div>
-            <div class="info-item" id="visit-time"></div>
-        </div>
-    </div>
+    <a href="https://github.com/Ishushan02" target="_blank" class="social-link" data-label="GitHub">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+    </a>
+    <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-link" data-label="LinkedIn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+        </svg>
+    </a>
+    <a href="mailto:isanand@ucsd.edu" class="social-link" data-label="Email">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+        </svg>
+    </a>
 </div>
 
 <a href="index.html" class="back-button">← BACK TO HOME</a>
@@ -512,6 +480,14 @@ body {
         <span class="tech-tag">TensorFlow</span>
         <span class="tech-tag">PyTorch</span>
         <span class="tech-tag">NLP</span>
+        <span class="tech-tag">Computer Vision</span>
+        <span class="tech-tag">AWS</span>
+        <span class="tech-tag">Docker</span>
+        <span class="tech-tag">Kubernetes</span>
+        <span class="tech-tag">React</span>
+        <span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">PostgreSQL</span>
+        <span class="tech-tag">MongoDB</span>
         <span class="tech-tag">Computer Vision</span>
         <span class="tech-tag">AWS</span>
         <span class="tech-tag">Docker</span>
@@ -550,18 +526,6 @@ body {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// Update visit time
-function updateVisitTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('visit-time').textContent = `${hours}:${minutes}:${seconds}`;
-}
-
-updateVisitTime();
-setInterval(updateVisitTime, 1000);
-
 // Experience data
 const experienceData = {
     syncron: {
@@ -569,7 +533,7 @@ const experienceData = {
         label: "Syncron",
         role: "AI Engineer",
         period: "2023 - Present",
-        orbitRadius: 4,
+        orbitRadius: 10,
         color: 0x00ff00,
         speed: 0.5,
         rotationDirection: 1, // clockwise
@@ -592,7 +556,7 @@ const experienceData = {
         label: "Gnani.ai",
         role: "Machine Learning Engineer",
         period: "2021 - 2023",
-        orbitRadius: 6,
+        orbitRadius: 15,
         color: 0x00cc00,
         speed: 0.3,
         rotationDirection: -1, // anti-clockwise
@@ -615,7 +579,7 @@ const experienceData = {
         label: "VigaET",
         role: "AI/ML Developer",
         period: "2019 - 2021",
-        orbitRadius: 8,
+        orbitRadius: 20,
         color: 0x009900,
         speed: 0.2,
         rotationDirection: 1, // clockwise
@@ -642,7 +606,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.z = 20;
+camera.position.z = 25;
 
 // Central sun - "EXPERIENCE"
 const sunGeometry = new THREE.SphereGeometry(5, 64, 64);
@@ -953,19 +917,13 @@ function animate() {
         
         const x = Math.cos(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
         const z = Math.sin(planetGroup.userData.angle) * planetGroup.userData.orbitRadius;
-        const y = Math.sin(planetGroup.userData.angle * 0.5) * 0.5;
+        const y = Math.sin(planetGroup.userData.angle * 2) * 0.5;
         
         planetGroup.position.set(x, y, z);
+        planetGroup.lookAt(camera.position);
         
         // Rotate planet
         planetGroup.userData.planet.rotation.y += 0.01 * planetGroup.userData.rotationDirection;
-        
-        // Keep sprite facing camera
-        planetGroup.children.forEach(child => {
-            if (child instanceof THREE.Sprite) {
-                child.lookAt(camera.position);
-            }
-        });
     });
     
     // Rotate stars slowly
