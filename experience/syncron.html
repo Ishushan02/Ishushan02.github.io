@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience - Ishan Kumar Anand</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'JetBrains Mono', monospace;
+    background:#000;
+    color:#00ff00;
+    overflow-x:hidden;
+    line-height:1.8;
+    min-height:100vh;
+}
+
+.crt-effect {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
+    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
+    background-size:100% 4px;
+    animation:crt-flicker .15s infinite;
+}
+@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
+
+.container {
+    display:flex;
+    min-height:100vh;
+    position:relative;
+}
+
+/* ================= LEFT SIDE - GLOBE ================= */
+.globe-section {
+    width:50%;
+    position:relative;
+    overflow:hidden;
+}
+
+#globe-canvas {
+    position:absolute;
+    top:0;
+    left:-50%;
+    width:200%;
+    height:100%;
+    z-index:1;
+}
+
+/* ================= RIGHT SIDE - CONTENT ================= */
+.content-section {
+    width:50%;
+    padding:4rem 3rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    z-index:10;
+}
+
+.back-button {
+    position:absolute;
+    top:2rem;
+    right:2rem;
+    color:#00ff00;
+    text-decoration:none;
+    font-size:0.9rem;
+    padding:0.8rem 1.5rem;
+    border:1px solid #00ff00;
+    border-radius:5px;
+    transition:all 0.3s;
+    text-shadow:0 0 5px #00ff00;
+    background:rgba(0,0,0,0.5);
+}
+
+.back-button:hover {
+    background:rgba(0,255,0,0.2);
+    box-shadow:0 0 20px #00ff00;
+    transform:scale(1.05);
+}
+
+.company-name {
+    font-size:2.5rem;
+    font-weight:700;
+    color:#00ff00;
+    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
+    margin-bottom:0.5rem;
+    letter-spacing:3px;
+}
+
+.job-title {
+    font-size:1.5rem;
+    color:#00ff00;
+    opacity:0.8;
+    margin-bottom:0.3rem;
+    letter-spacing:2px;
+}
+
+.duration {
+    font-size:0.9rem;
+    color:#00ff00;
+    opacity:0.6;
+    margin-bottom:2rem;
+    letter-spacing:1px;
+}
+
+.experience-content {
+    margin-top:1rem;
+}
+
+.experience-content p {
+    margin-bottom:1.5rem;
+    font-size:0.95rem;
+    color:#00ff00;
+    opacity:0.9;
+    text-align:justify;
+}
+
+.experience-content ul {
+    list-style:none;
+    margin:1rem 0;
+}
+
+.experience-content li {
+    margin-bottom:1rem;
+    font-size:0.9rem;
+    color:#00ff00;
+    opacity:0.85;
+    padding-left:1.5rem;
+    position:relative;
+}
+
+.experience-content li::before {
+    content:"▹";
+    position:absolute;
+    left:0;
+    color:#00ff00;
+    font-weight:700;
+}
+
+/* ================= RECOMMENDATION POPUP ================= */
+.recommendation-popup {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%) scale(0);
+    background:rgba(0,0,0,0.95);
+    border:2px solid #00ff00;
+    border-radius:10px;
+    padding:2rem;
+    box-shadow:0 0 50px #00ff00;
+    max-width:500px;
+    width:90%;
+    z-index:1000;
+    opacity:0;
+    transition:all 0.3s;
+    pointer-events:none;
+}
+
+.recommendation-popup.active {
+    transform:translate(-50%, -50%) scale(1);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.recommendation-header {
+    display:flex;
+    align-items:center;
+    margin-bottom:1.5rem;
+    gap:1rem;
+}
+
+.recommender-image {
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    border:2px solid #00ff00;
+    box-shadow:0 0 15px #00ff00;
+}
+
+.recommender-info h3 {
+    color:#00ff00;
+    font-size:1.2rem;
+    margin-bottom:0.3rem;
+    text-shadow:0 0 10px #00ff00;
+}
+
+.recommender-info p {
+    color:#00ff00;
+    font-size:0.8rem;
+    opacity:0.7;
+}
+
+.recommendation-text {
+    color:#00ff00;
+    font-size:0.9rem;
+    line-height:1.6;
+    opacity:0.85;
+    font-style:italic;
+}
+
+.close-recommendation {
+    position:absolute;
+    top:1rem;
+    right:1rem;
+    color:#00ff00;
+    font-size:1.5rem;
+    cursor:pointer;
+    border:none;
+    background:none;
+    transition:all 0.3s;
+}
+
+.close-recommendation:hover {
+    text-shadow:0 0 10px #00ff00;
+    transform:scale(1.2);
+}
+
+/* ================= RESPONSIVE STYLES ================= */
+@media (max-width: 768px) {
+    .container {
+        flex-direction:column;
+    }
+    
+    .globe-section {
+        width:100%;
+        height:40vh;
+    }
+    
+    #globe-canvas {
+        left:-50%;
+        top:-25%;
+        width:200%;
+        height:150%;
+    }
+    
+    .content-section {
+        width:100%;
+        padding:2rem 1.5rem;
+    }
+    
+    .company-name {
+        font-size:1.8rem;
+        letter-spacing:2px;
+    }
+    
+    .job-title {
+        font-size:1.2rem;
+    }
+    
+    .back-button {
+        top:1rem;
+        right:1rem;
+        padding:0.6rem 1rem;
+        font-size:0.8rem;
+    }
+    
+    .recommendation-popup {
+        padding:1.5rem;
+        max-width:90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-section {
+        padding:1.5rem 1rem;
+    }
+    
+    .company-name {
+        font-size:1.5rem;
+        letter-spacing:1px;
+    }
+    
+    .job-title {
+        font-size:1rem;
+    }
+    
+    .duration {
+        font-size:0.8rem;
+    }
+    
+    .experience-content p,
+    .experience-content li {
+        font-size:0.85rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="crt-effect"></div>
+
+<div class="container">
+    <div class="globe-section">
+        <canvas id="globe-canvas"></canvas>
+    </div>
+    
+    <div class="content-section">
+        <a href="index.html" class="back-button">← BACK TO HOME</a>
+        
+        <div class="company-name">SYNCRON</div>
+        <div class="job-title">AI Engineer</div>
+        <div class="duration">January 2024 - Present | San Diego, CA</div>
+        
+        <div class="experience-content">
+            <p>
+                Leading the development of advanced AI solutions for supply chain optimization and predictive maintenance. 
+                Working with cutting-edge machine learning models to transform enterprise operations.
+            </p>
+            
+            <ul>
+                <li>Architected and deployed ML pipelines processing 10M+ daily transactions with 99.9% uptime</li>
+                <li>Developed transformer-based models achieving 23% improvement in demand forecasting accuracy</li>
+                <li>Led cross-functional team of 5 engineers to deliver AI-powered inventory optimization platform</li>
+                <li>Implemented real-time anomaly detection system reducing operational costs by $2.5M annually</li>
+                <li>Designed scalable microservices architecture supporting 500K+ concurrent API requests</li>
+            </ul>
+            
+            <p>
+                Technologies: Python, TensorFlow, PyTorch, Kubernetes, AWS, Apache Kafka, PostgreSQL, Redis
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="recommendation-popup" class="recommendation-popup">
+    <button class="close-recommendation" onclick="closeRecommendation()">✕</button>
+    <div class="recommendation-header">
+        <img src="https://via.placeholder.com/60/00ff00/000000?text=JD" alt="Recommender" class="recommender-image" id="recommender-image">
+        <div class="recommender-info">
+            <h3 id="recommender-name">John Doe</h3>
+            <p id="recommender-title">Engineering Manager at Syncron</p>
+        </div>
+    </div>
+    <div class="recommendation-text" id="recommendation-text">
+        "Ishan is an exceptional AI engineer with a rare combination of technical expertise and business acumen. 
+        His ability to translate complex ML concepts into production-ready solutions has been instrumental in our success. 
+        He consistently delivers high-quality work and is a natural leader who elevates the entire team."
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('globe-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+camera.position.set(0, 0, 5);
+
+// Create main globe
+const geometry = new THREE.SphereGeometry(2.5, 64, 64);
+const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+});
+
+const globe = new THREE.Mesh(geometry, material);
+scene.add(globe);
+
+// Add background stars
+const starGeometry = new THREE.BufferGeometry();
+const starVertices = [];
+const starCount = 1000;
+
+for (let i = 0; i < starCount; i++) {
+    const x = (Math.random() - 0.5) * 100;
+    const y = (Math.random() - 0.5) * 100;
+    const z = (Math.random() - 0.5) * 100;
+    starVertices.push(x, y, z);
+}
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const starMaterial = new THREE.PointsMaterial({ 
+    color: 0x00ff00, 
+    size: 0.1,
+    transparent: true,
+    opacity: 0.6
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Add glowing dots on main globe
+const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const dotCount = 400;
+
+for (let i = 0; i < dotCount; i++) {
+    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 2.5;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    globe.add(dot);
+}
+
+// Create orbiting recommendation sphere
+const orbitGroup = new THREE.Group();
+
+// Small globe for recommendation
+const smallGlobeGeometry = new THREE.SphereGeometry(0.4, 32, 32);
+const smallGlobeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.5
+});
+const smallGlobe = new THREE.Mesh(smallGlobeGeometry, smallGlobeMaterial);
+orbitGroup.add(smallGlobe);
+
+// Add dots to small globe
+const smallDotGeometry = new THREE.SphereGeometry(0.008, 8, 8);
+const smallDotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const smallDotCount = 50;
+
+for (let i = 0; i < smallDotCount; i++) {
+    const dot = new THREE.Mesh(smallDotGeometry, smallDotMaterial);
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const radius = 0.4;
+    
+    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
+    dot.position.z = radius * Math.cos(phi);
+    
+    smallGlobe.add(dot);
+}
+
+// Create image/icon sprite on the orbiting sphere
+const spriteCanvas = document.createElement('canvas');
+const spriteContext = spriteCanvas.getContext('2d');
+spriteCanvas.width = 256;
+spriteCanvas.height = 256;
+
+// Draw circle background
+spriteContext.fillStyle = '#00ff00';
+spriteContext.beginPath();
+spriteContext.arc(128, 128, 100, 0, Math.PI * 2);
+spriteContext.fill();
+
+// Draw initials
+spriteContext.fillStyle = '#000';
+spriteContext.font = 'bold 80px JetBrains Mono';
+spriteContext.textAlign = 'center';
+spriteContext.textBaseline = 'middle';
+spriteContext.fillText('JD', 128, 128);
+
+const spriteTexture = new THREE.CanvasTexture(spriteCanvas);
+const spriteMaterial = new THREE.SpriteMaterial({ 
+    map: spriteTexture,
+    transparent: true
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.8, 0.8, 0.8);
+orbitGroup.add(sprite);
+
+scene.add(orbitGroup);
+
+// Raycaster for hover detection
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let isHovering = false;
+
+function updateMousePosition(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects([smallGlobe, sprite], true);
+    
+    if (intersects.length > 0) {
+        isHovering = true;
+        canvas.style.cursor = 'pointer';
+        orbitGroup.scale.set(1.2, 1.2, 1.2);
+    } else {
+        isHovering = false;
+        canvas.style.cursor = 'default';
+        orbitGroup.scale.set(1, 1, 1);
+    }
+}
+
+canvas.addEventListener('mousemove', (event) => {
+    updateMousePosition(event.clientX, event.clientY);
+});
+
+canvas.addEventListener('click', (event) => {
+    if (isHovering) {
+        showRecommendation();
+    }
+});
+
+// Touch events
+let touchStartX = 0;
+let touchStartY = 0;
+
+canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 0) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+        updateMousePosition(touchStartX, touchStartY);
+    }
+}, { passive: true });
+
+canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length > 0) {
+        updateMousePosition(event.touches[0].clientX, event.touches[0].clientY);
+    }
+}, { passive: true });
+
+canvas.addEventListener('touchend', (event) => {
+    if (event.changedTouches.length > 0 && isHovering) {
+        const touch = event.changedTouches[0];
+        const deltaX = Math.abs(touch.clientX - touchStartX);
+        const deltaY = Math.abs(touch.clientY - touchStartY);
+        
+        if (deltaX < 10 && deltaY < 10) {
+            showRecommendation();
+        }
+    }
+}, { passive: true });
+
+function showRecommendation() {
+    const popup = document.getElementById('recommendation-popup');
+    popup.classList.add('active');
+}
+
+function closeRecommendation() {
+    const popup = document.getElementById('recommendation-popup');
+    popup.classList.remove('active');
+}
+
+// Animation
+let time = 0;
+const orbitRadius = 4;
+const orbitSpeed = 0.5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    // Rotate main globe
+    globe.rotation.y += 0.002;
+    globe.rotation.x = Math.sin(time * 0.3) * 0.05;
+    
+    // Rotate small globe
+    smallGlobe.rotation.y += 0.01;
+    
+    // Orbit the recommendation sphere
+    const angle = time * orbitSpeed * 0.1;
+    const x = Math.cos(angle) * orbitRadius;
+    const z = Math.sin(angle) * orbitRadius;
+    const y = Math.sin(angle * 2) * 0.8;
+    
+    orbitGroup.position.set(x, y, z);
+    
+    // Make sprite always face camera
+    sprite.lookAt(camera.position);
+    
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Close popup on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeRecommendation();
+    }
+});
+</script>
+
+</body>
+</html>
