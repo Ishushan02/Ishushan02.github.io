@@ -900,8 +900,6 @@ document.addEventListener('keydown', (e) => {
 </body>
 </html> -->
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1458,6 +1456,17 @@ const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 camera.position.z = 5;
+
+// Reset camera position on page load/back button
+window.addEventListener('pageshow', function(event) {
+    camera.position.set(0, 0, 5);
+    camera.lookAt(0, 0, 0);
+    rotationPaused = false;
+    if (hoveredObject) {
+        hoveredObject.scale.set(1, 1, 1);
+        hoveredObject = null;
+    }
+});
 
 // Create main globe
 const geometry = new THREE.SphereGeometry(2, 64, 64);
