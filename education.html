@@ -194,36 +194,34 @@ body {
 }
 
 .college-logo {
-    width:50px;
-    height:50px;
+    width:60px;
+    height:60px;
     display:flex;
     align-items:center;
     justify-content:center;
     border:2px solid #00ff00;
-    border-radius:8px;
-    background:rgba(0,255,0,0.1);
+    border-radius:50%;
+    background:#fff;
     transition:all 0.3s;
     text-decoration:none;
     flex-shrink:0;
     overflow:hidden;
-    padding:4px;
+    padding:6px;
+    box-shadow:0 0 10px rgba(0,255,0,0.3);
 }
 
 .college-logo:hover, .college-logo:active {
-    background:rgba(0,255,0,0.2);
-    box-shadow:0 0 15px rgba(0,255,0,0.5);
-    transform:scale(1.05);
+    background:#f0f0f0;
+    box-shadow:0 0 20px rgba(0,255,0,0.6);
+    transform:scale(1.08);
+    border-color:#00ff00;
 }
 
 .college-logo img {
     width:100%;
     height:100%;
     object-fit:contain;
-    filter:brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(500%) hue-rotate(70deg);
-}
-
-.college-logo:hover img {
-    filter:brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(700%) hue-rotate(70deg);
+    display:block;
 }
 
 .education-meta {
@@ -478,28 +476,29 @@ const educationData = {
         degree: "Master of Science in Computer Science",
         college: "University of California, San Diego",
         collegeUrl: "https://ucsd.edu",
-        logoUrl: "./images/ucsd.png", // Add your UCSD logo file here
+        logoUrl: "ucsd-logo.png", // Add your UCSD logo file here
         location: "San Diego, California",
         duration: "September 2023 - June 2025",
-        gpa: "3.71 / 4.0",
+        gpa: "3.85 / 4.0",
         coursework: [
-            { code: "CSE 252A", name: "Computer Vision" },
+            { code: "CSE 250A", name: "Probabilistic Reasoning & Learning" },
             { code: "CSE 251B", name: "Deep Learning" },
             { code: "CSE 258", name: "Recommender Systems & Web Mining" },
             { code: "CSE 276A", name: "Introduction to Robotics" },
-            { code: "CSE 202", name: "Data Structure and Algorithms" },
+            { code: "CSE 291", name: "Advanced Machine Learning" },
             { code: "CSE 230", name: "Principles of Programming Languages" },
-            { code: "CSE 221A", name: "Operating Systems" },
+            { code: "CSE 240A", name: "Computer Architecture" },
+            { code: "CSE 260", name: "Parallel Computation" }
         ]
     },
     bachelors: {
-        degree: "Bachelor of Technology in Computer Science and Engineering",
-        college: "Christ University",
+        degree: "Bachelor of Technology in Computer Science",
+        college: "Indian Institute of Technology (IIT) Delhi",
         collegeUrl: "https://home.iitd.ac.in",
         logoUrl: "iitd-logo.png", // Add your IIT Delhi logo file here
         location: "New Delhi, India",
         duration: "August 2017 - May 2021",
-        gpa: "3.87 / 4",
+        gpa: "8.7 / 10.0",
         coursework: [
             { code: "CSL201", name: "Data Structures & Algorithms" },
             { code: "CSL211", name: "Computer Architecture" },
@@ -764,7 +763,7 @@ function showDetails(key) {
             <div class="coursework-grid">
                 ${data.coursework.map(course => `
                     <div class="course-card">
-                        
+                        <div class="course-code">${course.code}</div>
                         <div class="course-name">${course.name}</div>
                     </div>
                 `).join('')}
