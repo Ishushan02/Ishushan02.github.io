@@ -206,7 +206,7 @@ body {
     text-decoration:none;
     flex-shrink:0;
     overflow:hidden;
-    padding:6px;
+    padding:8px;
     box-shadow:0 0 10px rgba(0,255,0,0.3);
 }
 
@@ -220,8 +220,10 @@ body {
 .college-logo img {
     width:100%;
     height:100%;
-    object-fit:contain;
+    object-fit:cover;
+    object-position:center;
     display:block;
+    border-radius:50%;
 }
 
 .education-meta {
@@ -476,7 +478,7 @@ const educationData = {
         degree: "Master of Science in Computer Science",
         college: "University of California, San Diego",
         collegeUrl: "https://ucsd.edu",
-        logoUrl: "images/ucsd.png", 
+        logoUrl: "ucsd-logo.png", // Add your UCSD logo file here
         location: "San Diego, California",
         duration: "September 2023 - June 2025",
         gpa: "3.85 / 4.0",
@@ -492,10 +494,10 @@ const educationData = {
         ]
     },
     bachelors: {
-        degree: "Bachelor of Technology in Computer Science adn Engineering",
-        college: "Christ University, India",
+        degree: "Bachelor of Technology in Computer Science",
+        college: "Indian Institute of Technology (IIT) Delhi",
         collegeUrl: "https://home.iitd.ac.in",
-        logoUrl: "images/gnani.png", 
+        logoUrl: "iitd-logo.png", // Add your IIT Delhi logo file here
         location: "New Delhi, India",
         duration: "August 2017 - May 2021",
         gpa: "8.7 / 10.0",
