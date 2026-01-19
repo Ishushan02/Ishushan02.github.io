@@ -444,22 +444,24 @@ body {
 <script>
 const publicationData = {
     paper: {
-        title: "Deep Learning Approaches for Real-Time Object Detection in Autonomous Systems",
-        authors: ["Ishan Kumar Anand", "Dr. Sarah Mitchell", "Dr. James Chen"],
+        title: "Brain Tumor Detection Using Deep Learning Model",
+        authors: ["Ishan Kumar Anand", "Joel Louis Menachery", "Dr. Michael Moses"],
         journal: "IEEE Transactions on Neural Networks and Learning Systems",
-        year: "2024",
-        doi: "10.1109/TNNLS.2024.12345",
-        abstract: "This paper presents a novel deep learning architecture for real-time object detection in autonomous systems. We introduce an efficient convolutional neural network design that achieves state-of-the-art accuracy while maintaining low computational overhead suitable for edge deployment. Our approach demonstrates a 15% improvement in detection accuracy compared to existing methods while reducing inference time by 30%. Experimental results on benchmark datasets validate the effectiveness of our proposed method across various challenging scenarios including adverse weather conditions and low-light environments.",
-        keywords: ["Deep Learning", "Object Detection", "Autonomous Systems", "Computer Vision", "Neural Networks", "Edge Computing"],
-        citations: 47,
-        pdfUrl: "#",
-        arxivUrl: "#",
-        bibtex: `@article{anand2024deep,
-  title={Deep Learning Approaches for Real-Time Object Detection in Autonomous Systems},
-  author={Anand, Ishan Kumar and Mitchell, Sarah and Chen, James},
-  journal={IEEE Transactions on Neural Networks and Learning Systems},
-  year={2024},
-  doi={10.1109/TNNLS.2024.12345}
+        year: "2023",
+        doi: "10.1109/InC457730.2023.10262967",
+        abstract: "Brain tumor is a life-threatening disease that can disrupt normal brain functioning and have a significant impact on a patient's quality of life. Early detection and diagnosis are crucial for effective treatment. In recent years, deep learning techniques for image analysis and detection have played a vital role in the medical field, supplying more accurate and reliable results. Segmentation, the process of distinguishing between normal and abnormal brain cells or tissues, is a critical step in the detection of brain tumors. In this research, we aim to investigate various techniques for brain tumor detection and segmentation using Magnetic Resonance Imaging (MRI) images. The detection process begins by analyzing the symmetric and asymmetric shape of the brain to identify abnormalities. We will then classify the cells as either Tumored or non-Tumored. This research is aimed at finding a more accurate and efficient method for detecting brain tumors. Four Keras models are compared side by side to find out the best deep learning model for providing a suitable outcome. The models are ResNet50, DenseNet201, Inception V3 and MobileNet. These models gave training accuracy of 85.30%, 78%, 78%, and 77.12% respectively.",
+        keywords: ["Deep Learning","Magnetic Resonance Imaging","Tumor Detection",,"Inception V3","Convolutional Neural Network","Transfer Learning"],
+        citations: 8,
+        pdfUrl: "https://ieeexplore.ieee.org/document/10262967",
+        arxivUrl: "https://ieeexplore.ieee.org/document/10262967",
+        bibtex: `@inproceedings{menachery2023brain,
+  title={Brain tumor detection using deep learning model},
+  author={Menachery, Joel and Anand, Ishan Kumar and Thiruthuvanathan, Michael Moses},
+  booktitle={2023 IEEE International Conference on Contemporary Computing and Communications (InC4)},
+  volume={1},
+  pages={1--6},
+  year={2023},
+  organization={IEEE}
 }`
     }
 };
@@ -504,7 +506,7 @@ scene.add(stars);
 const centerGlobe = createGlobe("PUBLICATION", 3);
 scene.add(centerGlobe);
 
-const paperGlobe = createGlobe("RESEARCH PAPER", 1.2);
+const paperGlobe = createGlobe("IEEE PUBLICATION", 1.2);
 paperGlobe.userData = {
     key: 'paper',
     angle: 0,
