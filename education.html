@@ -478,10 +478,10 @@ const educationData = {
         degree: "Master of Science in Computer Science",
         college: "University of California, San Diego",
         collegeUrl: "https://ucsd.edu",
-        logoUrl: "ucsd-logo.png", // Add your UCSD logo file here
+        logoUrl: "images/ucsd.png", // Add your UCSD logo file here
         location: "San Diego, California",
         duration: "September 2023 - June 2025",
-        gpa: "3.85 / 4.0",
+        gpa: "3.71 / 4.0",
         coursework: [
             { code: "CSE 250A", name: "Probabilistic Reasoning & Learning" },
             { code: "CSE 251B", name: "Deep Learning" },
@@ -494,13 +494,13 @@ const educationData = {
         ]
     },
     bachelors: {
-        degree: "Bachelor of Technology in Computer Science",
-        college: "Indian Institute of Technology (IIT) Delhi",
-        collegeUrl: "https://home.iitd.ac.in",
-        logoUrl: "iitd-logo.png", // Add your IIT Delhi logo file here
-        location: "New Delhi, India",
+        degree: "Bachelor of Technology in Computer Science and Engineering",
+        college: "Christ University",
+        collegeUrl: "https://christuniversity.in/",
+        logoUrl: "images/bachelorLogo.png", // Add your IIT Delhi logo file here
+        location: "Bangalore, India",
         duration: "August 2017 - May 2021",
-        gpa: "8.7 / 10.0",
+        gpa: "3.87 / 4",
         coursework: [
             { code: "CSL201", name: "Data Structures & Algorithms" },
             { code: "CSL211", name: "Computer Architecture" },
@@ -765,7 +765,6 @@ function showDetails(key) {
             <div class="coursework-grid">
                 ${data.coursework.map(course => `
                     <div class="course-card">
-                        <div class="course-code">${course.code}</div>
                         <div class="course-name">${course.name}</div>
                     </div>
                 `).join('')}
