@@ -6,7 +6,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-WZHW34FRXN');
     </script>
 <meta charset="UTF-8">
@@ -123,7 +122,6 @@ body {
     transform:translateX(-3px);
 }
 
-/* ================= SKILLS PANEL ================= */
 .skills-toggle {
     position:fixed;
     bottom:2rem;
@@ -342,6 +340,13 @@ body {
     color:#00ff00;
     transition:all 0.3s;
     flex-shrink:0;
+    overflow:hidden;
+}
+
+.company-logo img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
 }
 
 .company-logo:hover {
@@ -432,6 +437,21 @@ body {
     font-weight:700;
     text-shadow:0 0 5px #00ff00;
     flex-shrink:0;
+    overflow:hidden;
+    text-decoration:none;
+    color:#00ff00;
+    transition:all 0.3s;
+}
+
+.recommender-image img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.recommender-image:hover {
+    box-shadow:0 0 15px #00ff00;
+    transform:scale(1.05);
 }
 
 .recommender-info {
@@ -454,12 +474,6 @@ body {
     line-height:1.6;
     opacity:0.9;
     font-style:italic;
-}
-
-@media (max-width: 1024px) and (min-width: 769px) {
-    .detail-modal {
-        padding:1.8rem;
-    }
 }
 
 @media (max-width: 768px) {
@@ -510,300 +524,19 @@ body {
         left:-300px;
         padding:1.5rem 1rem;
     }
-    
-    .skills-panel-header h2 {
-        font-size:1.3rem;
-    }
-    
-    .category-title {
-        font-size:0.95rem;
-    }
-    
-    .skill-tag {
-        font-size:0.65rem;
-        padding:0.45rem 0.8rem;
-    }
-    
-    .detail-modal {
-        padding:1.5rem;
-        width:calc(100% - 1rem);
-        max-height:calc(100vh - 1rem);
-    }
-    
-    .company-header {
-        gap:1rem;
-    }
-    
+}
+
+@media (max-width: 480px) {
     .company-logo {
         width:60px;
         height:60px;
         font-size:1.5rem;
     }
     
-    .company-info h2 {
-        font-size:1.3rem;
-    }
-    
-    .company-info .duration {
-        font-size:0.8rem;
-    }
-    
-    .experience-section h3 {
-        font-size:1rem;
-    }
-    
-    .experience-section p,
-    .experience-section ul {
-        font-size:0.8rem;
-    }
-    
-    .recommendation {
-        padding:1.2rem;
-    }
-    
-    .recommendation h3 {
-        font-size:1rem;
-    }
-    
     .recommender-image {
         width:50px;
         height:50px;
         font-size:1.1rem;
-    }
-    
-    .recommender-info h4 {
-        font-size:0.85rem;
-    }
-    
-    .recommendation-text {
-        font-size:0.75rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-social {
-        top:0.5rem;
-        right:0.5rem;
-        gap:0.5rem;
-        max-width:110px;
-    }
-    
-    .social-link {
-        width:32px;
-        height:32px;
-        padding:0.4rem;
-    }
-    
-    .social-link svg {
-        width:16px;
-        height:16px;
-    }
-    
-    .back-home {
-        top:0.5rem;
-        left:0.5rem;
-        padding:0.5rem 0.8rem;
-        font-size:0.7rem;
-    }
-    
-    .back-home svg {
-        width:14px;
-        height:14px;
-    }
-    
-    .skills-toggle {
-        bottom:0.8rem;
-        left:0.5rem;
-        padding:0.5rem 0.8rem;
-        font-size:0.7rem;
-    }
-    
-    .skills-toggle svg {
-        width:14px;
-        height:14px;
-    }
-    
-    .skills-panel {
-        width:280px;
-        left:-280px;
-        padding:1.2rem 0.8rem;
-    }
-    
-    .skills-panel-header h2 {
-        font-size:1.2rem;
-    }
-    
-    .close-panel {
-        font-size:1.3rem;
-    }
-    
-    .category-title {
-        font-size:0.9rem;
-    }
-    
-    .skill-tag {
-        font-size:0.6rem;
-        padding:0.4rem 0.7rem;
-    }
-    
-    .detail-modal {
-        padding:1rem;
-        border-radius:8px;
-    }
-    
-    .company-header {
-        gap:0.8rem;
-    }
-    
-    .company-logo {
-        width:50px;
-        height:50px;
-        font-size:1.2rem;
-    }
-    
-    .company-info h2 {
-        font-size:1.1rem;
-    }
-    
-    .company-info .duration {
-        font-size:0.75rem;
-    }
-    
-    .experience-section {
-        margin-bottom:1.5rem;
-    }
-    
-    .experience-section h3 {
-        font-size:0.95rem;
-    }
-    
-    .experience-section p,
-    .experience-section ul {
-        font-size:0.75rem;
-        line-height:1.6;
-    }
-    
-    .experience-section ul {
-        padding-left:0.5rem;
-    }
-    
-    .recommendation {
-        padding:1rem;
-        margin-top:1.5rem;
-    }
-    
-    .recommendation h3 {
-        font-size:0.95rem;
-    }
-    
-    .recommender {
-        gap:0.8rem;
-    }
-    
-    .recommender-image {
-        width:45px;
-        height:45px;
-        font-size:1rem;
-    }
-    
-    .recommender-info h4 {
-        font-size:0.8rem;
-    }
-    
-    .recommender-info p {
-        font-size:0.7rem;
-    }
-    
-    .recommendation-text {
-        font-size:0.7rem;
-        line-height:1.5;
-    }
-    
-    .close-modal {
-        font-size:1.3rem;
-        top:0.5rem;
-        right:0.5rem;
-    }
-}
-
-@media (min-width: 1400px) {
-    .header-social {
-        top:2rem;
-        right:2rem;
-        gap:1.5rem;
-    }
-    
-    .social-link {
-        width:50px;
-        height:50px;
-        padding:0.8rem;
-    }
-    
-    .social-link svg {
-        width:24px;
-        height:24px;
-    }
-    
-    .back-home {
-        top:2rem;
-        left:2rem;
-        padding:0.8rem 1.5rem;
-        font-size:0.9rem;
-    }
-    
-    .back-home svg {
-        width:20px;
-        height:20px;
-    }
-    
-    .skills-toggle {
-        bottom:2rem;
-        left:2rem;
-        padding:0.8rem 1.5rem;
-        font-size:0.9rem;
-    }
-    
-    .skills-toggle svg {
-        width:20px;
-        height:20px;
-    }
-    
-    .skills-panel {
-        width:380px;
-        left:-380px;
-    }
-    
-    .detail-modal {
-        max-width:900px;
-    }
-    
-    .company-logo {
-        width:80px;
-        height:80px;
-        font-size:2rem;
-    }
-    
-    .company-info h2 {
-        font-size:1.8rem;
-    }
-    
-    .company-info .duration {
-        font-size:0.9rem;
-    }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-    .skills-toggle {
-        bottom:0.5rem;
-    }
-    
-    .skills-panel {
-        padding:1rem;
-    }
-    
-    .detail-modal {
-        max-height:calc(100vh - 0.5rem);
-        padding:1rem;
     }
 }
 </style>
@@ -865,7 +598,6 @@ body {
             <span class="skill-tag">C++</span>
             <span class="skill-tag">Golang</span>
             <span class="skill-tag">C</span>
-
         </div>
     </div>
     
@@ -910,7 +642,6 @@ body {
             <span class="skill-tag">Agentic AI</span>
             <span class="skill-tag">CI/CD</span>
             <span class="skill-tag">Microservices</span>
-            
         </div>
     </div>
 </div>
@@ -926,44 +657,49 @@ const experienceData = {
     syncron: {
         name: "Syncron",
         logo: "images/syncron.png",
+        logoFallback: "SY",
         url: "https://syncron.com",
         title: "Associate Software Developer",
-        duration: "Jan 2024 - Sep 2024",
+        duration: "Jan 2022 - Sep 2022",
         description: [
             "Initiated and led a cloud cost-reduction effort by identifying underutilized AWS resources and implementing a tier-level architecture that improved resource efficiency, environment isolation, and overall cost visibility across deployments.",
-            "Architected and deployed scalable, fault-tolerant AWS infrastructure using Terraform and Golang-based microservices,improving system reliability, service availability, and pipeline performance under sustained production workloads.",
+            "Architected and deployed scalable, fault-tolerant AWS infrastructure using Terraform and Golang-based microservices, improving system reliability, service availability, and pipeline performance under sustained production workloads.",
             "Optimized data flow and isolation across staging and production environments, boosting throughput by 37%, cutting cloud costs by 11%, and minimizing latency, resource misuse, and data loss in high-traffic systems."
         ],
         recommender: {
             name: "Rithik Sahu",
-            link:"https://www.linkedin.com/in/ritiksahusa/",
+            link: "https://www.linkedin.com/in/ritiksahusa/",
             title: "Senior Software Engineer",
             image: "images/rithik.png",
+            imageFallback: "RS",
             message: "Coming Soon"
         }
     },
     gnani: {
         name: "Gnani.ai",
-        logo: "GN",
+        logo: "images/gnani.png",
+        logoFallback: "GN",
         url: "https://gnani.ai",
-        title: "Machine Learning Engineer",
-        duration: "Mar 2023 - Sep 2023",
+        title: "NLP Engineer",
+        duration: "Sep 2022 - Sep 2023",
         description: [
             "Built conversational AI systems using natural language processing",
             "Optimized speech recognition models for accuracy and performance",
             "Collaborated on voice bot deployment for enterprise clients"
         ],
         recommender: {
-            name: "Sarah Johnson",
-            link:"https://www.linkedin.com/in/ritiksahusa/",
+            name: "Avinash N",
+            link: "https://www.linkedin.com/in/avinash-example/",
             title: "VP of Product",
-            image: "SJ",
+            image: "images/avinash.png",
+            imageFallback: "AN",
             message: "Working with Ishan was a pleasure. He brought fresh perspectives to our AI challenges and his technical expertise in NLP helped us achieve breakthrough results in our voice AI platform. Highly recommend him for any AI-focused role."
         }
     },
     vigaet: {
         name: "VigaET",
-        logo: "VE",
+        logo: "images/vigaet.png",
+        logoFallback: "VE",
         url: "https://vigaentertainment.com",
         title: "Software Developer",
         duration: "Jan 2022 - Feb 2023",
@@ -974,9 +710,10 @@ const experienceData = {
         ],
         recommender: {
             name: "Michael Chen",
-            link:"https://www.linkedin.com/in/ritiksahusa/",
+            link: "https://www.linkedin.com/in/michael-example/",
             title: "CTO",
-            image: "MC",
+            image: "images/michael.png",
+            imageFallback: "MC",
             message: "Ishan was instrumental in building our gaming platform from the ground up. His attention to detail and problem-solving skills made him a standout developer on our team. He consistently went above and beyond to ensure quality deliverables."
         }
     }
@@ -1190,9 +927,19 @@ function showDetails(companyKey) {
     const modal = document.getElementById('detail-modal');
     const content = document.getElementById('modal-content');
     
+    // Handle company logo - either image or fallback text
+    const companyLogoHTML = data.logo && data.logo.endsWith('.png') 
+        ? `<a href="${data.url}" target="_blank" class="company-logo"><img src="${data.logo}" alt="${data.name}" onerror="this.parentElement.innerHTML='${data.logoFallback}'"></a>`
+        : `<a href="${data.url}" target="_blank" class="company-logo">${data.logoFallback}</a>`;
+    
+    // Handle recommender image - either image or fallback text
+    const recommenderImageHTML = data.recommender.image && data.recommender.image.endsWith('.png')
+        ? `<a href="${data.recommender.link}" target="_blank" class="recommender-image"><img src="${data.recommender.image}" alt="${data.recommender.name}" onerror="this.parentElement.innerHTML='${data.recommender.imageFallback}'"></a>`
+        : `<a href="${data.recommender.link}" target="_blank" class="recommender-image">${data.recommender.imageFallback}</a>`;
+    
     content.innerHTML = `
         <div class="company-header">
-            <a href="${data.url}" target="_blank" class="company-logo">${data.logo}</a>
+            ${companyLogoHTML}
             <div class="company-info">
                 <h2>${data.title}</h2>
                 <div class="duration">${data.duration}</div>
@@ -1209,7 +956,7 @@ function showDetails(companyKey) {
         <div class="recommendation">
             <h3>Recommendation</h3>
             <div class="recommender">
-                <div href="${data.recommender.link}" class="recommender-image">${data.recommender.image}</div>
+                ${recommenderImageHTML}
                 <div class="recommender-info">
                     <h4>${data.recommender.name}</h4>
                     <p>${data.recommender.title}</p>
