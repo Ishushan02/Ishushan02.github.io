@@ -925,7 +925,7 @@ body {
 const experienceData = {
     syncron: {
         name: "Syncron",
-        logo: "../images/syncron.png",
+        logo: "./images/syncron.png",
         url: "https://syncron.com",
         title: "Associate Software Developer",
         duration: "Jan 2024 - Sep 2024",
@@ -936,8 +936,9 @@ const experienceData = {
         ],
         recommender: {
             name: "Rithik Sahu",
+            link:"https://www.linkedin.com/in/ritiksahusa/",
             title: "Senior Software Engineer",
-            image: "../images/rithik.png",
+            image: "./images/rithik.png",
             message: "Coming Soon"
         }
     },
@@ -954,6 +955,7 @@ const experienceData = {
         ],
         recommender: {
             name: "Sarah Johnson",
+            link:"https://www.linkedin.com/in/ritiksahusa/",
             title: "VP of Product",
             image: "SJ",
             message: "Working with Ishan was a pleasure. He brought fresh perspectives to our AI challenges and his technical expertise in NLP helped us achieve breakthrough results in our voice AI platform. Highly recommend him for any AI-focused role."
@@ -972,6 +974,7 @@ const experienceData = {
         ],
         recommender: {
             name: "Michael Chen",
+            link:"https://www.linkedin.com/in/ritiksahusa/",
             title: "CTO",
             image: "MC",
             message: "Ishan was instrumental in building our gaming platform from the ground up. His attention to detail and problem-solving skills made him a standout developer on our team. He consistently went above and beyond to ensure quality deliverables."
@@ -1206,7 +1209,7 @@ function showDetails(companyKey) {
         <div class="recommendation">
             <h3>Recommendation</h3>
             <div class="recommender">
-                <div class="recommender-image">${data.recommender.image}</div>
+                <div href="${data.recommender.link}" class="recommender-image">${data.recommender.image}</div>
                 <div class="recommender-info">
                     <h4>${data.recommender.name}</h4>
                     <p>${data.recommender.title}</p>
