@@ -564,7 +564,7 @@ function createGlobe(text, size) {
     const sphere = new THREE.Mesh(geometry, material);
     group.add(sphere);
     
-    const dotGeometry = new THREE.SphereGeometry(size * 0.02, 8, 8);
+    const dotGeometry = new THREE.SphereGeometry(size * 0.02, 6, 6);
     const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const dotCount = 50;
     
