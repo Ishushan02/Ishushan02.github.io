@@ -44,6 +44,7 @@ body {
     background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
     background-size:100% 4px;
     animation:crt-flicker .15s infinite;
+    display: None;
 }
 @keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
 
@@ -595,7 +596,7 @@ function createGlobe(text, size) {
     
     const dotGeometry = new THREE.SphereGeometry(size * 0.02, 8, 8);
     const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const dotCount = size === 3 ? 150 : 100;
+    const dotCount = 50;
     
     for (let i = 0; i < dotCount; i++) {
         const dot = new THREE.Mesh(dotGeometry, dotMaterial);
@@ -616,7 +617,7 @@ function createGlobe(text, size) {
     
     context.fillStyle = '#00ff00';
     // context.font = `bold ${size === 3 ? 50 : 35}px JetBrains Mono`;
-    context.font = 'bold 60px Times New Roman';
+    context.font = 'bold 70px Times New Roman';
 
     context.textAlign = 'center';
     context.textBaseline = 'middle';
