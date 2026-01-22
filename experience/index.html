@@ -866,7 +866,21 @@ const starMaterial = new THREE.PointsMaterial({
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
-const centerGlobe = createGlobe("EXPERIENCE", 2);
+
+const centerGlobe = createGlobe("EXPERIENCE", 64);
+scene.add(centerGlobe);
+
+// const companyGlobes = [];
+// const companies = [
+//     { key: 'syncron', name: 'SYNCRON', angle: 0 },
+//     { key: 'gnani', name: 'GNANI.AI', angle: (2 * Math.PI) / 3 },
+//     { key: 'vigaet', name: 'VIGAET', angle: (4 * Math.PI) / 3 }
+// ];
+
+// companies.forEach(company => {
+//     const globe = createGlobe(company.name, 32);
+
+// const centerGlobe = createGlobe("EXPERIENCE", 2);
 scene.add(centerGlobe);
 
 const companyGlobes = [];
@@ -877,7 +891,7 @@ const companies = [
 ];
 
 companies.forEach(company => {
-    const globe = createGlobe(company.name, 1);
+    const globe = createGlobe(company.name, 32);
     globe.userData = {
         key: company.key,
         angle: company.angle,
