@@ -416,52 +416,49 @@ const projectsData = {
         name: "Self Driving Motion Prediction",
         icon: "../images/sdmp.gif",
         techStack: "Solidity • Web3.js • React • Ethereum",
-        github: "https://github.com/Ishushan02",
+        github: "https://github.com/Ishushan02/Self-Driving-Motion-Prediction",
         demo: "#",
-        description: "A decentralized application built on Ethereum blockchain for secure transactions.",
+        description: "Built a scalable multi-agent trajectory forecasting model for autonomous driving, leveraging hybrid encoder–decoder networks and multimodal attention to improve motion prediction accuracy in complex urban scenes.",
         features: [
-            "Smart contract deployment and interaction",
-            "Wallet integration with MetaMask",
-            "Real-time transaction tracking",
-            "Gas optimization techniques"
+            "Developed a scalable multi-agent trajectory forecasting system for autonomous vehicles using the Argoverse 2 Motion Forecasting dataset, accurately predicting future positions in complex urban driving scenarios.",
+            "Engineered a hybrid Encoder Decoder architecture combining recurrent networks and multi-modal attention mechanisms to model vehicle–vehicle and vehicle–map interactions in dense traffic environments.",
+            "Achieved 15% improvement in motion prediction accuracy (minADE/minFDE) by fusing past trajectories, dynamic map features, and contextual embeddings with a multi-modal attention framework."
         ],
-        technologies: ["Solidity", "Web3.js", "React", "Ethereum", "Truffle", "IPFS"]
+        technologies: ["Multi-Agent Trajectory Forecasting", "Autonomous Driving", "Spatiotemporal Modeling ", "Multimodal Attention", "Motion Prediction"]
     },
     vgfm: {
         name: "Video Generation Flowing MNIST",
         icon: "../images/vgfm.gif",
         techStack: "PyTorch • MLflow • Kubernetes • AWS",
-        github: "https://github.com/Ishushan02",
+        github: "https://github.com/Ishushan02/Video-Generation-Flowing-MNIST",
         demo: "#",
-        description: "End-to-end machine learning pipeline for model training and deployment at scale.",
+        description: "Developed a deep video generation pipeline using ConvLSTM, Vision Transformers, and VQ-VAE for temporally consistent and high-fidelity sequence modeling.",
         features: [
-            "Automated model training and validation",
-            "Version control for ML models and datasets",
-            "One-click deployment to production",
-            "Real-time monitoring and alerting"
+            "Developed a deep video generation pipeline using ConvLSTM and Vision Transformer architectures on the Flowing MNIST dataset, establishing a strong sequence modeling baseline.",
+            "Designed and compared ViT models with linear and upconvolutional decoders, leveraging combined MSE and perceptual (VGG-based) loss functions to enhance reconstruction fidelity.",
+            "Implemented and integrated VQ-VAE to model discrete latent spaces, significantly improving temporal consistency and compression in generated video sequences."
         ],
-        technologies: ["PyTorch", "MLflow", "Kubernetes", "AWS", "Docker", "Apache Airflow"]
+        technologies: ["Video Generation", "ConvLSTM", "Vision Transformer (ViT)", "VQ-VAE", "Temporal Consistency"]
     },
     awsec2: {
         name: "AWS EC2 Benchmarking",
         icon: "../images/ec2.png",
         techStack: "Node.js • MQTT • InfluxDB • Grafana",
-        github: "https://github.com/Ishushan02",
+        github: "https://github.com/Ishushan02/AWS-EC2-Benchmark",
         demo: "#",
-        description: "Real-time analytics platform for IoT devices with time-series data visualization.",
+        description: "Developed a high-performance C benchmarking suite for AWS EC2 instances, profiling CPU, memory, and I/O to optimize cloud infrastructure performance.",
         features: [
-            "Real-time data ingestion from IoT sensors",
-            "Time-series data storage and querying",
-            "Interactive dashboards for data visualization",
-            "Anomaly detection and alerting"
+            "Developed a comprehensive benchmarking suite in C to evaluate AWS EC2 instance performance across CPU, memory, and file system operations, enabling detailed OS-level profiling.",
+            "Achieved approximately 25% faster benchmarking throughput as measured by total test execution time by implementing parallelized process and thread creation tests across multiple EC2 instance types.",
+            "Conducted systematic analysis of context-switch latency, memory latency, and I/O performance across diverse EC2 families, producing actionable insights for cloud infrastructure optimization."
         ],
-        technologies: ["Node.js", "MQTT", "InfluxDB", "Grafana", "Redis", "Docker"]
+        technologies: ["AWS EC2 Benchmarking", "C Programming", "Performance Profiling", "CPU and Memory Analysis", "Cloud Infrastructure Optimization"]
     },
     dit: {
         name: "Diffusion Transformer T2I",
         icon: "../images/dit.jpg",
         techStack: "OpenCV • PyTorch • YOLO • Flask",
-        github: "https://github.com/Ishushan02",
+        github: "https://github.com/Ishushan02/Diffusion-Transformer-Text-To-Image-Generation",
         demo: "#",
         description: "Built an end-to-end multimodal diffusion model integrating multiple text encoders and a compressed image latent space, using FiLM-based time conditioning and hybrid losses to achieve compute-efficient, high-fidelity text-aligned image generation.",
         features: [
@@ -474,16 +471,15 @@ const projectsData = {
         name: "Hybrid Architecture T2I",
         icon: "../images/ht2i.png",
         techStack: "Rasa • spaCy • MongoDB • React",
-        github: "https://github.com/Ishushan02",
+        github: "https://github.com/Ishushan02/Hybrid-Architecture-T2I",
         demo: "#",
-        description: "Conversational AI chatbot for enterprise customer support automation.",
+        description: "Developed a brain-inspired, diffusion-free text-to-image model using VQ-VAE and a gated-attention transformer to map text embeddings directly to discrete image latents.",
         features: [
-            "Intent recognition and entity extraction",
-            "Multi-channel deployment (Web, Slack, Teams)",
-            "Analytics dashboard for conversation insights",
-            "Seamless handoff to human agents"
+            "Designed a VQ-VAE + decoder-only transformer architecture for text-to-image generation, mapping text embeddings directly to discrete image latents without diffusion-based denoising, reducing computational overhead.",
+            "Implemented Gated-Attention and optional hyper-connections in the transformer decoder to amplify meaningful attention blocks and improve gradient flow, inspired by NeurIPS and DeepSeek research.",
+            "Leveraged brain-inspired embedding-space reasoning, drawing from cognitive and nested learning principles, enabling efficient high-level image synthesis aligned with textual prompts.",
         ],
-        technologies: ["Rasa", "spaCy", "MongoDB", "React", "Redis", "Docker"]
+        technologies: ["Text-to-Image Generation", "VQ-VAE", "Gated-Attention Transformer", "Diffusion-Free Architecture", "Brain-Inspired AI"]
     }
 };
 
