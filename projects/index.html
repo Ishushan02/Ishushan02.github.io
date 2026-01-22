@@ -398,8 +398,8 @@ body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const projectsData = {
-    ai_assistant: {
-        name: "Tiny Recursive Model for T2I",
+    trm: {
+        name: "Tiny Recursive Model for Text To Image Generation",
         icon: "🤖",
         techStack: "Python • TensorFlow • NLP • FastAPI",
         github: "https://github.com/Ishushan02",
@@ -413,7 +413,7 @@ const projectsData = {
         ],
         technologies: ["Python", "TensorFlow", "NLTK", "FastAPI", "Docker", "PostgreSQL"]
     },
-    blockchain_app: {
+    sdmp: {
         name: "Self Driving Motion Prediction",
         icon: "⛓️",
         techStack: "Solidity • Web3.js • React • Ethereum",
@@ -428,7 +428,7 @@ const projectsData = {
         ],
         technologies: ["Solidity", "Web3.js", "React", "Ethereum", "Truffle", "IPFS"]
     },
-    ml_pipeline: {
+    vgfm: {
         name: "Video Generation Flowing MNIST",
         icon: "🔬",
         techStack: "PyTorch • MLflow • Kubernetes • AWS",
@@ -443,7 +443,7 @@ const projectsData = {
         ],
         technologies: ["PyTorch", "MLflow", "Kubernetes", "AWS", "Docker", "Apache Airflow"]
     },
-    iot_platform: {
+    awsec2: {
         name: "AWS EC2 Benchmarking",
         icon: "📡",
         techStack: "Node.js • MQTT • InfluxDB • Grafana",
@@ -458,7 +458,7 @@ const projectsData = {
         ],
         technologies: ["Node.js", "MQTT", "InfluxDB", "Grafana", "Redis", "Docker"]
     },
-    cv_system: {
+    dit: {
         name: "Diffusion Transformer T2I",
         icon: "👁️",
         techStack: "OpenCV • PyTorch • YOLO • Flask",
@@ -473,7 +473,7 @@ const projectsData = {
         ],
         technologies: ["OpenCV", "PyTorch", "YOLO", "Flask", "TensorRT", "CUDA"]
     },
-    chatbot: {
+    ht2i: {
         name: "Hybrid Architecture T2I",
         icon: "💬",
         techStack: "Rasa • spaCy • MongoDB • React",
@@ -532,12 +532,12 @@ scene.add(centerGlobe);
 
 const projectGlobes = [];
 const projects = [
-    { key: 'ai_assistant', name: 'TINY RECURSIVE MODEL FOR TEXT TO IMAGE GENERATION', angle: 0 },
-    { key: 'blockchain_app', name: 'Self Driving Motion Prediction', angle: Math.PI / 3 },
-    { key: 'ml_pipeline', name: 'Video Generation Flowing MNIST', angle: (2 * Math.PI) / 3 },
-    { key: 'iot_platform', name: 'AWS EC2 Benchmarking', angle: Math.PI },
-    { key: 'cv_system', name: 'Diffusion Transformer T2I', angle: (4 * Math.PI) / 3 },
-    { key: 'chatbot', name: 'Hybrid Architecture T2I', angle: (5 * Math.PI) / 3 }
+    { key: 'trm', name: 'TINY RECURSIVE MODEL FOR TEXT TO IMAGE GENERATION', angle: 0 },
+    { key: 'sdmp', name: 'SELF DRIVING MOTION PREDICTION', angle: Math.PI / 3 },
+    { key: 'vgfm', name: 'VIDEO GENERATION FLOWING MNIST', angle: (2 * Math.PI) / 3 },
+    { key: 'awsec2', name: 'AWS EC2 BENCHMARKING', angle: Math.PI },
+    { key: 'dit', name: 'DIFFUSION TRANSFORMER', angle: (4 * Math.PI) / 3 },
+    { key: 'ht2i', name: 'HYBRID ARCHITECTURE FOR  T2I', angle: (5 * Math.PI) / 3 }
 ];
 
 projects.forEach(project => {
@@ -559,7 +559,7 @@ function createGlobe(text, size) {
         color: 0x00ff00,
         wireframe: true,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.2
     });
     const sphere = new THREE.Mesh(geometry, material);
     group.add(sphere);
