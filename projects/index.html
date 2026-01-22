@@ -414,7 +414,7 @@ const projectsData = {
     },
     sdmp: {
         name: "Self Driving Motion Prediction",
-        icon: "⛓️",
+        icon: "../images/sdmp.gif",
         techStack: "Solidity • Web3.js • React • Ethereum",
         github: "https://github.com/Ishushan02",
         demo: "#",
@@ -429,7 +429,7 @@ const projectsData = {
     },
     vgfm: {
         name: "Video Generation Flowing MNIST",
-        icon: "🔬",
+        icon: "../images/vgfm.gif",
         techStack: "PyTorch • MLflow • Kubernetes • AWS",
         github: "https://github.com/Ishushan02",
         demo: "#",
@@ -444,7 +444,7 @@ const projectsData = {
     },
     awsec2: {
         name: "AWS EC2 Benchmarking",
-        icon: "📡",
+        icon: "../images/ec2.png",
         techStack: "Node.js • MQTT • InfluxDB • Grafana",
         github: "https://github.com/Ishushan02",
         demo: "#",
@@ -459,7 +459,7 @@ const projectsData = {
     },
     dit: {
         name: "Diffusion Transformer T2I",
-        icon: "👁️",
+        icon: "../images/dit.jpg",
         techStack: "OpenCV • PyTorch • YOLO • Flask",
         github: "https://github.com/Ishushan02",
         demo: "#",
@@ -474,7 +474,7 @@ const projectsData = {
     },
     ht2i: {
         name: "Hybrid Architecture T2I",
-        icon: "💬",
+        icon: "../images/ht2i.png",
         techStack: "Rasa • spaCy • MongoDB • React",
         github: "https://github.com/Ishushan02",
         demo: "#",
@@ -701,18 +701,25 @@ function showDetails(projectKey) {
     const data = projectsData[projectKey];
     const modal = document.getElementById('detail-modal');
     const content = document.getElementById('modal-content');
-    
+
+    const isImageIcon = typeof data.icon === "string" &&
+        (data.icon.endsWith(".png") || data.icon.endsWith(".jpg") ||
+         data.icon.endsWith(".jpeg") || data.icon.endsWith(".gif") ||
+         data.icon.endsWith(".webp"));
+
+    const iconHTML = isImageIcon
+        ? `<img src="${data.icon}" style="width:100%;height:100%;object-fit:contain;" />`
+        : data.icon;
+
     content.innerHTML = `
         <div class="project-header">
-            <div class="project-icon">
-                <img src="${data.icon}" Logo" />
-                </div>
+            <div class="project-icon">${iconHTML}</div>
             <div class="project-info">
                 <h2>${data.name}</h2>
                 <div class="tech-stack">${data.techStack}</div>
             </div>
         </div>
-        
+
         <div class="project-links">
             <a href="${data.github}" target="_blank" class="project-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -721,29 +728,31 @@ function showDetails(projectKey) {
                 GitHub
             </a>
         </div>
-        
+
         <div class="project-section">
             <h3>Overview</h3>
             <p>${data.description}</p>
         </div>
-        
+
         <div class="project-section">
             <h3>Key Features</h3>
             <ul>
-                ${data.features.map(item => `<li>${item}</li>`).join('')}
+                ${data.features.map(f => `<li>${f}</li>`).join('')}
             </ul>
         </div>
-        
+
         <div class="project-section">
             <h3>Technologies Used</h3>
             <div class="tech-tags">
-                ${data.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                ${data.technologies.map(t => `<span class="tech-tag">${t}</span>`).join('')}
             </div>
         </div>
     `;
-    
+
     modal.classList.add('active');
 }
+
+
 
 function closeModal() {
     document.getElementById('detail-modal').classList.remove('active');
