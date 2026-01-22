@@ -615,7 +615,9 @@ function createGlobe(text, size) {
     canvas.height = 512;
     
     context.fillStyle = '#00ff00';
-    context.font = `bold ${size === 3 ? 50 : 35}px JetBrains Mono`;
+    // context.font = `bold ${size === 3 ? 50 : 35}px JetBrains Mono`;
+    context.font = 'bold 60px Times New Roman';
+
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     context.fillText(text, 256, 256);
