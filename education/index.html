@@ -589,12 +589,12 @@ function createGlobe(text, size) {
         color: 0x00ff00,
         wireframe: true,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.25
     });
     const sphere = new THREE.Mesh(geometry, material);
     group.add(sphere);
     
-    const dotGeometry = new THREE.SphereGeometry(size * 0.02, 8, 8);
+    const dotGeometry = new THREE.SphereGeometry(size * 0.01, 8, 8);
     const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const dotCount = 50;
     
