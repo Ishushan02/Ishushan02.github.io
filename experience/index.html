@@ -12,12 +12,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ishan's Website</title>
 
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-    font-family:'JetBrains Mono', monospace;
+    font-family:'Space Grotesk', 'JetBrains Mono', monospace;
     background:#000;
     color:#00ff00;
     overflow-x:hidden;
@@ -93,6 +93,7 @@ body {
     color:#00ff00;
     text-decoration:none;
     font-size:0.85rem;
+    font-weight:600;
     padding:0.7rem 1.2rem;
     border:1px solid #00ff00;
     border-radius:5px;
@@ -103,6 +104,7 @@ body {
     text-shadow:0 0 5px #00ff00;
     background:rgba(0,0,0,0.7);
     white-space:nowrap;
+    letter-spacing:0.5px;
 }
 
 .back-home:hover {
@@ -129,6 +131,7 @@ body {
     z-index:10;
     color:#00ff00;
     font-size:0.85rem;
+    font-weight:600;
     padding:0.8rem 1.2rem;
     border:1px solid #00ff00;
     border-radius:5px;
@@ -140,6 +143,7 @@ body {
     background:rgba(0,0,0,0.7);
     cursor:pointer;
     white-space:nowrap;
+    letter-spacing:0.5px;
 }
 
 .skills-toggle:hover {
@@ -206,7 +210,9 @@ body {
 
 .skills-panel-header h2 {
     font-size:1.5rem;
+    font-weight:700;
     text-shadow:0 0 10px #00ff00;
+    letter-spacing:1px;
 }
 
 .close-panel {
@@ -231,11 +237,13 @@ body {
 
 .category-title {
     font-size:1rem;
+    font-weight:600;
     margin-bottom:1rem;
     text-shadow:0 0 5px #00ff00;
     display:flex;
     align-items:center;
     gap:0.5rem;
+    letter-spacing:0.5px;
 }
 
 .category-title::before {
@@ -252,6 +260,7 @@ body {
 .skill-tag {
     color:#00ff00;
     font-size:0.7rem;
+    font-weight:500;
     padding:0.5rem 0.9rem;
     border:1px solid #00ff00;
     border-radius:4px;
@@ -277,9 +286,9 @@ body {
     background:rgba(0,0,0,0.95);
     border:2px solid #00ff00;
     border-radius:10px;
-    padding:2rem;
+    padding:2.5rem;
     box-shadow:0 0 50px #00ff00;
-    max-width:800px;
+    max-width:850px;
     width:calc(100% - 2rem);
     max-height:calc(100vh - 2rem);
     overflow-y:auto;
@@ -318,21 +327,21 @@ body {
     display:flex;
     align-items:center;
     gap:1.5rem;
-    margin-bottom:2rem;
-    padding-bottom:1rem;
+    margin-bottom:2.5rem;
+    padding-bottom:1.5rem;
     border-bottom:1px solid rgba(0,255,0,0.3);
     flex-wrap:wrap;
 }
 
 .company-logo {
-    width:70px;
-    height:70px;
+    width:80px;
+    height:80px;
     border:2px solid #00ff00;
     border-radius:10px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:1.8rem;
+    font-size:2rem;
     font-weight:700;
     text-shadow:0 0 10px #00ff00;
     background:rgba(0,0,0,0.5);
@@ -360,32 +369,43 @@ body {
 }
 
 .company-info h2 {
-    font-size:1.5rem;
-    margin-bottom:0.5rem;
+    font-size:1.85rem;
+    font-weight:700;
+    margin-bottom:0.6rem;
     text-shadow:0 0 10px #00ff00;
     word-break:break-word;
+    letter-spacing:0.3px;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .company-info .duration {
-    font-size:0.85rem;
-    opacity:0.8;
+    font-size:1rem;
+    font-weight:400;
+    opacity:0.85;
+    letter-spacing:0.2px;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .experience-section {
-    margin-bottom:2rem;
+    margin-bottom:2.5rem;
 }
 
 .experience-section h3 {
-    font-size:1.1rem;
-    margin-bottom:1rem;
+    font-size:1.4rem;
+    font-weight:600;
+    margin-bottom:1.3rem;
     text-shadow:0 0 5px #00ff00;
+    letter-spacing:0.3px;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .experience-section p,
 .experience-section ul {
-    font-size:0.85rem;
-    line-height:1.8;
-    opacity:0.9;
+    font-size:1rem;
+    line-height:2;
+    opacity:0.92;
+    font-weight:400;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .experience-section ul {
@@ -394,7 +414,7 @@ body {
 }
 
 .experience-section ul li {
-    margin-bottom:0.5rem;
+    margin-bottom:1rem;
 }
 
 .experience-section ul li:before {
@@ -407,33 +427,36 @@ body {
     background:rgba(0,255,0,0.05);
     border:1px solid rgba(0,255,0,0.3);
     border-radius:8px;
-    padding:1.5rem;
-    margin-top:2rem;
+    padding:1.8rem;
+    margin-top:2.5rem;
 }
 
 .recommendation h3 {
-    font-size:1.1rem;
-    margin-bottom:1rem;
+    font-size:1.5rem;
+    font-weight:600;
+    margin-bottom:1.3rem;
     text-shadow:0 0 5px #00ff00;
+    letter-spacing:0.3px;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .recommender {
     display:flex;
     gap:1rem;
-    margin-bottom:1rem;
+    margin-bottom:1.3rem;
     flex-wrap:wrap;
 }
 
 .recommender-image {
-    width:60px;
-    height:60px;
+    width:70px;
+    height:70px;
     border-radius:50%;
     border:2px solid #00ff00;
     background:rgba(0,0,0,0.5);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:1.3rem;
+    font-size:1.5rem;
     font-weight:700;
     text-shadow:0 0 5px #00ff00;
     flex-shrink:0;
@@ -460,20 +483,27 @@ body {
 }
 
 .recommender-info h4 {
-    font-size:0.95rem;
-    margin-bottom:0.2rem;
+    font-size:1.2rem;
+    font-weight:600;
+    margin-bottom:0.4rem;
+    letter-spacing:0.2px;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .recommender-info p {
-    font-size:0.75rem;
-    opacity:0.7;
+    font-size:0.95rem;
+    font-weight:400;
+    opacity:0.75;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .recommendation-text {
-    font-size:0.8rem;
-    line-height:1.6;
-    opacity:0.9;
+    font-size:1rem;
+    line-height:1.9;
+    opacity:0.92;
     font-style:italic;
+    font-weight:400;
+    font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -524,19 +554,97 @@ body {
         left:-300px;
         padding:1.5rem 1rem;
     }
+    
+    .detail-modal {
+        padding:2rem;
+    }
+    
+    .company-info h2 {
+        font-size:1.5rem;
+    }
+    
+    .company-info .duration {
+        font-size:0.9rem;
+    }
+    
+    .experience-section h3 {
+        font-size:1.2rem;
+    }
+    
+    .experience-section p,
+    .experience-section ul {
+        font-size:0.9rem;
+        line-height:1.8;
+    }
+    
+    .recommendation h3 {
+        font-size:1.3rem;
+    }
+    
+    .recommender-info h4 {
+        font-size:1.05rem;
+    }
+    
+    .recommender-info p {
+        font-size:0.85rem;
+    }
+    
+    .recommendation-text {
+        font-size:0.9rem;
+        line-height:1.7;
+    }
 }
 
 @media (max-width: 480px) {
     .company-logo {
-        width:60px;
-        height:60px;
-        font-size:1.5rem;
+        width:65px;
+        height:65px;
+        font-size:1.6rem;
     }
     
     .recommender-image {
-        width:50px;
-        height:50px;
+        width:55px;
+        height:55px;
+        font-size:1.2rem;
+    }
+    
+    .detail-modal {
+        padding:1.5rem;
+    }
+    
+    .company-info h2 {
+        font-size:1.3rem;
+    }
+    
+    .company-info .duration {
+        font-size:0.85rem;
+    }
+    
+    .experience-section h3 {
         font-size:1.1rem;
+    }
+    
+    .experience-section p,
+    .experience-section ul {
+        font-size:0.85rem;
+        line-height:1.7;
+    }
+    
+    .recommendation h3 {
+        font-size:1.2rem;
+    }
+    
+    .recommender-info h4 {
+        font-size:1rem;
+    }
+    
+    .recommender-info p {
+        font-size:0.8rem;
+    }
+    
+    .recommendation-text {
+        font-size:0.85rem;
+        line-height:1.6;
     }
 }
 </style>
@@ -813,12 +921,12 @@ function createGlobe(text, size) {
     canvas.height = 512;
     
     context.fillStyle = '#00ff00';
-    context.font = `bold ${size === 2 ? 50 : 60}px JetBrains Mono`;
+    context.font = `bold ${size === 2 ? 60 : 70}px Space Grotesk, JetBrains Mono`;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     
     const words = text.split(' ');
-    const lineHeight = 70;
+    const lineHeight = size === 2 ? 75 : 85;
     const startY = 256 - ((words.length - 1) * lineHeight / 2);
     
     words.forEach((word, i) => {
@@ -831,7 +939,7 @@ function createGlobe(text, size) {
         transparent: true
     });
     const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(size * 1.2, size * 1.2, 1);
+    sprite.scale.set(size * 1.4, size * 1.4, 1);
     
     group.add(sprite);
     group.userData.sphere = sphere;
@@ -928,12 +1036,10 @@ function showDetails(companyKey) {
     const modal = document.getElementById('detail-modal');
     const content = document.getElementById('modal-content');
     
-    // Handle company logo - either image or fallback text
     const companyLogoHTML = data.logo && data.logo.endsWith('.png') 
         ? `<a href="${data.url}" target="_blank" class="company-logo"><img src="${data.logo}" alt="${data.name}" onerror="this.parentElement.innerHTML='${data.logoFallback}'"></a>`
         : `<a href="${data.url}" target="_blank" class="company-logo">${data.logoFallback}</a>`;
     
-    // Handle recommender image - either image or fallback text
     const recommenderImageHTML = data.recommender.image && data.recommender.image.endsWith('.png')
         ? `<a href="${data.recommender.link}" target="_blank" class="recommender-image"><img src="${data.recommender.image}" alt="${data.recommender.name}" onerror="this.parentElement.innerHTML='${data.recommender.imageFallback}'"></a>`
         : `<a href="${data.recommender.link}" target="_blank" class="recommender-image">${data.recommender.imageFallback}</a>`;
@@ -1007,6 +1113,9 @@ function animate() {
         centerGlobe.userData.sphere.rotation.y += 0.002;
     }
     
+    // Self-rotate the center globe on Y axis only
+    centerGlobe.rotation.y += 0.006;
+    
     companyGlobes.forEach((globe) => {
         globe.userData.angle += 0.003;
         
@@ -1015,7 +1124,9 @@ function animate() {
         const y = Math.sin(globe.userData.angle * 1.5) * 0.8;
         
         globe.position.set(x, y, z);
-        globe.lookAt(camera.position);
+        
+        // Self-rotate the entire globe group on Y axis only
+        globe.rotation.y += 0.008;
         
         if (globe.userData.sphere) {
             globe.userData.sphere.rotation.y += 0.005;
