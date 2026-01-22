@@ -404,7 +404,7 @@ const projectsData = {
         techStack: "Python • TensorFlow • NLP • FastAPI",
         github: "https://github.com/Ishushan02/Tiny-Recursive-Model-for-Text-To-Image-Generation/",
         demo: "#",
-        description: "A Less Parameter Efficient Text To Image Generation Model",
+        description: "Designed a 27M-parameter, parameter-efficient recursive transformer model for text-to-image generation, iteratively refining shared text-image latents to achieve scalable multimodal synthesis with minimal compute and memory.",
         features: [
             "Researched and designed a parameter-efficient multimodal text-to-image architecture using recursive latent refinement to iteratively fuse text embeddings with image latents in a shared representation space.",
             "Achieved extreme model efficiency with a 27M-parameter footprint by replacing large Diffusion Transformer backbones with shared-weight recursive transformer blocks, reducing compute and memory requirements.",
@@ -704,7 +704,9 @@ function showDetails(projectKey) {
     
     content.innerHTML = `
         <div class="project-header">
-            <div class="project-icon">${data.icon}</div>
+            <div class="project-icon">
+                <img src="${data.icon}" Logo" />
+                </div>
             <div class="project-info">
                 <h2>${data.name}</h2>
                 <div class="tech-stack">${data.techStack}</div>
