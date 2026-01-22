@@ -537,7 +537,7 @@ const projects = [
     { key: 'vgfm', name: 'VIDEO GENERATION FLOWING MNIST', angle: (2 * Math.PI) / 3 },
     { key: 'awsec2', name: 'AWS EC2 BENCHMARKING', angle: Math.PI },
     { key: 'dit', name: 'DIFFUSION TRANSFORMER', angle: (4 * Math.PI) / 3 },
-    { key: 'ht2i', name: 'HYBRID ARCHITECTURE FOR  T2I', angle: (5 * Math.PI) / 3 }
+    { key: 'ht2i', name: 'HYBRID ARCHITECTURE FOR T2I', angle: (5 * Math.PI) / 3 }
 ];
 
 projects.forEach(project => {
@@ -564,7 +564,7 @@ function createGlobe(text, size) {
     const sphere = new THREE.Mesh(geometry, material);
     group.add(sphere);
     
-    const dotGeometry = new THREE.SphereGeometry(size * 0.02, 6, 6);
+    const dotGeometry = new THREE.SphereGeometry(size * 0.015, 8, 8);
     const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const dotCount = 50;
     
