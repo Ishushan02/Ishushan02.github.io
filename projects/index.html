@@ -463,15 +463,13 @@ const projectsData = {
         techStack: "OpenCV • PyTorch • YOLO • Flask",
         github: "https://github.com/Ishushan02",
         demo: "#",
-        description: "Advanced computer vision system for object detection and image classification.",
+        description: "Built an end-to-end multimodal diffusion model integrating multiple text encoders and a compressed image latent space, using FiLM-based time conditioning and hybrid losses to achieve compute-efficient, high-fidelity text-aligned image generation.",
         features: [
-            "Real-time object detection and tracking",
-            "Custom model training pipeline",
-            "Edge deployment optimization",
-            "RESTful API for easy integration"
+            "Built a multimodal diffusion model combining multiple text encoders such as GPT NEO, T5, and CLIP for text encodings and a Deep Compression Autoencoder (DCAE) for the latent representation of images.",
+            "Designed a time-conditioning pipeline by injecting sinusoidal diffusion step embeddings into every block via FiLM-style modulation (Scale and Shift), reducing compute cost by approximately 70% compared to using cross-attention.",
+            "Trained the model end-to-end using a hybrid loss function that combines denoising, perceptual, and Inception losses, enabling high-fidelity image generation aligned with textual prompts."
         ],
-        technologies: ["OpenCV", "PyTorch", "YOLO", "Flask", "TensorRT", "CUDA"]
-    },
+        technologies: ["Multimodal Diffusion Models", "Text-to-Image Generation", "Multitext Encoder Fusion", "CLIP", "T5", "GPT-Neo"]    },
     ht2i: {
         name: "Hybrid Architecture T2I",
         icon: "../images/ht2i.png",
