@@ -1035,6 +1035,56 @@ canvas.addEventListener('touchend', (event) => {
     }
 }, { passive: true });
 
+
+
+// function showDetails(companyKey) {
+//     const data = experienceData[companyKey];
+//     const modal = document.getElementById('detail-modal');
+//     const content = document.getElementById('modal-content');
+    
+//     const companyLogoHTML = data.logo && data.logo.endsWith('.png') 
+//         ? `<a href="${data.url}" target="_blank" class="company-logo"><img src="${data.logo}" alt="${data.name}" onerror="this.parentElement.innerHTML='${data.logoFallback}'"></a>`
+//         : `<a href="${data.url}" target="_blank" class="company-logo">${data.logoFallback}</a>`;
+    
+//     const recommenderImageHTML = data.recommender.image && data.recommender.image.endsWith('.png')
+//         ? `<a href="${data.recommender.link}" target="_blank" class="recommender-image"><img src="${data.recommender.image}" alt="${data.recommender.name}" onerror="this.parentElement.innerHTML='${data.recommender.imageFallback}'"></a>`
+//         : `<a href="${data.recommender.link}" target="_blank" class="recommender-image">${data.recommender.imageFallback}</a>`;
+    
+//     content.innerHTML = `
+//         <div class="company-header">
+//             ${companyLogoHTML}
+//             <div class="company-info">
+//                 <h2>${data.title}</h2>
+//                 <div class="duration">${data.duration}</div>
+//             </div>
+//         </div>
+        
+//         <div class="experience-section">
+//             <h3>Key Responsibilities</h3>
+//             <ul>
+//                 ${data.description.map(item => `<li>${item}</li>`).join('')}
+//             </ul>
+//         </div>
+        
+//         <div class="recommendation">
+//             <h3>Recommendation</h3>
+//             <div class="recommender">
+//                 ${recommenderImageHTML}
+//                 <div class="recommender-info">
+//                     <h4>${data.recommender.name}</h4>
+//                     <p>${data.recommender.title}</p>
+//                 </div>
+//             </div>
+//             <div class="recommendation-text">
+//                 "${data.recommender.message}"
+//             </div>
+//         </div>
+//     `;
+    
+//     modal.classList.add('active');
+// }
+
+
 function showDetails(companyKey) {
     const data = experienceData[companyKey];
     const modal = document.getElementById('detail-modal');
@@ -1063,27 +1113,27 @@ function showDetails(companyKey) {
                 ${data.description.map(item => `<li>${item}</li>`).join('')}
             </ul>
         </div>
-
-        ${data.description.name !== "Syncron" ? `
-            <div class="recommendation">
-                <h3>Recommendation</h3>
-                <div class="recommender">
-                    ${recommenderImageHTML}
-                    <div class="recommender-info">
-                        <h4>${data.recommender.name}</h4>
-                        <p>${data.recommender.title}</p>
-                    </div>
-                </div>
-                <div class="recommendation-text">
-                    "${data.recommender.message}"
+        
+        ${companyKey !== 'syncron' ? `
+        <div class="recommendation">
+            <h3>Recommendation</h3>
+            <div class="recommender">
+                ${recommenderImageHTML}
+                <div class="recommender-info">
+                    <h4>${data.recommender.name}</h4>
+                    <p>${data.recommender.title}</p>
                 </div>
             </div>
-        ` : ""}
-        
+            <div class="recommendation-text">
+                "${data.recommender.message}"
+            </div>
+        </div>
+        ` : ''}
     `;
     
     modal.classList.add('active');
 }
+
 
 function closeModal() {
     document.getElementById('detail-modal').classList.remove('active');
