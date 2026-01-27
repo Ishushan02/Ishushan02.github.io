@@ -781,8 +781,8 @@ const experienceData = {
             title: "Senior Software Engineer",
             image: "../images/rithik.png",
             imageFallback: "RS",
-            message: "I had the opportunity to work alongside Ishan as both a colleague and a friend, and he is an outstanding engineer and collaborator. He brings strong technical expertise in AI/ML, approaches problems with clarity and ownership, and consistently delivers high-quality results. Beyond his skills, Ishan is reliable, proactive, and always supportive of the team. He makes complex work easier for everyone around them and is a pleasure to work with. I highly recommend them and would gladly work with them again."
-        }
+            message: "I’ve had the opportunity to work closely with Ishan on projects involving complex architectures, and one thing that consistently stood out was his approach to problem-solving. He has an admirable attitude toward digging deep into issues rather than settling for surface-level fixes.       Ishan is comfortable navigating complex systems and has a strong ability to break down challenging problems into manageable solutions. His persistence, analytical thinking, and ownership make him a reliable teammate when dealing with technically demanding work. I genuinely enjoyed collaborating with him and would highly recommend him for roles that require depth, clarity, and strong problem-solving skills. "
+         }
     },
     gnani: {
         name: "Gnani.ai",
@@ -1037,54 +1037,6 @@ canvas.addEventListener('touchend', (event) => {
 
 
 
-// function showDetails(companyKey) {
-//     const data = experienceData[companyKey];
-//     const modal = document.getElementById('detail-modal');
-//     const content = document.getElementById('modal-content');
-    
-//     const companyLogoHTML = data.logo && data.logo.endsWith('.png') 
-//         ? `<a href="${data.url}" target="_blank" class="company-logo"><img src="${data.logo}" alt="${data.name}" onerror="this.parentElement.innerHTML='${data.logoFallback}'"></a>`
-//         : `<a href="${data.url}" target="_blank" class="company-logo">${data.logoFallback}</a>`;
-    
-//     const recommenderImageHTML = data.recommender.image && data.recommender.image.endsWith('.png')
-//         ? `<a href="${data.recommender.link}" target="_blank" class="recommender-image"><img src="${data.recommender.image}" alt="${data.recommender.name}" onerror="this.parentElement.innerHTML='${data.recommender.imageFallback}'"></a>`
-//         : `<a href="${data.recommender.link}" target="_blank" class="recommender-image">${data.recommender.imageFallback}</a>`;
-    
-//     content.innerHTML = `
-//         <div class="company-header">
-//             ${companyLogoHTML}
-//             <div class="company-info">
-//                 <h2>${data.title}</h2>
-//                 <div class="duration">${data.duration}</div>
-//             </div>
-//         </div>
-        
-//         <div class="experience-section">
-//             <h3>Key Responsibilities</h3>
-//             <ul>
-//                 ${data.description.map(item => `<li>${item}</li>`).join('')}
-//             </ul>
-//         </div>
-        
-//         <div class="recommendation">
-//             <h3>Recommendation</h3>
-//             <div class="recommender">
-//                 ${recommenderImageHTML}
-//                 <div class="recommender-info">
-//                     <h4>${data.recommender.name}</h4>
-//                     <p>${data.recommender.title}</p>
-//                 </div>
-//             </div>
-//             <div class="recommendation-text">
-//                 "${data.recommender.message}"
-//             </div>
-//         </div>
-//     `;
-    
-//     modal.classList.add('active');
-// }
-
-
 function showDetails(companyKey) {
     const data = experienceData[companyKey];
     const modal = document.getElementById('detail-modal');
@@ -1114,7 +1066,6 @@ function showDetails(companyKey) {
             </ul>
         </div>
         
-        ${companyKey !== 'syncron' ? `
         <div class="recommendation">
             <h3>Recommendation</h3>
             <div class="recommender">
@@ -1128,11 +1079,11 @@ function showDetails(companyKey) {
                 "${data.recommender.message}"
             </div>
         </div>
-        ` : ''}
     `;
     
     modal.classList.add('active');
 }
+
 
 
 function closeModal() {
