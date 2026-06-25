@@ -544,6 +544,43 @@ body {
     0%,100% { transform:translateX(0); }
     50%     { transform:translateX(4px); }
 }
+#hr-notification {
+    position:fixed;
+    top:5.5rem;
+    right:2rem;
+    z-index:10;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    background:rgba(0,0,0,0.9);
+    border:1.5px solid #00ff00;
+    border-radius:10px;
+    padding:0.8rem 1.6rem;
+    cursor:pointer;
+    overflow:hidden;
+    transition:transform 0.3s;
+    animation:hr-pulse 2s ease-in-out infinite;
+}
+#hr-notification::before {
+    content:'';
+    position:absolute;
+    top:0; left:-100%;
+    width:55%;
+    height:100%;
+    background:linear-gradient(90deg, transparent, rgba(0,255,0,0.12), transparent);
+    animation:notif-shimmer 2.8s ease-in-out infinite;
+    pointer-events:none;
+}
+#hr-notification:hover {
+    transform:scale(1.07);
+    box-shadow:0 0 60px rgba(0,255,0,0.9), 0 0 120px rgba(0,255,0,0.3), inset 0 0 30px rgba(0,255,0,0.15) !important;
+}
+@keyframes hr-pulse {
+    0%,100% { box-shadow:0 0 18px rgba(0,255,0,0.35), 0 0 40px rgba(0,255,0,0.1), inset 0 0 10px rgba(0,255,0,0.05); }
+    50%      { box-shadow:0 0 40px rgba(0,255,0,0.7), 0 0 80px rgba(0,255,0,0.25), inset 0 0 20px rgba(0,255,0,0.1); }
+}
+
 @media (max-width: 768px) {
     #apps-notification {
         top:1rem;
@@ -564,6 +601,45 @@ body {
         font-size:0.8rem;
     }
 }
+@media (max-width: 768px) {
+    #hr-notification {
+        top:4.5rem;
+        right:1rem;
+        padding:0.45rem 0.9rem;
+        gap:0.6rem;
+        border-radius:8px;
+    }
+    #hr-notification .notif-text {
+        font-size:0.72rem;
+        letter-spacing:2px;
+    }
+    #hr-notification .notif-dot {
+        width:8px;
+        height:8px;
+    }
+    #hr-notification .notif-arrow {
+        font-size:0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #hr-notification {
+        top:4rem;
+        right:0.5rem;
+        padding:0.35rem 0.7rem;
+        gap:0.45rem;
+        border-radius:6px;
+    }
+    #hr-notification .notif-text {
+        font-size:0.62rem;
+        letter-spacing:1.5px;
+    }
+    #hr-notification .notif-dot {
+        width:7px;
+        height:7px;
+    }
+}
+
 @media (max-width: 480px) {
     #apps-notification {
         top:0.5rem;
@@ -609,6 +685,12 @@ body {
     <!-- <span class="notif-badge">NEW</span> -->
     <div class="notif-dot"></div>
     <span class="notif-text"> DOWNLOAD MY APP</span>
+</a>
+
+<a href="https://ishushan02.github.io/Heart-Rate-Vizualizer/" target="_blank" id="hr-notification">
+    <div class="notif-dot" style="background:#00ff00;box-shadow:0 0 12px #00ff00,0 0 24px rgba(0,255,0,0.4);"></div>
+    <span class="notif-text" style="color:#00ff00;text-shadow:0 0 12px #00ff00,0 0 24px rgba(0,255,0,0.5);"> HEART RATE VIZ</span>
+    <span class="notif-arrow" style="color:#00ff00;text-shadow:0 0 10px #00ff00;">→</span>
 </a>
 
 <div class="social-sidebar">
