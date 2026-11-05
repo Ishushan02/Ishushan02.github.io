@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f2f4f6">
+<title>Cube</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #f2f4f6; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<canvas id="cube"></canvas>
+<script>
+  // One seed per page load, and every random choice comes from it.
+  const SEED = crypto.getRandomValues(new Uint32Array(1))[0];
+
+  // A small seeded generator (mulberry32). Returns a number from 0 up to 1.
+  const random = (() => {
+    let state = SEED;
+    return () => {
+      state = (state + 0x6D2B79F5) | 0;
+      let t = Math.imul(state ^ (state >>> 15), 1 | state);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  })();
+
+  function randomFrom(list) {
+    return list[Math.floor(random() * list.length)];
+  }
+
+  function shuffled(list) {
+    const result = [...list];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  const CELLS = 3;                 // blocks along each edge of the cube
+  const DOTS_PER_CELL = 7;         // dots along each edge of a block's face
+  const ELEVATION_DEG = 37;        // camera tilt; true isometric is 35.26
+  const FILL = 0.84;               // share of the screen height the cube may occupy
+  const SIDE_MARGIN_PX = 16;       // kept clear at each side, even mid-twist
+  // Half a dot's width, as a share of the spacing between dots on the cube. The
+  // nearest dots on screen sit about 0.8 of that spacing apart, so this makes a
+  // dot about two-thirds as wide as the distance to its neighbor.
+  const DOT_RADIUS = 0.265;
+  const INNER_DOT_SIZE = 0.222;    // inside-the-cube dots, as a share of DOT_RADIUS
+  const INNER_DOT_COLOR = '#cdd1d6';
+
+  const QUARTER_TURN_MS = 2000;
+  const HALF_TURN_MS = 3000;
+  const REST_MS = 1000;            // perfectly still time between twists
+  const HALF_TURN_CHANCE = 0.15;
+  const TWO_LAYER_CHANCE = 0.2;
+  const MAX_SAME_IN_A_ROW = 2;     // for spin direction, and for axis
+  const SWIRL_DURATION_MS = 2200;  // the whole swirl, first shell start to last landing
+  const SWIRL_SHELL_DELAY_MS = 250; // each inner shell starts this much later
+  const SWIRL_OPPOSITE_CHANCE = 0.4; // how often the middle shell spins the other way
+  // Tried after any normal twist. Swirls never come twice in a row, so this works
+  // out to about one move in six.
+  const SWIRL_CHANCE = 0.2;
+  const MAX_FRAME_STEP_MS = 33;    // the most time one frame can move things on
+
+  const CHANGE_EVERY_MS = [4000, 8000];   // wait between clusters of dots changing
+  const CHANGE_CLUSTER_SIZE = [2, 4];     // dots in a cluster
+  const CHANGE_LASTS_MS = [15000, 35000]; // how long before a cluster changes back
+  const CHANGE_QUIET_MS = 20000;          // a dot stays put this long after returning
+  const CHANGE_DURATION_MS = 650;         // one dot's shrink-and-pop
+  const CHANGE_STAGGER_MS = 90;           // delay between dots in a cluster
+  const CHANGE_SMALLEST = 0.2;            // dot size at the bottom of the shrink
+  const CHANGE_SHRINK_SHARE = 0.4;        // share of the time spent shrinking
+  const CHANGE_POP = 1.5;                 // overshoot of the pop; higher is bouncier
+
+  const TILE_GRADIENT = 0.5;       // strength of the gradient inside each block face
+  const COLOR_SATURATION = 1.2;    // pushes every color away from grey
+  const COLOR_BRIGHTNESS = 1.05;
+
+  const COLOR_DRIFT = 0.006;       // how far colors wander, as a share of the ramp
+  const COLOR_DRIFT_PERIOD_MS = 90000;
+  const COLOR_UPDATE_MS = 200;
+
+  const GHOST_COLOR = [203, 207, 212];
+  const GHOST_FADE_MS = 220;       // the cube fades in as a grey ghost
+  const BLOOM_STAGGER_MS = 260;    // dots start their bloom within this window
+  const BLOOM_MS = 270;            // one dot's bloom, from ghost through pastel to full
+  const BLOOM_PASTEL = 0.55;       // how close to white the pastel stage is
+  const BLOOM_SPARKLE = 0.18;      // extra size at the peak of a dot's bloom
+  const WARM_UP_MS = 5000;         // how long the middle takes to reach full color
+  const MIDDLE_WASH = 0.35;        // how washed out the very middle starts
+
+  // A looping color ramp painted over the cube. The number is how much of the
+  // ramp the blend from that color to the next one takes up, so a small number
+  // makes a color scarce. The word is its family, used when judging a pattern.
+  const PALETTE = [
+    ['#29aee8', 1, 'cool'],       // sky blue
+    ['#14c4c8', 1, 'cool'],       // turquoise
+    ['#0d9e96', 1, 'cool'],       // teal
+    ['#3ad6a0', 1, 'cool'],       // mint
+    ['#2fb65a', 1, 'cool'],       // green
+    ['#9ccc1c', 1, 'cool'],       // lime
+    ['#f4b61a', 1, 'warm'],       // amber
+    ['#f5821f', 1, 'warm'],       // orange
+    ['#9c6840', 0.8, 'earthy'],   // brown
+    ['#cc7f8a', 1, 'earthy'],     // dusty rose
+    ['#e8463a', 1, 'warm'],       // warm red
+    ['#f2579c', 0.5, 'warm'],     // pink
+    ['#8a4fc7', 0.3, 'scarce'],   // purple
+    ['#2f4db8', 0.4, 'scarce'],   // deep blue
+  ];
+
+  const SHAPE_LETTERS = ['c', 's', 't', 'r', 'h'];  // see SHAPES
+  const STRIPED_FACES_PER_SIDE = 3;
+
+  const canvas = document.getElementById('cube');
+  const ctx = canvas.getContext('2d');
+  const BACKGROUND = getComputedStyle(document.body).backgroundColor;
+
+  // ---- View ---------------------------------------------------------------
+
+  const elevation = ELEVATION_DEG * Math.PI / 180;
+  const sinE = Math.sin(elevation);
+  const cosE = Math.cos(elevation);
+
+  // Orthographic view of a cube spanning -1..1 on each axis, y up, with the
+  // (+x, +y, +z) corner pointing at the camera. Returns units of half an edge.
+  function project(x, y, z) {
+    return [
+      (x - z) * Math.SQRT1_2,
+      (x + z) * Math.SQRT1_2 * sinE - y * cosE,
+    ];
+  }
+
+  // Points from the cube toward the camera. A side faces the viewer when its
+  // outward normal has a positive dot product with this.
+  const TOWARD_CAMERA = [cosE * Math.SQRT1_2, sinE, cosE * Math.SQRT1_2];
+
+  // Half the cube's on-screen size, measured from its center.
+  const HALF_WIDTH = Math.SQRT2;
+  // How far from the center a block's corner can reach sideways during a twist.
+  const TWIST_HALF_WIDTH = 1 + Math.SQRT1_2;
+  const HALF_HEIGHT = Math.SQRT2 * sinE + cosE;
+
+  // ---- Shapes -------------------------------------------------------------
+
+  // Shapes are traced in screen space around the dot's projected center, with
+  // no face transform applied, so they always face the viewer straight on.
+  // Each is sized relative to r so the five carry a similar visual weight.
+  const SQUARE_HALF = 0.88;        // near the circle's area, for the same weight
+  const SQUARE_CORNER = 0.2;
+  const TRIANGLE_RADIUS = 1.5;     // likewise; a triangle needs to be wider to match
+  const RING_LINE = 0.58;          // thick outlines leave just a small window
+  const HOLLOW_LINE = 0.53;        // a little thinner, so the two windows match
+  const HOLLOW_CORNER = 0.04;      // tighter, or small outlines read as rings
+
+  function traceCircle(x, y, r) {
+    ctx.moveTo(x + r, y);
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+  }
+
+  function traceSquare(x, y, half, corner) {
+    // Plain squares on browsers without roundRect, such as Safari before 16.
+    if (ctx.roundRect) ctx.roundRect(x - half, y - half, half * 2, half * 2, corner);
+    else ctx.rect(x - half, y - half, half * 2, half * 2);
+  }
+
+  const SHAPES = {
+    c: { trace: traceCircle },
+    s: { trace: (x, y, r) => traceSquare(x, y, SQUARE_HALF * r, SQUARE_CORNER * r) },
+    t: {
+      trace(x, y, r) {
+        const R = TRIANGLE_RADIUS * r;
+        ctx.moveTo(x, y - R);
+        ctx.lineTo(x + R * Math.sqrt(3) / 2, y + R / 2);
+        ctx.lineTo(x - R * Math.sqrt(3) / 2, y + R / 2);
+        ctx.closePath();
+      },
+    },
+    r: { hollow: true, line: RING_LINE, trace: (x, y, r) => traceCircle(x, y, r - RING_LINE * r / 2) },
+    h: {
+      hollow: true,
+      line: HOLLOW_LINE,
+      trace: (x, y, r) => traceSquare(x, y, (SQUARE_HALF - HOLLOW_LINE / 2) * r, HOLLOW_CORNER * r),
+    },
+  };
+
+  // The tiny dots on the inside of the cube, like the plastic of a real one.
+  const INNER_SHAPE = { trace: (x, y, r) => traceCircle(x, y, INNER_DOT_SIZE * r) };
+
+  function shapeInCell(cell, col, row) {
+    if (cell.length === 1) return cell;
+    const [first, second, direction, width] = cell;
+    const position = direction === '-' ? row : col;
+    return Math.floor(position / Number(width)) % 2 ? second : first;
+  }
+
+  // ---- Color --------------------------------------------------------------
+
+  const RAMP = PALETTE.map(([hex, width, family]) => ({
+    rgb: [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)),
+    width,
+    family,
+  }));
+  const RAMP_LENGTH = RAMP.reduce((sum, stop) => sum + stop.width, 0);
+
+  function cssColor([r, g, b]) {
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function rampRgb(t) {
+    let position = (t - Math.floor(t)) * RAMP_LENGTH;
+    let i = 0;
+    while (position > RAMP[i].width && i < RAMP.length - 1) position -= RAMP[i++].width;
+    const from = RAMP[i];
+    const to = RAMP[(i + 1) % RAMP.length];
+    const mix = position / from.width;
+    const rgb = from.rgb.map((value, c) => value + (to.rgb[c] - value) * mix);
+    const grey = 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2];
+    return rgb.map((value) => (
+      Math.round(Math.max(0, Math.min(255, (grey + (value - grey) * COLOR_SATURATION) * COLOR_BRIGHTNESS)))
+    ));
+  }
+
+  // The nearest palette color to a place on the ramp.
+  function rampStop(t) {
+    let position = (t - Math.floor(t)) * RAMP_LENGTH;
+    let i = 0;
+    while (position > RAMP[i].width && i < RAMP.length - 1) position -= RAMP[i++].width;
+    return RAMP[position / RAMP[i].width < 0.5 ? i : (i + 1) % RAMP.length];
+  }
+
+  // A color pattern says where it starts on the ramp, which way the rainbow runs
+  // through the cube, and where its waves sit. The three direction amounts always
+  // add up to the same total, so the rainbow passes over the cube about once
+  // whichever way it runs. None gets small, as that would crowd all the color
+  // changes onto one axis.
+  function randomField() {
+    const shares = [0, 1, 2].map(() => 0.2 + random() * 0.3);
+    const total = shares.reduce((sum, share) => sum + share, 0);
+    return {
+      start: random(),
+      direction: shares.map((share) => (share / total) * 0.5 * (random() < 0.5 ? -1 : 1)),
+      waveOffsets: [random() * Math.PI * 2, random() * Math.PI * 2],
+    };
+  }
+
+  // How far along the ramp a point of the cube falls. Working from the 3D position
+  // keeps colors continuous across blocks and around the cube's edges; the sine
+  // terms bend the bands so they look painted rather than ruled.
+  function rampPositionAt(field, x, y, z) {
+    const [dx, dy, dz] = field.direction;
+    return field.start + dx * x + dy * y + dz * z
+      + 0.08 * Math.sin(1.03 * x - 1.77 * y + field.waveOffsets[0])
+      + 0.06 * Math.sin(1.82 * z - 0.23 * y + field.waveOffsets[1]);
+  }
+
+  // ---- Blocks -------------------------------------------------------------
+
+  // The cube is 27 blocks. Each block has:
+  //   position  where it sits, as [x, y, z] with each value -1, 0 or 1
+  //   rotation  which way it's turned, as a 3x3 matrix; starts as the identity
+  //   faces     its six sides, each with an outward normal, corners and dots
+  // Normals and dots are stored in the block's own frame, relative to its
+  // center, and never change. Moving a block only touches position and rotation,
+  // and its dots keep their shape and color wherever it goes.
+  //
+  // Sides on the outside of the cube get the colored dots: 3 on a corner block,
+  // 2 on an edge block, 1 on a center block, and none on the block in the very
+  // middle. All the others face inward and get tiny grey dots, which only show
+  // when a twist opens up the cube.
+  const BLOCK_SIZE = 2 / CELLS;    // in the cube's -1..1 units
+  const SPACING = BLOCK_SIZE / DOTS_PER_CELL;
+
+  function applyMatrix(m, [x, y, z]) {
+    return [
+      m[0][0] * x + m[0][1] * y + m[0][2] * z,
+      m[1][0] * x + m[1][1] * y + m[1][2] * z,
+      m[2][0] * x + m[2][1] * y + m[2][2] * z,
+    ];
+  }
+
+  const blocks = [];
+  for (const x of [-1, 0, 1]) {
+    for (const y of [-1, 0, 1]) {
+      for (const z of [-1, 0, 1]) {
+        blocks.push({
+          position: [x, y, z],
+          rotation: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+          faces: [],
+        });
+      }
+    }
+  }
+
+  // The cube's six sides, used only to paint the blocks. Each maps (column, row)
+  // in -1..1 to a point on the cube, as if looking straight at that side.
+  const SIDES = [
+    { normal: [0, 1, 0],  point: (col, row) => [col, 1, row] },        // top
+    { normal: [0, 0, 1],  point: (col, row) => [col, -row, 1] },       // left
+    { normal: [1, 0, 0],  point: (col, row) => [1, -row, -col] },      // right
+    { normal: [0, -1, 0], point: (col, row) => [col, -1, -row] },      // bottom
+    { normal: [-1, 0, 0], point: (col, row) => [-1, -row, col] },      // back left
+    { normal: [0, 0, -1], point: (col, row) => [-col, -row, -1] },     // back right
+  ];
+
+  // Which block a given cell of a side belongs to.
+  function blockPositionOfCell(side, cellRow, cellCol) {
+    const center = side.point(
+      -1 + (cellCol + 0.5) * BLOCK_SIZE,
+      -1 + (cellRow + 0.5) * BLOCK_SIZE
+    );
+    return center.map((v) => Math.max(-1, Math.min(1, Math.round(v / BLOCK_SIZE))));
+  }
+
+  // Makes each block face read as its own tile. The face takes its color from the
+  // pattern at its center, with a softened version of the pattern's gradient
+  // around that, so the color steps at the border between two faces while
+  // neighbors stay related.
+  function tileRampPosition(field, side, cellRow, cellCol, point) {
+    const center = rampPositionAt(field, ...side.point(
+      -1 + (cellCol + 0.5) * BLOCK_SIZE,
+      -1 + (cellRow + 0.5) * BLOCK_SIZE
+    ));
+    return center + TILE_GRADIENT * (rampPositionAt(field, ...point) - center);
+  }
+
+  // Every block face as a cell of its side, and whether two of them touch: side
+  // by side, or around an edge of the cube on the same block.
+  const SIDE_CELLS = SIDES.flatMap((side) => [0, 1, 2].flatMap((row) => [0, 1, 2].map((col) => (
+    { side, row, col, position: blockPositionOfCell(side, row, col).join() }
+  ))));
+
+  function cellsTouch(a, b) {
+    if (a === b) return false;
+    return a.side === b.side
+      ? Math.abs(a.row - b.row) + Math.abs(a.col - b.col) === 1
+      : a.position === b.position;
+  }
+
+  // Keeps every page load feeling like the same cube. Judged on the three sides
+  // visible at the start, against the shares of each color family: mostly cool
+  // colors, a good amount of warm, some earthy, and just a little purple and blue.
+  const FIELD_LIMITS = {
+    cool: [0.4, 0.75],
+    warm: [0.18, 0.45],
+    earthy: [0.02, 0.18],
+    scarce: [0.015, 0.08],
+    colorsShown: 10,          // of the palette's 12 main colors
+    touchingDifference: 15,   // smallest color difference between touching faces
+  };
+  const FIELD_TRIES = 500;
+
+  function fieldLooksRight(field) {
+    const visibleCells = SIDE_CELLS.slice(0, 27);
+    const counts = new Map(RAMP.map((stop) => [stop, 0]));
+    const averages = new Map();
+    for (const cell of visibleCells) {
+      const sum = [0, 0, 0];
+      for (const v of [0.2, 0.5, 0.8]) {
+        for (const u of [0.2, 0.5, 0.8]) {
+          const point = cell.side.point(-1 + (cell.col + u) * BLOCK_SIZE, -1 + (cell.row + v) * BLOCK_SIZE);
+          const t = tileRampPosition(field, cell.side, cell.row, cell.col, point);
+          const stop = rampStop(t);
+          counts.set(stop, counts.get(stop) + 1);
+          rampRgb(t).forEach((value, c) => { sum[c] += value; });
+        }
+      }
+      averages.set(cell, sum);
+    }
+
+    const total = visibleCells.length * 9;
+    const shareOf = (family) => RAMP.filter((stop) => stop.family === family)
+      .reduce((sum, stop) => sum + counts.get(stop), 0) / total;
+    for (const family of ['cool', 'warm', 'earthy', 'scarce']) {
+      const [low, high] = FIELD_LIMITS[family];
+      const share = shareOf(family);
+      if (share < low || share > high) return false;
+    }
+
+    const shown = RAMP.filter((stop) => stop.family !== 'scarce' && counts.get(stop) / total >= 0.02).length;
+    if (shown < FIELD_LIMITS.colorsShown) return false;
+
+    for (const a of visibleCells) {
+      for (const b of visibleCells) {
+        if (!cellsTouch(a, b)) continue;
+        const [p, q] = [averages.get(a), averages.get(b)];
+        const difference = Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) / 9;
+        if (difference < FIELD_LIMITS.touchingDifference) return false;
+      }
+    }
+    return true;
+  }
+
+  // This page load's color pattern: the first random one that keeps the feel.
+  // Ends on the last one tried in the very unlikely case that none does.
+  function chooseField() {
+    let field;
+    for (let tries = 0; tries < FIELD_TRIES; tries++) {
+      field = randomField();
+      if (fieldLooksRight(field)) return field;
+    }
+    return field;
+  }
+
+  const FIELD = chooseField();
+
+  // Shuffles which shape fills each block face. Each cell gets a string:
+  //   c circle   s square   t triangle   r ring   h hollow square
+  // One letter fills the whole face. A striped face is written like 'rt|1':
+  // first shape (the majority), second shape, '-' for rows or '|' for columns,
+  // then the stripe width in dots.
+  //
+  // Faces that touch never share a main shape, so each one reads as its own
+  // patch. That can always be done, as a face touches at most 4 others and there
+  // are 5 shapes. Choosing the least used shape keeps the five roughly even.
+  function shuffleShapes() {
+    const cells = SIDE_CELLS.map((cell) => ({ ...cell, main: null }));
+
+    const uses = new Map(SHAPE_LETTERS.map((letter) => [letter, 0]));
+    for (const cell of shuffled(cells)) {
+      const taken = cells.filter((other) => cellsTouch(cell, other)).map((other) => other.main);
+      const open = SHAPE_LETTERS.filter((letter) => !taken.includes(letter));
+      const fewest = Math.min(...open.map((letter) => uses.get(letter)));
+      cell.main = randomFrom(open.filter((letter) => uses.get(letter) === fewest));
+      uses.set(cell.main, uses.get(cell.main) + 1);
+    }
+
+    for (const side of SIDES) {
+      const own = cells.filter((cell) => cell.side === side);
+      const striped = new Set(shuffled(own).slice(0, STRIPED_FACES_PER_SIDE));
+      side.cells = [0, 1, 2].map((row) => [0, 1, 2].map((col) => {
+        const cell = own.find((other) => other.row === row && other.col === col);
+        if (!striped.has(cell)) return cell.main;
+        const second = randomFrom(SHAPE_LETTERS.filter((letter) => letter !== cell.main));
+        return `${cell.main}${second}${randomFrom(['-', '|'])}${randomFrom([1, 2])}`;
+      }));
+    }
+  }
+
+  shuffleShapes();
+
+  // A side's four corners in its block's frame.
+  function cornersOfSide(normal) {
+    const half = BLOCK_SIZE / 2;
+    const axis = normal.findIndex((v) => v !== 0);
+    const [u, v] = [0, 1, 2].filter((i) => i !== axis);
+    return [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => {
+      const corner = normal.map((n) => n * half);
+      corner[u] = a * half;
+      corner[v] = b * half;
+      return corner;
+    });
+  }
+
+  function blockAt([x, y, z]) {
+    return blocks[(x + 1) * 9 + (y + 1) * 3 + (z + 1)];
+  }
+
+  const DRIFT_OFFSET = random() * Math.PI * 2;
+
+  // Each dot sits in the middle of its own slot on the side, which keeps the
+  // spacing even across blocks and leaves no dot on a shared edge. Its place on
+  // the color ramp is set here, once, and belongs to the dot from then on, as
+  // does the shape it returns to after changing.
+  for (const side of SIDES) {
+    side.cells.forEach((cellRow, cellRowIndex) => {
+      cellRow.forEach((cell, cellColIndex) => {
+        const position = blockPositionOfCell(side, cellRowIndex, cellColIndex);
+
+        const dots = [];
+        for (let row = 0; row < DOTS_PER_CELL; row++) {
+          for (let col = 0; col < DOTS_PER_CELL; col++) {
+            const onCube = side.point(
+              -1 + (cellColIndex * DOTS_PER_CELL + col + 0.5) * SPACING,
+              -1 + (cellRowIndex * DOTS_PER_CELL + row + 0.5) * SPACING
+            );
+            const shape = SHAPES[shapeInCell(cell, col, row)];
+            const rampPosition = tileRampPosition(FIELD, side, cellRowIndex, cellColIndex, onCube);
+            const rgb = rampRgb(rampPosition);
+            dots.push({
+              point: onCube.map((v, axis) => v - position[axis] * BLOCK_SIZE),
+              shape,
+              homeShape: shape,
+              size: 1,
+              changing: false,
+              canChangeAt: 0,
+              rampPosition,
+              driftPhase: DRIFT_OFFSET + 1.7 * onCube[0] + 2.3 * onCube[1] - 1.1 * onCube[2],
+              bloomDelay: random() * BLOOM_STAGGER_MS,
+              rgb,
+              color: cssColor(rgb),
+            });
+          }
+        }
+        blockAt(position).faces.push({ normal: side.normal, corners: cornersOfSide(side.normal), dots, painted: true });
+      });
+    });
+  }
+
+  // Every remaining side faces inward.
+  for (const block of blocks) {
+    for (const { normal } of SIDES) {
+      if (block.faces.some((face) => face.normal === normal)) continue;
+      const axis = normal.findIndex((v) => v !== 0);
+      const [u, v] = [0, 1, 2].filter((i) => i !== axis);
+      const dots = [];
+      for (let row = 0; row < DOTS_PER_CELL; row++) {
+        for (let col = 0; col < DOTS_PER_CELL; col++) {
+          const point = normal.map((n) => n * BLOCK_SIZE / 2);
+          point[u] = (col + 0.5) * SPACING - BLOCK_SIZE / 2;
+          point[v] = (row + 0.5) * SPACING - BLOCK_SIZE / 2;
+          dots.push({ point, shape: INNER_SHAPE, size: 1, color: INNER_DOT_COLOR });
+        }
+      }
+      block.faces.push({ normal, corners: cornersOfSide(normal), dots });
+    }
+  }
+
+  // ---- Drawing ------------------------------------------------------------
+
+  const WHITE = [255, 255, 255];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Runs from page load until the middle has warmed up. With reduced motion on,
+  // the cube simply starts in its finished state.
+  let entranceActive = !reducedMotion.matches;
+  let lifeClock = 0;          // pausable time since the cube appeared
+
+  // The twist in progress, if any: { axis, layers, direction, turns, duration,
+  // elapsed, angle }. The angle is only ever used for drawing. A block's saved
+  // position and rotation don't change until the twist lands.
+  // A swirl is the other kind of move, set up in startSwirl. It has the same
+  // duration and elapsed, plus shells, and a spin for each block in place of an
+  // angle. Those too are only for drawing until it lands.
+  let twist = null;
+
+  function axisRotation(axis, angle) {
+    const c = Math.cos(angle);
+    const s = Math.sin(angle);
+    if (axis === 0) return [[1, 0, 0], [0, c, -s], [0, s, c]];
+    if (axis === 1) return [[c, 0, s], [0, 1, 0], [-s, 0, c]];
+    return [[c, -s, 0], [s, c, 0], [0, 0, 1]];
+  }
+
+  // A rotation around the line from the (+x, +y, +z) corner through the opposite
+  // corner of the cube.
+  function diagonalRotation(angle) {
+    const c = Math.cos(angle);
+    const a = (1 - c) / 3;
+    const b = Math.sin(angle) / Math.sqrt(3);
+    return [[c + a, a - b, a + b], [a + b, c + a, a - b], [a - b, a + b, c + a]];
+  }
+
+  function multiplyMatrices(a, b) {
+    return a.map((row) => [0, 1, 2].map((c) => row[0] * b[0][c] + row[1] * b[1][c] + row[2] * b[2][c]));
+  }
+
+  function isTwisting(block) {
+    return twist !== null && !twist.shells && twist.layers.includes(block.position[twist.axis]);
+  }
+
+  // The rotation a block is drawn with right now, on top of its saved one.
+  function currentSpin(block) {
+    if (twist && twist.shells) return twist.spins.get(block) || null;
+    return isTwisting(block) ? axisRotation(twist.axis, twist.angle) : null;
+  }
+
+  // How squarely a side faces the camera: 1 is head on, 0 is edge-on, and
+  // negative is turned away.
+  function facing(block, spin, normal) {
+    const turned = applyMatrix(block.rotation, normal);
+    const [x, y, z] = spin ? applyMatrix(spin, turned) : turned;
+    return x * TOWARD_CAMERA[0] + y * TOWARD_CAMERA[1] + z * TOWARD_CAMERA[2];
+  }
+
+  // Where a point of this block currently is on screen, in cube units.
+  function projectBlockPoint(block, spin, point) {
+    const [x, y, z] = applyMatrix(block.rotation, point);
+    const placed = [
+      x + block.position[0] * BLOCK_SIZE,
+      y + block.position[1] * BLOCK_SIZE,
+      z + block.position[2] * BLOCK_SIZE,
+    ];
+    return project(...(spin ? applyMatrix(spin, placed) : placed));
+  }
+
+  // Dots stay flat to the screen, so as a side turns edge-on they squeeze
+  // together into thick lines. It appears and disappears over this tiny range of
+  // facing values, so the lines don't pop in at full strength.
+  const EDGE_ON_FADE = 0.03;
+
+  // Blocks grouped so that drawing the groups in order runs back to front. At
+  // rest nothing overlaps, so one group will do. Mid-twist, the moving layers and
+  // the blocks on either side of them are separated by flat planes, so the order
+  // along the twist axis is always right, whatever the angle.
+  //
+  // Swirling shells have no true order, since cubes can't really turn inside each
+  // other, so they're drawn as nested hexagons from the outside in. A shell can't
+  // hide part of itself from this view: its sides stair-step toward the camera,
+  // and stay facing it at any angle of the swirl.
+  function drawingGroups() {
+    if (!twist) return [blocks];
+    if (twist.shells) return twist.shells.map((shell) => shell.blocks);
+    const towardCamera = Math.sign(TOWARD_CAMERA[twist.axis]);
+    const groups = [];
+    let previousMoved = null;
+    for (const layer of [-towardCamera, 0, towardCamera]) {
+      const moved = twist.layers.includes(layer);
+      const members = blocks.filter((block) => block.position[twist.axis] === layer);
+      if (moved === previousMoved) groups[groups.length - 1].push(...members);
+      else groups.push(members);
+      previousMoved = moved;
+    }
+    return groups;
+  }
+
+  function positionKey([x, y, z]) {
+    return (x + 2) * 25 + (y + 2) * 5 + (z + 2);
+  }
+
+  // The sides of a group the camera can actually see, ordered back to front. A
+  // side pressed against another block in the same group is skipped.
+  function visibleFaces(group) {
+    const occupied = new Set(group.map((block) => positionKey(block.position)));
+    const faces = [];
+    for (const block of group) {
+      const spin = currentSpin(block);
+      for (const face of block.faces) {
+        const faceFacing = facing(block, spin, face.normal);
+        if (faceFacing <= 0) continue;
+        const outward = applyMatrix(block.rotation, face.normal);
+        if (occupied.has(positionKey(block.position.map((v, i) => v + outward[i])))) continue;
+
+        const [x, y, z] = applyMatrix(block.rotation, face.normal.map((n) => n * BLOCK_SIZE / 2));
+        const center = [
+          x + block.position[0] * BLOCK_SIZE,
+          y + block.position[1] * BLOCK_SIZE,
+          z + block.position[2] * BLOCK_SIZE,
+        ];
+        const [cx, cy, cz] = spin ? applyMatrix(spin, center) : center;
+        const depth = cx * TOWARD_CAMERA[0] + cy * TOWARD_CAMERA[1] + cz * TOWARD_CAMERA[2];
+        faces.push({ block, spin, face, faceFacing, depth });
+      }
+    }
+    return faces.sort((a, b) => a.depth - b.depth);
+  }
+
+  // Paints a side in the background color, blocking whatever is behind it. The
+  // thin outline closes the hairline that would otherwise show between sides.
+  function paintFaceBackground({ block, spin, face }, scale) {
+    ctx.beginPath();
+    face.corners.forEach((corner, i) => {
+      const [x, y] = projectBlockPoint(block, spin, corner);
+      if (i === 0) ctx.moveTo(x * scale, y * scale);
+      else ctx.lineTo(x * scale, y * scale);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function mixRgb(a, b, amount) {
+    return a.map((value, c) => Math.round(value + (b[c] - value) * amount));
+  }
+
+  function smoothstep(low, high, value) {
+    const t = Math.max(0, Math.min(1, (value - low) / (high - low)));
+    return t * t * (3 - 2 * t);
+  }
+
+  // How a dot looks during the entrance. It's worked out fresh from the dot's
+  // own color and leaves that color untouched. The wash follows where the dot is
+  // on screen, so dots moving through the middle pick it up too.
+  function entranceLook(dot, x, y) {
+    if (!dot.rgb) return { color: dot.color, size: 1 };
+
+    const fromCenter = Math.hypot(x / HALF_WIDTH, y / HALF_HEIGHT);
+    const wash = MIDDLE_WASH * (1 - smoothstep(0, WARM_UP_MS, lifeClock)) * (1 - smoothstep(0.1, 0.8, fromCenter));
+    const washed = mixRgb(dot.rgb, WHITE, wash);
+
+    const bloom = (lifeClock - GHOST_FADE_MS - dot.bloomDelay) / BLOOM_MS;
+    if (bloom >= 1) return { color: cssColor(washed), size: 1 };
+    if (bloom <= 0) return { color: cssColor(GHOST_COLOR), size: 1 };
+
+    const pastel = mixRgb(washed, WHITE, BLOOM_PASTEL);
+    const rgb = bloom < 0.45
+      ? mixRgb(GHOST_COLOR, pastel, smoothstep(0, 0.45, bloom))
+      : mixRgb(pastel, washed, smoothstep(0.45, 1, bloom));
+    return { color: cssColor(rgb), size: 1 + BLOOM_SPARKLE * Math.sin(bloom * Math.PI) };
+  }
+
+  function drawFaceDots({ block, spin, face, faceFacing }, scale, r) {
+    const ghostFade = entranceActive ? Math.min(1, lifeClock / GHOST_FADE_MS) : 1;
+    ctx.globalAlpha = Math.min(1, faceFacing / EDGE_ON_FADE) * ghostFade;
+    for (const dot of face.dots) {
+      const [x, y] = projectBlockPoint(block, spin, dot.point);
+      const look = entranceActive ? entranceLook(dot, x, y) : null;
+      const color = look ? look.color : dot.color;
+      const dotR = r * dot.size * (look ? look.size : 1);
+      ctx.beginPath();
+      dot.shape.trace(x * scale, y * scale, dotR);
+      if (dot.shape.hollow) {
+        ctx.lineWidth = dot.shape.line * dotR;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // All of a group's backgrounds go down before any of its dots. The sides of a
+  // group never hide each other, and this way a neighboring side's background
+  // can't cut an edge-on side's thick lines in half.
+  function drawGroup(group, scale, r) {
+    const faces = visibleFaces(group);
+    ctx.fillStyle = BACKGROUND;
+    ctx.strokeStyle = BACKGROUND;
+    ctx.lineWidth = 1;
+    ctx.lineJoin = 'round';
+    for (const face of faces) paintFaceBackground(face, scale);
+
+    ctx.lineJoin = 'miter';
+    for (const face of faces) drawFaceDots(face, scale, r);
+  }
+
+  function draw() {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const scale = Math.min(
+      FILL * height / (2 * HALF_HEIGHT),
+      (width - 2 * SIDE_MARGIN_PX) / (2 * TWIST_HALF_WIDTH)
+    );
+    const r = DOT_RADIUS * SPACING * scale;
+
+    // Filling with the background, rather than clearing to transparent, means the
+    // soft edges of the face patches blend to exactly the same color.
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = BACKGROUND;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Maps CSS pixels exactly onto the canvas's device pixels, to stay crisp.
+    ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
+    ctx.translate(width / 2, height / 2);
+
+    for (const group of drawingGroups()) drawGroup(group, scale, r);
+  }
+
+  let fittedDensity = null;
+
+  function resize() {
+    fittedDensity = window.devicePixelRatio || 1;
+    canvas.width = Math.round(canvas.clientWidth * fittedDensity);
+    canvas.height = Math.round(canvas.clientHeight * fittedDensity);
+    draw();
+  }
+
+  // ---- Twisting -----------------------------------------------------------
+
+  // Speed and acceleration are both zero at each end, with no overshoot.
+  function ease(t) {
+    return t * t * t * (t * (t * 6 - 15) + 10);
+  }
+
+  // Saves the finished turn using whole numbers only, so blocks land exactly on
+  // the grid and endless twisting can't build up rounding errors.
+  function landTwist() {
+    if (twist.shells) {
+      for (const shell of twist.shells) {
+        applyTurn(shell.blocks, diagonalRotation(shell.direction * SWIRL_TURN));
+      }
+    } else {
+      const moved = blocks.filter(isTwisting);
+      applyTurn(moved, axisRotation(twist.axis, twist.direction * twist.turns * Math.PI / 2));
+    }
+    twist = null;
+  }
+
+  function applyTurn(movedBlocks, rotation) {
+    const turn = rotation.map((row) => row.map(Math.round));
+    for (const block of movedBlocks) {
+      block.position = applyMatrix(turn, block.position).map((v) => v || 0);
+      block.rotation = multiplyMatrices(turn, block.rotation).map((row) => row.map((v) => v || 0));
+    }
+  }
+
+  // ---- Scrambling ---------------------------------------------------------
+
+  const SINGLE_LAYERS = [[-1], [0], [1]];
+  const TWO_LAYERS = [[-1, 0], [0, 1]];  // always neighbors, so they move as one chunk
+
+  let recentMoves = [];
+
+  // Never the same axis and layers as the last move, which also rules out
+  // undoing it, and no long runs of one spin direction or one axis.
+  function isAllowedMove(move) {
+    const last = recentMoves[recentMoves.length - 1];
+    if (last && last.axis === move.axis && last.layers.join() === move.layers.join()) return false;
+    if (recentMoves.length === MAX_SAME_IN_A_ROW) {
+      if (recentMoves.every((recent) => recent.direction === move.direction)) return false;
+      if (recentMoves.every((recent) => recent.axis === move.axis)) return false;
+    }
+    return true;
+  }
+
+  function pickMove() {
+    let move;
+    do {
+      move = {
+        axis: randomFrom([0, 1, 2]),
+        layers: randomFrom(random() < TWO_LAYER_CHANCE ? TWO_LAYERS : SINGLE_LAYERS),
+        direction: randomFrom([1, -1]),
+        turns: random() < HALF_TURN_CHANCE ? 2 : 1,
+      };
+    } while (!isAllowedMove(move));
+    recentMoves = [...recentMoves, move].slice(-MAX_SAME_IN_A_ROW);
+    return move;
+  }
+
+  function startTwist(move) {
+    twist = {
+      ...move,
+      duration: move.turns === 2 ? HALF_TURN_MS : QUARTER_TURN_MS,
+      elapsed: 0,
+      angle: 0,
+    };
+  }
+
+  // ---- Small signs of life ------------------------------------------------
+
+  const TWINS = new Map([
+    [SHAPES.c, SHAPES.r],
+    [SHAPES.r, SHAPES.c],
+    [SHAPES.s, SHAPES.h],
+    [SHAPES.h, SHAPES.s],
+    [SHAPES.t, SHAPES.c],  // triangles have no hollow twin
+  ]);
+
+  function randomBetween([low, high]) {
+    return low + random() * (high - low);
+  }
+
+  // The dots beside this one on its face. Dots are stored row by row.
+  function neighborIndexes(index) {
+    const row = Math.floor(index / DOTS_PER_CELL);
+    const col = index % DOTS_PER_CELL;
+    const found = [];
+    if (row > 0) found.push(index - DOTS_PER_CELL);
+    if (row < DOTS_PER_CELL - 1) found.push(index + DOTS_PER_CELL);
+    if (col > 0) found.push(index - 1);
+    if (col < DOTS_PER_CELL - 1) found.push(index + 1);
+    return found;
+  }
+
+  // A dot is on the edge of a patch if it's on the rim of its face or beside a
+  // different shape.
+  function isPatchEdge(dots, index) {
+    const neighbors = neighborIndexes(index);
+    return neighbors.length < 4 || neighbors.some((n) => dots[n].shape !== dots[index].shape);
+  }
+
+  // Starts from a random edge dot and grows through touching dots of the same
+  // shape, so a few change together rather than scattering across the face.
+  function pickCluster(dots) {
+    const usable = (i) => !dots[i].changing && dots[i].canChangeAt <= lifeClock && isPatchEdge(dots, i);
+    const starts = dots.map((_, i) => i).filter(usable);
+    if (starts.length === 0) return [];
+
+    const cluster = [randomFrom(starts)];
+    const size = Math.round(randomBetween(CHANGE_CLUSTER_SIZE));
+    while (cluster.length < size) {
+      const options = cluster.flatMap(neighborIndexes).filter((i) => (
+        !cluster.includes(i) && usable(i) && dots[i].shape === dots[cluster[0]].shape
+      ));
+      if (options.length === 0) break;
+      cluster.push(randomFrom(options));
+    }
+    return cluster.map((i) => dots[i]);
+  }
+
+  const activeChanges = [];   // dots partway through a shrink-and-pop
+  const changedClusters = []; // clusters waiting to change back
+  let nextClusterIn = randomBetween(CHANGE_EVERY_MS);
+
+  function beginChanges(dots, shapeFor, returningHome) {
+    dots.forEach((dot, i) => {
+      activeChanges.push({
+        dot,
+        to: shapeFor(dot),
+        returningHome,
+        elapsed: -i * CHANGE_STAGGER_MS,
+        swapped: false,
+      });
+    });
+  }
+
+  function startRandomCluster() {
+    const faces = drawingGroups().flatMap(visibleFaces)
+      .filter(({ face, faceFacing }) => face.painted && faceFacing > 0.2);
+    if (faces.length === 0) return;
+    const cluster = pickCluster(randomFrom(faces).face.dots);
+    if (cluster.length === 0) return;
+    for (const dot of cluster) dot.changing = true;
+    beginChanges(cluster, (dot) => TWINS.get(dot.shape), false);
+    changedClusters.push({ dots: cluster, changesBackIn: randomBetween(CHANGE_LASTS_MS) });
+  }
+
+  // Dot size through a change: shrinks smoothly, then pops back with a slight
+  // overshoot that settles at exactly full size.
+  function changeSize(progress) {
+    if (progress < CHANGE_SHRINK_SHARE) {
+      const t = progress / CHANGE_SHRINK_SHARE;
+      return 1 - (1 - CHANGE_SMALLEST) * t * t * (3 - 2 * t);
+    }
+    const t = (progress - CHANGE_SHRINK_SHARE) / (1 - CHANGE_SHRINK_SHARE) - 1;
+    const pop = 1 + (CHANGE_POP + 1) * t * t * t + CHANGE_POP * t * t;
+    return CHANGE_SMALLEST + (1 - CHANGE_SMALLEST) * pop;
+  }
+
+  // Returns whether anything visible may have changed.
+  function updateChanges(step) {
+    lifeClock += step;
+    nextClusterIn -= step;
+    if (nextClusterIn <= 0) {
+      nextClusterIn = randomBetween(CHANGE_EVERY_MS);
+      startRandomCluster();
+    }
+
+    for (let i = changedClusters.length - 1; i >= 0; i--) {
+      changedClusters[i].changesBackIn -= step;
+      if (changedClusters[i].changesBackIn <= 0) {
+        beginChanges(changedClusters[i].dots, (dot) => dot.homeShape, true);
+        changedClusters.splice(i, 1);
+      }
+    }
+
+    const anyActive = activeChanges.length > 0;
+    for (let i = activeChanges.length - 1; i >= 0; i--) {
+      const change = activeChanges[i];
+      change.elapsed += step;
+      const progress = change.elapsed / CHANGE_DURATION_MS;
+      if (progress <= 0) continue;
+      if (!change.swapped && progress >= CHANGE_SHRINK_SHARE) {
+        change.dot.shape = change.to;
+        change.swapped = true;
+      }
+      if (progress < 1) {
+        change.dot.size = changeSize(progress);
+      } else {
+        change.dot.size = 1;
+        if (change.returningHome) {
+          change.dot.changing = false;
+          change.dot.canChangeAt = lifeClock + CHANGE_QUIET_MS;
+        }
+        activeChanges.splice(i, 1);
+      }
+    }
+    return anyActive;
+  }
+
+  // Every painted dot wanders a little around its own place on the ramp and
+  // returns, so the palette can't slowly turn into a different one. The offset
+  // starts at zero, and the phase follows position so neighbors stay in step.
+  const paintedDots = blocks.flatMap((block) => block.faces)
+    .filter((face) => face.painted)
+    .flatMap((face) => face.dots);
+  let nextColorUpdateIn = COLOR_UPDATE_MS;
+
+  // Returns whether colors were updated.
+  function updateColors(step) {
+    nextColorUpdateIn -= step;
+    if (nextColorUpdateIn > 0) return false;
+    nextColorUpdateIn += COLOR_UPDATE_MS;
+
+    const angle = lifeClock / COLOR_DRIFT_PERIOD_MS * Math.PI * 2;
+    for (const dot of paintedDots) {
+      const drift = COLOR_DRIFT * (Math.sin(angle + dot.driftPhase) - Math.sin(dot.driftPhase));
+      dot.rgb = rampRgb(dot.rampPosition + drift);
+      dot.color = cssColor(dot.rgb);
+    }
+    return true;
+  }
+
+  // ---- Swirls -------------------------------------------------------------
+
+  // Three shells nested around the front corner: the 19 outer blocks, the 7 around
+  // the corner, then the corner itself. A third of a turn around the diagonal
+  // swaps the axes, so each shell lands back on itself as a perfect cube.
+  const SWIRL_TURN = Math.PI * 2 / 3;
+  const SWIRL_SHELL_MS = SWIRL_DURATION_MS - 2 * SWIRL_SHELL_DELAY_MS;
+
+  function startSwirl() {
+    const direction = randomFrom([1, -1]);
+    const middleDirection = random() < SWIRL_OPPOSITE_CHANCE ? -direction : direction;
+    const stepsFromCorner = (block) => Math.max(...block.position.map((v) => 1 - v));
+    twist = {
+      shells: [
+        { steps: 2, direction },
+        { steps: 1, direction: middleDirection },
+        { steps: 0, direction },
+      ].map(({ steps, direction: shellDirection }, i) => ({
+        blocks: blocks.filter((block) => stepsFromCorner(block) === steps),
+        direction: shellDirection,
+        delay: i * SWIRL_SHELL_DELAY_MS,
+      })),
+      spins: new Map(),
+      duration: SWIRL_DURATION_MS,
+      elapsed: 0,
+    };
+  }
+
+  function updateSwirl() {
+    for (const shell of twist.shells) {
+      const progress = Math.max(0, Math.min(1, (twist.elapsed - shell.delay) / SWIRL_SHELL_MS));
+      const spin = diagonalRotation(shell.direction * SWIRL_TURN * ease(progress));
+      for (const block of shell.blocks) twist.spins.set(block, spin);
+    }
+  }
+
+  // Off until one normal twist has run, so the first move after the intro is
+  // always a normal twist, and off again after each swirl, so swirls never come
+  // twice in a row.
+  let swirlAllowed = false;
+
+  function startNextMove() {
+    const swirl = swirlAllowed && random() < SWIRL_CHANCE;
+    swirlAllowed = !swirl;
+    if (swirl) startSwirl();
+    else startTwist(pickMove());
+  }
+
+  // Runs twists, rests and small changes from one clock that moves on by at most
+  // one short step each frame. A hidden tab gets no frames, so everything simply
+  // pauses there, and coming back continues from the same spot instead of
+  // jumping ahead. It only redraws when something has actually changed.
+  let restLeft = REST_MS;
+  let lastFrameTime = null;
+  let frameRequest = null;
+
+  function runScrambler(now) {
+    // Pixel density can change with no resize event, such as on another monitor.
+    if ((window.devicePixelRatio || 1) !== fittedDensity) resize();
+
+    const step = lastFrameTime === null ? 0 : Math.min(now - lastFrameTime, MAX_FRAME_STEP_MS);
+    lastFrameTime = now;
+
+    let changed = false;
+    if (twist) {
+      twist.elapsed += step;
+      const progress = twist.elapsed / twist.duration;
+      if (progress < 1) {
+        if (twist.shells) updateSwirl();
+        else twist.angle = twist.direction * twist.turns * Math.PI / 2 * ease(progress);
+      } else {
+        landTwist();
+        restLeft = REST_MS;
+      }
+      changed = true;
+    } else {
+      restLeft -= step;
+      if (restLeft <= 0) startNextMove();
+    }
+    if (updateChanges(step)) changed = true;
+    if (updateColors(step)) changed = true;
+    if (entranceActive) {
+      if (lifeClock >= WARM_UP_MS) entranceActive = false;
+      changed = true;
+    }
+    if (changed) draw();
+    frameRequest = requestAnimationFrame(runScrambler);
+  }
+
+  // Brings everything to a neat stop: a twist lands, and any dots mid-change
+  // finish at full size.
+  function settle() {
+    if (twist) {
+      landTwist();
+      restLeft = REST_MS;
+    }
+    for (const change of activeChanges) {
+      change.dot.shape = change.to;
+      change.dot.size = 1;
+      if (change.returningHome) change.dot.changing = false;
+    }
+    activeChanges.length = 0;
+    entranceActive = false;
+  }
+
+  // With reduced motion on there's no animation loop at all: the cube sits still
+  // and only redraws if the window changes. It follows the setting if it changes.
+  function applyMotionSetting() {
+    if (reducedMotion.matches) {
+      if (frameRequest !== null) cancelAnimationFrame(frameRequest);
+      frameRequest = null;
+      settle();
+      draw();
+    } else if (frameRequest === null) {
+      lastFrameTime = null;
+      frameRequest = requestAnimationFrame(runScrambler);
+    }
+  }
+
+  // With reduced motion there's no animation loop to notice a change in pixel
+  // density, so this listens for one too.
+  function watchPixelDensity() {
+    const query = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    query.addEventListener('change', () => {
+      resize();
+      watchPixelDensity();
+    }, { once: true });
+  }
+
+  window.addEventListener('resize', resize);
+  reducedMotion.addEventListener('change', applyMotionSetting);
+  watchPixelDensity();
+  resize();
+  applyMotionSetting();
+</script>
+</body>
+</html>
