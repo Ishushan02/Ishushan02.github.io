@@ -152,7 +152,6 @@
   const easeIn = (p) => p * p;
 
   function go(to, dur, ease, done) {
-    if (reduce) dur = 0;
     tween = { a: t, b: to, s: performance.now(), d: dur, e: ease, done };
     kick();
   }
@@ -163,7 +162,8 @@
     go(1, 620 * (1 - t) + 120, easeIn, () => {
       if (newSeed) { seed = 1000 + Math.floor(Math.random() * 9000); drawNoise(); }
       retarget();
-      denoise(2800);
+      t = 1; syncHud(); kick();
+      holdTimer = setTimeout(() => denoise(3800), 650);
     });
   }
 
@@ -202,7 +202,7 @@
     for (let pass = 0; pass < 3; pass++) {
       const from = pass === 0 ? 0 : pass === 1 ? cut1 : cut2;
       const to = pass === 0 ? cut1 : pass === 1 ? cut2 : N;
-      const s = pass === 1 ? 1 : 1.3;
+      const s = (pass === 1 ? 1 : 1.3) * (W < 720 ? 1.55 : 1);
       ctx.fillStyle = pass === 2 ? ACC : INK;
       ctx.globalAlpha = pass === 1 ? 0.5 : 0.95;
       for (let i = from; i < to; i++) {
@@ -282,7 +282,9 @@
   const used = () => consoleEl.classList.add('used');
   input.addEventListener('focus', () => { used(); setTimeout(() => input.select(), 0); });
   form.querySelectorAll('.console__try button').forEach((b) => b.addEventListener('click', () => {
-    used(); input.value = b.dataset.p;
+    used();
+    if (b.hasAttribute('data-own')) { input.value = ''; input.placeholder = 'type your name, then Generate'; input.focus(); return; }
+    input.value = b.dataset.p;
     if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
   }));
 
@@ -298,9 +300,8 @@
   drawNoise();
   const start = () => {
     resize();
-    if (reduce) { t = 0; syncHud(); kick(); return; }
-    t = 1; syncHud();
-    setTimeout(() => denoise(3600), 450);
+    t = 1; syncHud(); kick();
+    setTimeout(() => denoise(W < 720 ? 5200 : 4400), 1100);
   };
   const fontReady = document.fonts && document.fonts.load
     ? Promise.race([document.fonts.load('400 100px "Instrument Serif"'), new Promise((r) => setTimeout(r, 1800))])
