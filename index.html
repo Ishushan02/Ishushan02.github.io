@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZHW34FRXN"></script>
@@ -6,1161 +6,797 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-WZHW34FRXN');
 </script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ishan's Website</title>
-
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-    font-family:'JetBrains Mono', monospace;
-    background:#000;
-    color:#00ff00;
-    overflow:hidden;
-    line-height:1.6;
-    height:100vh;
-}
-
-#globe-canvas {
-    position:fixed; 
-    top:0; 
-    left:0; 
-    width:100%; 
-    height:100%; 
-    z-index:1;
-}
-
-.crt-effect {
-    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;
-    background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.25) 50%);
-    background-size:100% 4px;
-    animation:crt-flicker .15s infinite;
-}
-@keyframes crt-flicker { 0%,100%{opacity:.97} 50%{opacity:1} }
-
-/* ================= HEADER ================= */
-.header {
-    position:fixed;
-    top:2rem;
-    left:2rem;
-    z-index:10;
-    text-align:left;
-}
-
-.main-title {
-    font-size:2.5rem;
-    font-weight:700;
-    color:#00ff00;
-    text-shadow:0 0 20px #00ff00, 0 0 40px #00ff00;
-    margin-bottom:0.3rem;
-    letter-spacing:2px;
-}
-
-.subtitle {
-    color:#00ff00;
-    font-size:1.2rem;
-    font-weight:400;
-    text-shadow:0 0 10px #00ff00;
-    letter-spacing:4px;
-    opacity:0.8;
-}
-
-.location-time {
-    color:#00ff00;
-    font-size:0.75rem;
-    font-weight:400;
-    text-shadow:0 0 5px #00ff00;
-    opacity:0.7;
-    margin-top:0.5rem;
-    letter-spacing:1px;
-}
-
-/* ================= SOCIAL LINKS SIDEBAR ================= */
-.social-sidebar {
-    position:fixed;
-    right:2rem;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    gap:2rem;
-}
-
-.social-link {
-    color:#00ff00;
-    text-decoration:none;
-    font-size:0.85rem;
-    padding:0.8rem;
-    border:1px solid #00ff00;
-    border-radius:50%;
-    width:50px;
-    height:50px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:all 0.3s;
-    text-shadow:0 0 5px #00ff00;
-    background:rgba(0,0,0,0.5);
-    position:relative;
-}
-
-.social-link:hover {
-    background:rgba(0,255,0,0.1);
-    box-shadow:0 0 20px #00ff00;
-    transform:scale(1.1);
-}
-
-.social-link::before {
-    content:attr(data-label);
-    position:absolute;
-    right:60px;
-    background:rgba(0,0,0,0.9);
-    padding:0.5rem 1rem;
-    border:1px solid #00ff00;
-    border-radius:4px;
-    white-space:nowrap;
-    opacity:0;
-    pointer-events:none;
-    transition:all 0.3s;
-}
-
-.social-link:hover::before {
-    opacity:1;
-    right:65px;
-}
-
-/* ================= CORNER ACCENTS ================= */
-/* .corner {
-    position:fixed;
-    width:30px;
-    height:30px;
-    border:2px solid #00ff00;
-    z-index:10;
-    box-shadow:0 0 10px #00ff00;
-}
-.corner.top-left { top:0; left:0; border-right:none; border-bottom:none; }
-.corner.top-right { top:0; right:0; border-left:none; border-bottom:none; }
-.corner.bottom-left { bottom:0; left:0; border-right:none; border-top:none; }
-.corner.bottom-right { bottom:0; right:0; border-left:none; border-top:none; } */
-
-/* ================= SYSTEM STATUS PANEL ================= */
-.system-status {
-    position:fixed;
-    bottom:2rem;
-    right:2rem;
-    z-index:10;
-    background:rgba(0,0,0,0.9);
-    border:1px solid #00ff00;
-    border-radius:5px;
-    padding:1rem;
-    box-shadow:0 0 20px #00ff00;
-    min-width:200px;
-}
-
-.system-status-title {
-    color:#00ff00;
-    font-size:0.75rem;
-    text-align:center;
-    margin-bottom:0.8rem;
-    text-shadow:0 0 5px #00ff00;
-    font-weight:700;
-    letter-spacing:2px;
-    border-bottom:1px solid rgba(0,255,0,0.3);
-    padding-bottom:0.5rem;
-}
-
-.status-item {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:0.6rem;
-    font-size:0.7rem;
-}
-
-.status-label {
-    color:#00ff00;
-    opacity:0.7;
-    letter-spacing:1px;
-}
-
-.status-value {
-    color:#00ff00;
-    font-weight:700;
-    text-shadow:0 0 5px #00ff00;
-    letter-spacing:0.5px;
-}
-
-.status-online {
-    display:inline-block;
-    width:8px;
-    height:8px;
-    background:#00ff00;
-    border-radius:50%;
-    margin-left:5px;
-    box-shadow:0 0 10px #00ff00;
-    animation:pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity:1; }
-    50% { opacity:0.5; }
-}
-
-/* ================= SUBMENU ================= */
-.submenu {
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    z-index:100;
-    display:none;
-    background:rgba(0,0,0,0.95);
-    border:2px solid #00ff00;
-    border-radius:10px;
-    padding:2rem;
-    box-shadow:0 0 50px #00ff00;
-    min-width:400px;
-    max-width:90vw;
-    max-height:80vh;
-    overflow-y:auto;
-}
-
-.submenu.active {
-    display:block;
-    animation:slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from { transform:translate(-50%, -50%) scale(0.8); opacity:0; }
-    to { transform:translate(-50%, -50%) scale(1); opacity:1; }
-}
-
-.submenu-title {
-    font-size:2rem;
-    color:#00ff00;
-    text-align:center;
-    margin-bottom:2rem;
-    text-shadow:0 0 10px #00ff00;
-}
-
-.submenu-items {
-    display:flex;
-    flex-direction:column;
-    gap:1rem;
-}
-
-.submenu-item {
-    color:#00ff00;
-    text-decoration:none;
-    padding:1rem 2rem;
-    border:1px solid #00ff00;
-    border-radius:5px;
-    text-align:center;
-    transition:all 0.3s;
-    font-size:1.1rem;
-    background:rgba(0,0,0,0.5);
-}
-
-.submenu-item:hover {
-    background:rgba(0,255,0,0.2);
-    box-shadow:0 0 20px #00ff00;
-    transform:scale(1.05);
-}
-
-.close-submenu {
-    position:absolute;
-    top:1rem;
-    right:1rem;
-    color:#00ff00;
-    font-size:1.5rem;
-    cursor:pointer;
-    border:none;
-    background:none;
-    transition:all 0.3s;
-}
-
-.close-submenu:hover {
-    text-shadow:0 0 10px #00ff00;
-    transform:scale(1.2);
-}
-
-/* ================= RESPONSIVE STYLES ================= */
-@media (max-width: 768px) {
-    .header {
-        top:1rem;
-        left:1rem;
-        right:1rem;
-    }
-    
-    .main-title {
-        font-size:1.5rem;
-        letter-spacing:1px;
-    }
-    
-    .subtitle {
-        font-size:0.8rem;
-        letter-spacing:2px;
-    }
-    
-    .location-time {
-        font-size:0.65rem;
-        margin-top:0.3rem;
-    }
-    
-    .social-sidebar {
-        right:1rem;
-        gap:1rem;
-    }
-    
-    .social-link {
-        width:40px;
-        height:40px;
-        padding:0.6rem;
-    }
-    
-    .social-link svg {
-        width:20px;
-        height:20px;
-    }
-    
-    .social-link::before {
-        display:none;
-    }
-    
-    .corner {
-        width:20px;
-        height:20px;
-    }
-    
-    .system-status {
-        bottom:1rem;
-        right:1rem;
-        padding:0.8rem;
-        min-width:180px;
-    }
-    
-    .system-status-title {
-        font-size:0.65rem;
-        margin-bottom:0.6rem;
-    }
-    
-    .status-item {
-        font-size:0.65rem;
-        margin-bottom:0.5rem;
-    }
-    
-    .submenu {
-        min-width:auto;
-        width:90vw;
-        padding:1.5rem;
-    }
-    
-    .submenu-title {
-        font-size:1.5rem;
-        margin-bottom:1.5rem;
-    }
-    
-    .submenu-item {
-        padding:0.8rem 1.5rem;
-        font-size:0.95rem;
-    }
-    
-    .close-submenu {
-        font-size:1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        top:0.5rem;
-        left:0.5rem;
-        right:0.5rem;
-    }
-    
-    .main-title {
-        font-size:1.2rem;
-        letter-spacing:0.5px;
-    }
-    
-    .subtitle {
-        font-size:0.7rem;
-        letter-spacing:1px;
-    }
-    
-    .location-time {
-        font-size:0.55rem;
-        margin-top:0.2rem;
-    }
-    
-    .social-sidebar {
-        right:0.5rem;
-        gap:0.8rem;
-    }
-    
-    .social-link {
-        width:35px;
-        height:35px;
-        padding:0.5rem;
-    }
-    
-    .social-link svg {
-        width:18px;
-        height:18px;
-    }
-    
-    .corner {
-        width:15px;
-        height:15px;
-        border-width:1px;
-    }
-    
-    .system-status {
-        bottom:0.5rem;
-        right:0.5rem;
-        padding:0.6rem;
-        min-width:160px;
-    }
-    
-    .system-status-title {
-        font-size:0.6rem;
-        margin-bottom:0.5rem;
-    }
-    
-    .status-item {
-        font-size:0.6rem;
-        margin-bottom:0.4rem;
-    }
-    
-    .status-online {
-        width:6px;
-        height:6px;
-    }
-    
-    .submenu {
-        padding:1rem;
-    }
-    
-    .submenu-title {
-        font-size:1.2rem;
-        margin-bottom:1rem;
-    }
-    
-    .submenu-item {
-        padding:0.6rem 1rem;
-        font-size:0.85rem;
-    }
-}
-
-/* ================= MY APP NOTIFICATION ================= */
-#apps-notification {
-    position:fixed;
-    top:2rem;
-    right:2rem;
-    z-index:10;
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    gap:1rem;
-    background:rgba(0,0,0,0.9);
-    border:1.5px solid #00ffff;
-    border-radius:10px;
-    padding:1.1rem 2rem;
-    cursor:pointer;
-    overflow:hidden;
-    transition:transform 0.3s;
-    animation:notif-pulse 2s ease-in-out infinite;
-}
-#apps-notification::before {
-    content:'';
-    position:absolute;
-    top:0; left:-100%;
-    width:55%;
-    height:100%;
-    background:linear-gradient(90deg, transparent, rgba(0,255,255,0.12), transparent);
-    animation:notif-shimmer 2.8s ease-in-out infinite;
-    pointer-events:none;
-}
-#apps-notification:hover {
-    transform:scale(1.07);
-    box-shadow:0 0 60px rgba(0,255,255,0.9), 0 0 120px rgba(0,255,255,0.3), inset 0 0 30px rgba(0,255,255,0.15) !important;
-}
-.notif-badge {
-    position:absolute;
-    top:-1px; right:-1px;
-    background:#ff0000;
-    color:#fff;
-    font-family:'JetBrains Mono', monospace;
-    font-size:0.55rem;
-    font-weight:700;
-    letter-spacing:1.5px;
-    padding:3px 7px;
-    border-radius:0 9px 0 6px;
-    box-shadow:0 0 10px #ff0000;
-    animation:notif-blink 1.2s ease-in-out infinite;
-}
-.notif-dot {
-    width:12px;
-    height:12px;
-    background:#ff0000;
-    border-radius:50%;
-    box-shadow:0 0 12px #ff0000, 0 0 24px rgba(255,0,0,0.4);
-    flex-shrink:0;
-    animation:notif-blink 1.2s ease-in-out infinite;
-}
-.notif-text {
-    color:#00ffff;
-    font-family:'JetBrains Mono', monospace;
-    font-size:1.05rem;
-    font-weight:700;
-    letter-spacing:4px;
-    text-shadow:0 0 12px #00ffff, 0 0 24px rgba(0,255,255,0.5);
-    white-space:nowrap;
-}
-.notif-arrow {
-    color:#00ffff;
-    font-size:1.1rem;
-    text-shadow:0 0 10px #00ffff;
-    animation:notif-arrow-bounce 1.5s ease-in-out infinite;
-}
-@keyframes notif-pulse {
-    0%,100% { box-shadow:0 0 18px rgba(0,255,255,0.35), 0 0 40px rgba(0,255,255,0.1), inset 0 0 10px rgba(0,255,255,0.05); }
-    50%      { box-shadow:0 0 40px rgba(0,255,255,0.7), 0 0 80px rgba(0,255,255,0.25), inset 0 0 20px rgba(0,255,255,0.1); }
-}
-@keyframes notif-shimmer {
-    0%     { left:-100%; }
-    60%,100% { left:160%; }
-}
-@keyframes notif-blink {
-    0%,100% { opacity:1; }
-    50%     { opacity:0.25; }
-}
-@keyframes notif-arrow-bounce {
-    0%,100% { transform:translateX(0); }
-    50%     { transform:translateX(4px); }
-}
-#hr-notification {
-    position:fixed;
-    top:5.5rem;
-    right:2rem;
-    z-index:10;
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    gap:1rem;
-    background:rgba(0,0,0,0.9);
-    border:1.5px solid #00ff00;
-    border-radius:10px;
-    padding:0.8rem 1.6rem;
-    cursor:pointer;
-    overflow:hidden;
-    transition:transform 0.3s;
-    animation:hr-pulse 2s ease-in-out infinite;
-}
-#hr-notification::before {
-    content:'';
-    position:absolute;
-    top:0; left:-100%;
-    width:55%;
-    height:100%;
-    background:linear-gradient(90deg, transparent, rgba(0,255,0,0.12), transparent);
-    animation:notif-shimmer 2.8s ease-in-out infinite;
-    pointer-events:none;
-}
-#hr-notification:hover {
-    transform:scale(1.07);
-    box-shadow:0 0 60px rgba(0,255,0,0.9), 0 0 120px rgba(0,255,0,0.3), inset 0 0 30px rgba(0,255,0,0.15) !important;
-}
-@keyframes hr-pulse {
-    0%,100% { box-shadow:0 0 18px rgba(0,255,0,0.35), 0 0 40px rgba(0,255,0,0.1), inset 0 0 10px rgba(0,255,0,0.05); }
-    50%      { box-shadow:0 0 40px rgba(0,255,0,0.7), 0 0 80px rgba(0,255,0,0.25), inset 0 0 20px rgba(0,255,0,0.1); }
-}
-
-@media (max-width: 768px) {
-    #apps-notification {
-        top:1rem;
-        right:1rem;
-        padding:0.55rem 1rem;
-        gap:0.6rem;
-        border-radius:8px;
-    }
-    #apps-notification .notif-text {
-        font-size:0.72rem;
-        letter-spacing:2px;
-    }
-    #apps-notification .notif-dot {
-        width:8px;
-        height:8px;
-    }
-    #apps-notification .notif-arrow {
-        font-size:0.8rem;
-    }
-}
-@media (max-width: 768px) {
-    #hr-notification {
-        top:4.5rem;
-        right:1rem;
-        padding:0.45rem 0.9rem;
-        gap:0.6rem;
-        border-radius:8px;
-    }
-    #hr-notification .notif-text {
-        font-size:0.72rem;
-        letter-spacing:2px;
-    }
-    #hr-notification .notif-dot {
-        width:8px;
-        height:8px;
-    }
-    #hr-notification .notif-arrow {
-        font-size:0.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    #hr-notification {
-        top:4rem;
-        right:0.5rem;
-        padding:0.35rem 0.7rem;
-        gap:0.45rem;
-        border-radius:6px;
-    }
-    #hr-notification .notif-text {
-        font-size:0.62rem;
-        letter-spacing:1.5px;
-    }
-    #hr-notification .notif-dot {
-        width:7px;
-        height:7px;
-    }
-}
-
-@media (max-width: 480px) {
-    #apps-notification {
-        top:0.5rem;
-        right:0.5rem;
-        padding:0.4rem 0.8rem;
-        gap:0.45rem;
-        border-radius:6px;
-    }
-    #apps-notification .notif-text {
-        font-size:0.62rem;
-        letter-spacing:1.5px;
-    }
-    #apps-notification .notif-dot {
-        width:7px;
-        height:7px;
-    }
-    #apps-notification .notif-arrow {
-        font-size:0.7rem;
-    }
-}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ishan Kumar Anand · ML Engineer</title>
+<meta name="description" content="Ishan Kumar Anand is a machine learning, computer vision and AI engineer in San Francisco. Stroke detection from RF signals, 3D medical imaging, diffusion models and video generation.">
+<meta name="theme-color" content="#0c0c0b">
+<meta property="og:title" content="Ishan Kumar Anand · ML Engineer">
+<meta property="og:description" content="Machine learning for medical signals and images, diffusion models, video generation and motion forecasting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ishushan02.github.io/">
+<meta property="og:site_name" content="Ishan Kumar Anand">
+<meta property="og:image" content="https://ishushan02.github.io/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ishan Kumar Anand, Machine Learning, Computer Vision and AI Engineer in San Francisco">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ishan Kumar Anand · ML Engineer">
+<meta name="twitter:description" content="Machine learning for medical signals and images, diffusion models, video generation and motion forecasting.">
+<meta name="twitter:image" content="https://ishushan02.github.io/img/og-image.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0c0b'/%3E%3Cpath d='M6 12V6h6M20 6h6v6M26 20v6h-6M12 26H6v-6' fill='none' stroke='%23c9f24b' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23ece8de'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1794885505">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<canvas id="globe-canvas"></canvas>
-<div class="crt-effect"></div>
+<div id="detLayer" class="det-layer" aria-hidden="true"></div>
+<div id="reticle" class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i><span></span></div>
 
-<!-- <div class="corner top-left"></div>
-<div class="corner top-right"></div>
-<div class="corner bottom-left"></div>
-<div class="corner bottom-right"></div> -->
-<div style="position:fixed; bottom:0.5rem; left:2rem; z-index:10; color:#00ff00; font-size:0.7rem; opacity:0.7; letter-spacing:1px;">© 2026 Ishan Kumar Anand All Rights Reserved.</div>
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top">Ishan Kumar Anand</a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#research">Research</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="nav__right">
+    <button class="vision-btn" id="visionToggle" type="button" aria-pressed="false" title="Label this page the way an object detector would (press V)">
+      <span class="vision-btn__box"></span><span class="vision-btn__txt">Vision mode</span>
+    </button>
+    <span class="nav__clock">San Francisco <time id="clock">--:--:--</time></span>
+  </div>
+</header>
 
-<div class="header">
-    <div class="main-title">ISHAN KUMAR ANAND</div>
-    <div class="subtitle">AI ENGINEER</div>
-    <div class="location-time">
-        <span>San Diego</span> | <span id="live-time">00:00:00</span>
+<main>
+
+<!-- ───────────── HERO ───────────── -->
+<section class="hero" id="top">
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <h1 class="sr-only">Ishan Kumar Anand, Machine Learning, Computer Vision and AI Engineer</h1>
+
+  <div class="hero__stage" aria-hidden="true"></div>
+
+  <div class="hero__info">
+    <div>
+      <p class="hero__roles">Machine Learning <i>/</i> Computer Vision <i>/</i> AI Engineer</p>
+      <p class="hero__lede">I build models that see, and models that imagine. Right now: spotting strokes in radio signals, and turning those signals into brain images.</p>
     </div>
-</div>
+    <ul class="hero__facts">
+      <li><span>Now</span> ML Engineer at Tiposi</li>
+      <li><span>Based in</span> San Francisco, California</li>
+      <li><span>Studied at</span> UC San Diego, MS CS (AI)</li>
+    </ul>
+  </div>
 
-<a href="apps/" id="apps-notification">
-    <!-- <span class="notif-badge">NEW</span> -->
-    <div class="notif-dot"></div>
-    <span class="notif-text"> DOWNLOAD MY APP</span>
-</a>
-
-<a href="https://ishushan02.github.io/Heart-Rate-Vizualizer/" target="_blank" id="hr-notification">
-    <div class="notif-dot" style="background:#00ff00;box-shadow:0 0 12px #00ff00,0 0 24px rgba(0,255,0,0.4);"></div>
-    <span class="notif-text" style="color:#00ff00;text-shadow:0 0 12px #00ff00,0 0 24px rgba(0,255,0,0.5);"> HEART RATE VIZ</span>
-    <span class="notif-arrow" style="color:#00ff00;text-shadow:0 0 10px #00ff00;">→</span>
-</a>
-
-<div class="social-sidebar">
-    <a href="https://github.com/Ishushan02" target="_blank" class="social-link" data-label="GitHub">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-    </a>
-    <a href="https://linkedin.com/in/ishushan" target="_blank" class="social-link" data-label="LinkedIn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-            <rect x="2" y="9" width="4" height="12"/>
-            <circle cx="4" cy="4" r="2"/>
-        </svg>
-    </a>
-    <a href="mailto:isanand@ucsd.edu" class="social-link" data-label="Email">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-        </svg>
-    </a>
-</div>
-
-<div class="system-status">
-    <div class="system-status-title">SYSTEM STATUS</div>
-    <div class="status-item">
-        <span class="status-label">STATUS</span>
-        <span class="status-value">ONLINE<span class="status-online"></span></span>
+  <form class="console" id="promptForm" autocomplete="off">
+    <label class="console__prompt">
+      <span class="console__tag">prompt</span>
+      <input id="promptInput" type="text" maxlength="26" value="Ishan Kumar Anand" spellcheck="false" aria-label="Type any text and press enter to watch it form out of noise">
+      <kbd>enter ↵</kbd>
+    </label>
+    <label class="console__slider">
+      <span>noise</span>
+      <input id="tSlider" type="range" min="0" max="1000" value="0" aria-label="Amount of noise">
+      <span>image</span>
+    </label>
+    <div class="console__hud" aria-hidden="true">
+      <span>step <b id="hudStep">00/50</b></span>
+      <span>ᾱ <b id="hudAlpha">0.000</b></span>
+      <span>seed <b id="hudSeed">0000</b></span>
     </div>
-    <div class="status-item">
-        <span class="status-label">GITHUB [30d]</span>
-        <span class="status-value" id="github-commits">Loading...</span>
+    <button class="console__btn" id="resample" type="button">Resample ↻</button>
+  </form>
+  <div class="hero__foot">
+    <p class="hero__cap"><b>Try it</b> The name above forms out of random noise, the same way image generators like Stable Diffusion work. Type your own words and press enter, drag the slider back toward noise, or sweep your cursor through the letters.</p>
+    <a class="hero__down" href="#about">Scroll to explore <span>↓</span></a>
+  </div>
+</section>
+
+<!-- ───────────── ABOUT ───────────── -->
+<section class="sec abstract" id="about">
+  <div class="sec__head" data-r>
+    <h2 data-det="heading">About</h2>
+  </div>
+  <div class="abstract__grid">
+    <figure class="portrait" data-r>
+      <div class="portrait__frame" data-det="person">
+        <img src="img/portrait.jpg" alt="Portrait of Ishan Kumar Anand" width="454" height="516">
+        <div class="portrait__box"><span>person 0.99</span><i></i><i></i><i></i><i></i></div>
+      </div>
+      <figcaption>Machine Learning Engineer</figcaption>
+    </figure>
+
+    <div class="abstract__body">
+      <p class="abstract__text" id="abstractText">I build machine learning systems that see and that generate. Right now, at Tiposi, I teach models to detect strokes from the radio signals of an antenna helmet, and to turn those signals into 3D brain images. Before that I built controllable text-to-video for a Hollywood visual-effects pipeline, a multilingual voice bot, and cloud infrastructure that had to stay up.</p>
+
+      <div class="kit" data-r>
+        <p class="kit__head"><span>What I work with</span><em>98 skills · 8 areas</em></p>
+        <div class="kit__body">
+          <div class="kit__tabs" role="tablist" aria-label="Skill areas">
+            <button class="kit__tab on" role="tab" id="kt-cv" aria-controls="kp-cv" aria-selected="true" tabindex="0"><span class="kit__no">01</span><span class="kit__name">Computer Vision</span><span class="kit__n">13</span></button>
+            <button class="kit__tab" role="tab" id="kt-gen" aria-controls="kp-gen" aria-selected="false" tabindex="-1"><span class="kit__no">02</span><span class="kit__name">Generative AI</span><span class="kit__n">9</span></button>
+            <button class="kit__tab" role="tab" id="kt-med" aria-controls="kp-med" aria-selected="false" tabindex="-1"><span class="kit__no">03</span><span class="kit__name">Medical &amp; Signals</span><span class="kit__n">12</span></button>
+            <button class="kit__tab" role="tab" id="kt-llm" aria-controls="kp-llm" aria-selected="false" tabindex="-1"><span class="kit__no">04</span><span class="kit__name">Language &amp; LLMs</span><span class="kit__n">12</span></button>
+            <button class="kit__tab" role="tab" id="kt-train" aria-controls="kp-train" aria-selected="false" tabindex="-1"><span class="kit__no">05</span><span class="kit__name">Training &amp; Tuning</span><span class="kit__n">14</span></button>
+            <button class="kit__tab" role="tab" id="kt-ship" aria-controls="kp-ship" aria-selected="false" tabindex="-1"><span class="kit__no">06</span><span class="kit__name">Speed &amp; Deployment</span><span class="kit__n">12</span></button>
+            <button class="kit__tab" role="tab" id="kt-infra" aria-controls="kp-infra" aria-selected="false" tabindex="-1"><span class="kit__no">07</span><span class="kit__name">Cloud &amp; Infrastructure</span><span class="kit__n">14</span></button>
+            <button class="kit__tab" role="tab" id="kt-code" aria-controls="kp-code" aria-selected="false" tabindex="-1"><span class="kit__no">08</span><span class="kit__name">Languages</span><span class="kit__n">12</span></button>
+          </div>
+          <div class="kit__panels">
+          <div class="kit__panel on" role="tabpanel" id="kp-cv" aria-labelledby="kt-cv"><p class="kit__d">Teaching models to see: find, outline, track and measure what is in an image or video.</p><ul class="kit__items"><li>Object Detection</li><li>Image Segmentation</li><li>Image Classification</li><li>Object Tracking</li><li>Body &amp; Pose Tracking</li><li>Depth Estimation</li><li>Optical Flow</li><li>Super-Resolution</li><li>Vision Transformers (ViT)</li><li>2D / 3D Scene Understanding</li><li>Multi-Sensor Fusion</li><li>Anomaly Detection</li><li>OpenCV</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-gen" aria-labelledby="kt-gen"><p class="kit__d">Models that create new images and video, and models that understand pictures and words together.</p><ul class="kit__items"><li>Diffusion Models</li><li>Image &amp; Video Generation</li><li>VQ-VAE</li><li>GANs</li><li>Diffusion Transformers</li><li>Vision-Language Models</li><li>Multimodal Learning</li><li>Hugging Face Diffusers</li><li>Prompt Engineering</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-med" aria-labelledby="kt-med"><p class="kit__d">Reading the body: radio signals, brain scans and sensor data, checked carefully before anyone relies on them.</p><ul class="kit__items"><li>RF &amp; Microwave Signals</li><li>3D Medical Imaging (MRI)</li><li>MONAI</li><li>NIfTI</li><li>ECG &amp; PPG Signals</li><li>Wearable Sensor Data</li><li>Time-Series Modeling</li><li>ROCKET</li><li>Mamba</li><li>TabPFN</li><li>Domain Adaptation</li><li>Rigorous Validation</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-llm" aria-labelledby="kt-llm"><p class="kit__d">Systems that read, speak and reason in many languages, and agents that use tools.</p><ul class="kit__items"><li>Large Language Models</li><li>Natural Language Processing</li><li>Multilingual NLP</li><li>Speech Recognition (ASR)</li><li>Intent &amp; Slot Filling</li><li>Dialogue State Tracking</li><li>Retrieval (RAG)</li><li>Embeddings &amp; Vector Search</li><li>Agentic Workflows</li><li>Tool Calling &amp; MCP</li><li>LangChain &amp; LangGraph</li><li>Hugging Face Transformers</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-train" aria-labelledby="kt-train"><p class="kit__d">Getting a model to learn the right thing, then proving it did.</p><ul class="kit__items"><li>Distributed Training</li><li>Fine-Tuning (SFT, LoRA)</li><li>RLHF &amp; DPO</li><li>Reward Modeling</li><li>Reinforcement Learning</li><li>Knowledge Distillation</li><li>Transfer Learning</li><li>Evaluation Frameworks</li><li>Benchmark Design</li><li>PyTorch</li><li>TensorFlow</li><li>JAX</li><li>scikit-learn</li><li>NumPy &amp; Pandas</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-ship" aria-labelledby="kt-ship"><p class="kit__d">Making models small and fast enough to run for real, on servers or on the device.</p><ul class="kit__items"><li>ONNX Runtime</li><li>TensorRT</li><li>TensorRT-LLM</li><li>vLLM</li><li>Quantization (INT8, FP8)</li><li>Model Compression</li><li>On-Device ML</li><li>Edge Deployment</li><li>GPU Optimization</li><li>Numba</li><li>Batch Inference</li><li>Model Serving</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-infra" aria-labelledby="kt-infra"><p class="kit__d">Keeping it all running, cheaply and safely, with automatic checks on every change.</p><ul class="kit__items"><li>AWS (EC2, S3, Lambda)</li><li>Google Cloud</li><li>Azure</li><li>Docker</li><li>Kubernetes</li><li>Terraform</li><li>CI/CD &amp; GitHub Actions</li><li>Canary Rollouts</li><li>Microservices</li><li>REST APIs &amp; FastAPI</li><li>Apache Spark</li><li>PostgreSQL</li><li>MLOps</li><li>Monitoring &amp; Observability</li></ul></div>
+          <div class="kit__panel" role="tabpanel" id="kp-code" aria-labelledby="kt-code"><p class="kit__d">What I write it all in.</p><ul class="kit__items"><li>Python</li><li>C++</li><li>CUDA</li><li>Go</li><li>Java</li><li>SQL</li><li>JavaScript</li><li>TypeScript</li><li>Swift</li><li>Scala</li><li>R</li><li>MATLAB</li></ul></div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 
-<div id="submenu" class="submenu">
-    <button class="close-submenu" onclick="closeSubmenu()">✕</button>
-    <div class="submenu-title" id="submenu-title"></div>
-    <div class="submenu-items" id="submenu-items"></div>
-</div>
+<!-- ───────────── EXPERIENCE REEL ───────────── -->
+<section class="film" id="experience" data-unit="Act" data-runtime="240">
+  <div class="film__head">
+    <div class="sec__head" data-r>
+      <span class="sec__no">§ 1</span>
+      <h2 data-det="heading">Experience</h2>
+      <p class="sec__note">Four jobs, newest first. Each one is a cylinder that turns as you scroll, with its story printed all the way round: the picture shows what the work does, the caption explains it (plain words first, the technical detail underneath), and the numbers beside it are the results. Point at either edge of a cylinder (or tap it on a phone) to roll it by hand, and use the years in the top bar or ← / → to jump around.</p>
+    </div>
+    <nav class="toc" aria-label="Jobs" data-r>
+      <a href="#act-tiposi"><span class="toc__no">I</span><span class="toc__co">Tiposi <em>2026 – now</em></span><span class="toc__what">Detecting strokes from radio signals</span><span class="toc__go">Play ↓</span></a>
+      <a href="#act-viga"><span class="toc__no">II</span><span class="toc__co">Viga <em>2024</em></span><span class="toc__what">Text-to-video for a Hollywood VFX pipeline</span><span class="toc__go">Play ↓</span></a>
+      <a href="#act-gnani"><span class="toc__no">III</span><span class="toc__co">Gnani.ai <em>2022 – 23</em></span><span class="toc__what">A multilingual voice bot, 50K calls a day</span><span class="toc__go">Play ↓</span></a>
+      <a href="#act-syncron"><span class="toc__no">IV</span><span class="toc__co">Syncron <em>2022</em></span><span class="toc__what">Cheaper, faster cloud infrastructure</span><span class="toc__go">Play ↓</span></a>
+    </nav>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-// Live time update
-function updateTime() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('live-time').textContent = `${hours}:${minutes}:${seconds}`;
-}
+  <div class="ring" id="act-tiposi" data-scene="rf" data-rail="2026" data-name="Tiposi" style="--n:6">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>Act I</b><strong class="act__name">Tiposi</strong><em>Machine Learning Engineer · Sep 2026 – present</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Act I · Now showing · Sep 2026 – now</p>
+                  <h3 class="act__title">Tiposi</h3>
+                  <p class="act__role"><b>Machine Learning Engineer.</b> A helmet of antennas sends weak radio signals through the head. I build the models that read those signals to tell whether there is a stroke, and ship them to run on real scans.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Signals" data-a=".1" data-b=".325">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Reading the signals</b>The helmet’s antennas take turns sending a weak radio signal through the head while the others listen. Each recording is turned into a spectrum a model can read.<em class="cap__tech">raw RF → log spectra · every transmit–receive antenna pair</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Detect" data-a=".325" data-b=".555">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Spotting a stroke</b>A stroke changes how the signals travel (red lines). The model looks at each scan from 11 different angles and combines them into one verdict.<em class="cap__tech">11 spectral + temporal views · PCA–LDA readers · stacked ensembles · 50+ architectures compared</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Ship" data-a=".555" data-b=".765">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Working on any helmet</b>Every helmet has its own electronic fingerprint. I removed it so the model works on helmets it has never seen, then compiled it to run three times faster.<em class="cap__tech">RF nuisance removal · leave-one-helmet-out AUC 0.82 → 0.91 · one ONNX graph, 11.5 s → 3.5 s per scan</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="MRI" data-a=".765" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Seeing the brain</b>The next step: turning the same radio signals into a 3D image of the brain, the kind a doctor normally needs an MRI scanner for.<em class="cap__tech">3D FSQ VQ-VAE (42.7 dB reconstruction) · RF mapped into the MRI latent space</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">50+</b><span class="rsum__l">model architectures built and compared</span></li><li><b class="rsum__v">11</b><span class="rsum__l">views of every scan, combined into one verdict</span></li><li><b class="rsum__v">0.91</b><span class="rsum__l">accuracy score (AUC) on helmets it never trained on, up from 0.82</span></li><li><b class="rsum__v">3×</b><span class="rsum__l">faster per scan in production, 70% smaller model</span></li><li><b class="rsum__v">3D MRI</b><span class="rsum__l">brain images generated from the radio signals</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".14" data-b=".3"><span class="v"><b data-to="50">0</b><i>+</i></span><small>model architectures built and compared</small></li>
+              <li data-a=".36" data-b=".5"><span class="v"><b data-to="11">0</b></span><small>views of every scan, combined into one verdict</small></li>
+              <li data-a=".56" data-b=".66"><span class="v v--text">0.91</span><small>accuracy score (AUC) on helmets it never trained on, up from 0.82</small></li>
+              <li data-a=".64" data-b=".74"><span class="v"><b data-to="3">0</b><i>×</i></span><small>faster per scan in production, 70% smaller model</small></li>
+              <li data-a=".79" data-b=".93"><span class="v v--text">3D MRI</span><small>brain images generated from the radio signals</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-updateTime();
-setInterval(updateTime, 1000);
+  <div class="ring" id="act-viga" data-scene="picture" data-rail="2024" data-name="Viga Entertainment Technology" style="--n:6">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>Act II</b><strong class="act__name">Viga Entertainment Technology</strong><em>AI Engineer · Jan – Jun 2024</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Act II · Roll camera · 2024</p>
+                  <h3 class="act__title act__title--long">Viga Entertainment Technology</h3>
+                  <p class="act__role"><b>AI Engineer.</b> Generating video from text for film visual effects, where the character has to stay the same from frame to frame and the edges have to be clean enough for a Hollywood production.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Inputs" data-a=".1" data-b=".365">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">From pose to picture</b>Give the model a stick-figure pose (left), a depth map (middle) and a line of text. It generates the frame on the right, starting from pure noise.<em class="cap__tech">text-to-video diffusion · conditioned on depth maps + pose skeletons</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Consistency" data-a=".365" data-b=".62">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Same character, every frame</b>The hard part is keeping the character identical for 200+ frames instead of flickering. Watch the jacket colour settle.<em class="cap__tech">LoRA adapters per character · optical-flow-guided denoising · sliding-window temporal attention</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Clean edges" data-a=".62" data-b=".855">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Clean cut-outs</b>Visual-effects artists need the character cut out perfectly. Left of the green line: a glowing halo. Right of it: a clean edge.<em class="cap__tech">Segment Anything + edge-refinement head · boundary-weighted Dice loss · sub-pixel masks</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Result" data-a=".855" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">The result</b>Artists had to fix 40% less by hand. Built for a Hollywood production; the work later moved to Google AI research.<em class="cap__tech">diffusion super-resolution · multi-GPU inference pipeline</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">200+</b><span class="rsum__l">frames with one consistent character</span></li><li><b class="rsum__v">sub-pixel</b><span class="rsum__l">clean cut-out edges, no glowing halo</span></li><li><b class="rsum__v">−40%</b><span class="rsum__l">manual fixing needed from artists</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".38" data-b=".6"><span class="v"><b data-to="200">0</b><i>+</i></span><small>frames with one consistent character</small></li>
+              <li data-a=".66" data-b=".82"><span class="v v--text">sub-pixel</span><small>clean cut-out edges, no glowing halo</small></li>
+              <li data-a=".86" data-b=".96"><span class="v"><i>−</i><b data-to="40">0</b><i>%</i></span><small>manual fixing needed from artists</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-// GitHub commits from stats.json (updated by GitHub Actions)
-async function fetchGitHubCommits() {
-    try {
-        // Fetch stats from your own repo's stats.json file
-        // This file is updated daily by GitHub Actions
-        const response = await fetch('stats.json');
-        
-        if (response.ok) {
-            const data = await response.json();
-            document.getElementById('github-commits').textContent = `${data.commits} commits`;
-        } else {
-            // Fallback if stats.json doesn't exist yet
-            document.getElementById('github-commits').textContent = '36 repos';
-        }
-    } catch (error) {
-        console.error('Error fetching GitHub stats:', error);
-        document.getElementById('github-commits').textContent = '36 repos';
-    }
-}
+  <div class="ring" id="act-gnani" data-scene="voice" data-rail="2023" data-name="Gnani.ai" style="--n:6">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>Act III</b><strong class="act__name">Gnani.ai</strong><em>NLP / ML Engineer · Sep 2022 – Sep 2023</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Act III · Roll sound · 2022 – 2023</p>
+                  <h3 class="act__title">Gnani.ai</h3>
+                  <p class="act__role"><b>NLP / ML Engineer.</b> A voice bot that answers real phone calls: it has to understand what you mean, remember the conversation, and follow you when you switch languages.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Calls" data-a=".1" data-b=".31">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">50,000 calls a day</b>A voice bot answering real phone calls. The boxes fill in as it works out what the caller wants and remembers the details.<em class="cap__tech">dialogue state tracking · intent resolution · slot filling</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Languages" data-a=".31" data-b=".555">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Switching languages</b>Callers switch languages mid-sentence; each colour is a different language. The bot follows them, and it handles 16+ languages in all.<em class="cap__tech">shared XLM-RoBERTa vocabulary · code-switching accuracy 34% → 91%</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Speed" data-a=".555" data-b=".765">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Answering faster</b>I shrank the model from 12 layers to 6 without losing its answers, so it replies in less than half the time.<em class="cap__tech">BERT → DistilBERT distillation · ONNX graph optimization · −55% latency</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Deploys" data-a=".765" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Safer releases</b>Shipping a new version went from two hours to fifteen minutes, with an automatic undo if anything breaks.<em class="cap__tech">CI/CD · validation · canary rollout · auto-rollback</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">50K+</b><span class="rsum__l">calls a day</span></li><li><b class="rsum__v">91%</b><span class="rsum__l">accuracy when callers switch language, up from 34%</span></li><li><b class="rsum__v">−55%</b><span class="rsum__l">time to answer</span></li><li><b class="rsum__v">−75%</b><span class="rsum__l">client operating cost</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".14" data-b=".28"><span class="v"><b data-to="50">0</b><i>K+</i></span><small>calls a day</small></li>
+              <li data-a=".34" data-b=".54"><span class="v"><b data-from="34" data-to="91">34</b><i>%</i></span><small>accuracy when callers switch language, up from 34%</small></li>
+              <li data-a=".57" data-b=".74"><span class="v"><i>−</i><b data-to="55">0</b><i>%</i></span><small>time to answer</small></li>
+              <li data-a=".78" data-b=".93"><span class="v"><i>−</i><b data-to="75">0</b><i>%</i></span><small>client operating cost</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-fetchGitHubCommits();
-// Refresh every 5 minutes to get latest stats
-setInterval(fetchGitHubCommits, 300000);
+  <div class="ring" id="act-syncron" data-scene="infra" data-rail="2022" data-name="Syncron" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>Act IV</b><strong class="act__name">Syncron</strong><em>Associate Software Development Engineer · Jan – Sep 2022</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Act IV · Build the stage · 2022</p>
+                  <h3 class="act__title">Syncron</h3>
+                  <p class="act__role"><b>Associate Software Development Engineer.</b> The cloud servers underneath everything else: making them cheaper, faster and harder to break.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Idle servers" data-a=".1" data-b=".40">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Finding idle servers</b>Some cloud servers were running but doing nothing (red). I found them, shut them down and grouped the rest into tiers.<em class="cap__tech">AWS resource audit · tiered architecture · −11% compute cost</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Drift" data-a=".40" data-b=".67">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Catching drift</b>The test environment had quietly drifted away from the live one (≠). I built a check that catches the difference before it breaks the live system.<em class="cap__tech">staging ↔ production parity checker · CloudWatch + Terraform · −73% incidents</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Faster" data-a=".67" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Faster and cheaper</b>The result: data moved 37% faster, for 11% less money.<em class="cap__tech">Go microservices · Terraform · fault-tolerant AWS infrastructure</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">−11%</b><span class="rsum__l">cloud bill</span></li><li><b class="rsum__v">−73%</b><span class="rsum__l">live incidents caused by the test setup</span></li><li><b class="rsum__v">+37%</b><span class="rsum__l">data moved per second</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".14" data-b=".38"><span class="v"><i>−</i><b data-to="11">0</b><i>%</i></span><small>cloud bill</small></li>
+              <li data-a=".42" data-b=".66"><span class="v"><i>−</i><b data-to="73">0</b><i>%</i></span><small>live incidents caused by the test setup</small></li>
+              <li data-a=".68" data-b=".94"><span class="v"><i>+</i><b data-to="37">0</b><i>%</i></span><small>data moved per second</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-const canvas = document.getElementById('globe-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  <div class="film__end" data-r>
+    <p class="film__cut">Cut. Print.</p>
+    <p class="film__endnote">Next reel: the projects.</p>
+  </div>
+</section>
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-camera.position.z = 5;
+<!-- ───────────── PROJECTS REEL ───────────── -->
+<section class="film" id="projects" data-unit="Project" data-runtime="300">
+  <div class="film__head">
+    <div class="sec__head" data-r>
+      <span class="sec__no">§ 2</span>
+      <h2 data-det="heading">Projects</h2>
+      <p class="sec__note">Five things I built on my own, on a second rolling wall. Scroll to roll through them, or jump straight to one.</p>
+    </div>
+    <nav class="toc" aria-label="Projects" data-r>
+      <a href="#proj-trm"><span class="toc__no">01</span><span class="toc__co">Tiny Recursive Model</span><span class="toc__what">An image generator 25× smaller than usual</span><span class="toc__go">Play ↓</span></a>
+      <a href="#proj-dit"><span class="toc__no">02</span><span class="toc__co">Diffusion Transformer</span><span class="toc__what">Text-to-image, guided by three language models</span><span class="toc__go">Play ↓</span></a>
+      <a href="#proj-vq"><span class="toc__no">03</span><span class="toc__co">Hybrid VQ-VAE</span><span class="toc__what">Text-to-image without the noise-cleaning loop</span><span class="toc__go">Play ↓</span></a>
+      <a href="#proj-drive"><span class="toc__no">04</span><span class="toc__co">Motion Prediction</span><span class="toc__what">Forecasting where self-driving cars’ neighbours will go</span><span class="toc__go">Play ↓</span></a>
+      <a href="#proj-video"><span class="toc__no">05</span><span class="toc__co">Video Generation</span><span class="toc__what">Predicting the next frames of a video</span><span class="toc__go">Play ↓</span></a>
+    </nav>
+  </div>
 
-// Reset camera position on page load/back button
-window.addEventListener('pageshow', function(event) {
-    camera.position.set(0, 0, 5);
-    camera.lookAt(0, 0, 0);
-    rotationPaused = false;
-    if (hoveredObject) {
-        hoveredObject.scale.set(1, 1, 1);
-        hoveredObject = null;
-    }
-});
+  <div class="ring" id="proj-trm" data-scene="trm" data-rail="01" data-name="Tiny Recursive Model" data-code="https://github.com/Ishushan02/Tiny-Recursive-Model-for-Text-To-Image-Generation/" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>01</b><strong class="act__name">Tiny Recursive Model</strong><em>Text-to-image · Oct 2025 – Jan 2026</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Project 01 · Smaller.</p>
+                  <h3 class="act__title act__title--long">Tiny Recursive Model</h3>
+                  <p class="act__role">An image generator that turns a sentence into a picture, built from one small block reused in a loop instead of a huge stack of layers.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Size" data-a=".1" data-b=".43">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">How big is too big?</b>Each dot is a million parameters, the numbers a model learns. A standard image generator has about 700 million. How few would still work?<em class="cap__tech">baseline: Diffusion Transformer, 700M+ parameters</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Loop" data-a=".43" data-b=".71">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">One block, on repeat</b>Twenty-seven million. One small block runs in a loop, and the picture in the middle gets clearer on every pass.<em class="cap__tech">shared-weight recursive transformer · learnable per-pass residual scale · fused text + image latents</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Training" data-a=".71" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Cheap to train</b>Small enough to train from scratch in 18 hours on a single GPU.<em class="cap__tech">pretrained text encoders · latent image autoencoder · 1 × A100</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">27M</b><span class="rsum__l">parameters, versus 700M+ in a standard model</span></li><li><b class="rsum__v">1</b><span class="rsum__l">shared block, reused on every pass</span></li><li><b class="rsum__v">18h</b><span class="rsum__l">to train, on a single A100 GPU</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".14" data-b=".42"><span class="v"><b data-from="700" data-to="27">700</b><i>M</i></span><small>parameters, versus 700M+ in a standard model</small></li>
+              <li data-a=".44" data-b=".62"><span class="v"><b data-to="1">0</b></span><small>shared block, reused on every pass</small></li>
+              <li data-a=".72" data-b=".92"><span class="v"><b data-to="18">0</b><i>h</i></span><small>to train, on a single A100 GPU</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><a class="act__link" href="https://github.com/Ishushan02/Tiny-Recursive-Model-for-Text-To-Image-Generation/" target="_blank" rel="noopener">Code ↗</a><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-// Create main globe
-const geometry = new THREE.SphereGeometry(2, 64, 64);
-const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.3
-});
+  <div class="ring" id="proj-dit" data-scene="dit" data-rail="02" data-name="Diffusion Transformer" data-code="https://github.com/Ishushan02/Diffusion-Transformer-Text-To-Image-Generation" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>02</b><strong class="act__name">Diffusion Transformer</strong><em>Text-to-image · May – Sep 2025</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Project 02 · Three readers</p>
+                  <h3 class="act__title act__title--long">Diffusion Transformer</h3>
+                  <p class="act__role">A text-to-image generator where three different language models (GPT-Neo, T5 and CLIP) read your sentence and steer the picture together.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Denoise" data-a=".1" data-b=".41">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">From noise to picture</b>The picture starts as random noise and is cleaned up over 50 steps. Three language models read your sentence and steer every step.<em class="cap__tech">GPT-Neo + T5 + CLIP text encoders · Deep Compression Autoencoder latents</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Timing" data-a=".41" data-b=".68">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Telling it the time</b>Each block needs to know which step it is on. I passed that in as a simple scale and shift (γ, β), 70% cheaper than the usual way.<em class="cap__tech">sinusoidal timestep embedding · FiLM modulation instead of cross-attention</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Training" data-a=".68" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Learning from three scores</b>It learns from three scores at once: how much noise is left, how good the image looks, and how realistic it is overall.<em class="cap__tech">hybrid loss: denoising + perceptual + Inception</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">3</b><span class="rsum__l">language models reading the prompt</span></li><li><b class="rsum__v">−70%</b><span class="rsum__l">compute for the timing signal, versus the usual method</span></li><li><b class="rsum__v">3 scores</b><span class="rsum__l">learned from at once: noise, looks, realism</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".13" data-b=".3"><span class="v"><b data-to="3">0</b></span><small>language models reading the prompt</small></li>
+              <li data-a=".44" data-b=".66"><span class="v"><i>−</i><b data-to="70">0</b><i>%</i></span><small>compute for the timing signal, versus the usual method</small></li>
+              <li data-a=".7" data-b=".9"><span class="v v--text">3 scores</span><small>learned from at once: noise, looks, realism</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><a class="act__link" href="https://github.com/Ishushan02/Diffusion-Transformer-Text-To-Image-Generation" target="_blank" rel="noopener">Code ↗</a><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-const globe = new THREE.Mesh(geometry, material);
-scene.add(globe);
+  <div class="ring" id="proj-vq" data-scene="vq" data-rail="03" data-name="Hybrid VQ-VAE" data-code="https://github.com/Ishushan02/Hybrid-Architecture-T2I" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>03</b><strong class="act__name">Hybrid VQ-VAE</strong><em>Text-to-image · No diffusion</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Project 03 · No noise</p>
+                  <h3 class="act__title act__title--long">Hybrid VQ-VAE</h3>
+                  <p class="act__role">Text-to-image without the step-by-step noise cleaning: the model writes an image the way a language model writes a sentence.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Codebook" data-a=".1" data-b=".4">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Images as puzzle pieces</b>First the model learns a small set of image tokens, like puzzle pieces. Any picture can then be written as a grid of them.<em class="cap__tech">scale-invariant VQ-VAE · discrete codebook</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Write" data-a=".4" data-b=".69">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Writing an image</b>Then a transformer writes those tokens one by one, straight from your sentence, the way a language model writes words. No noise-cleaning loop.<em class="cap__tech">decoder-only transformer · text embeddings → image tokens</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Attention" data-a=".69" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Deciding what matters</b>Gates inside the model (the bars on the left) decide how much each part of its memory counts for the next token.<em class="cap__tech">gated attention · optional hyper-connections</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">tokens</b><span class="rsum__l">every image written as a grid of learned pieces</span></li><li><b class="rsum__v">0</b><span class="rsum__l">noise-cleaning steps: the image is written token by token</span></li><li><b class="rsum__v">gated</b><span class="rsum__l">attention picks what matters for each token</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".13" data-b=".38"><span class="v v--text">tokens</span><small>every image written as a grid of learned pieces</small></li>
+              <li data-a=".44" data-b=".66"><span class="v"><b data-from="50" data-to="0">50</b></span><small>noise-cleaning steps: the image is written token by token</small></li>
+              <li data-a=".72" data-b=".92"><span class="v v--text">gated</span><small>attention picks what matters for each token</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><a class="act__link" href="https://github.com/Ishushan02/Hybrid-Architecture-T2I" target="_blank" rel="noopener">Code ↗</a><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-// Add background stars with velocities
-const starGeometry = new THREE.BufferGeometry();
-const starVertices = [];
-const starVelocities = [];
-const starCount = 2000;
+  <div class="ring" id="proj-drive" data-scene="drive" data-rail="04" data-name="Self-Driving Motion Prediction" data-code="https://github.com/Ishushan02/Self-Driving-Motion-Prediction" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>04</b><strong class="act__name">Self-Driving Motion Prediction</strong><em>Autonomous driving · Apr – Jun 2025</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Project 04 · What next?</p>
+                  <h3 class="act__title act__title--long">Self-Driving Motion Prediction</h3>
+                  <p class="act__role">A self-driving car has to guess where every car around it is about to go. This model makes those guesses, trained on the Argoverse 2 dataset.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Past" data-a=".1" data-b=".38">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Where cars have been</b>A bird’s-eye view of a junction. Dotted trails show where each car has just been; the green car is the one being predicted.<em class="cap__tech">Argoverse 2 · agent histories + map lanes</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Futures" data-a=".38" data-b=".67">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Several possible futures</b>The model draws several possible paths, each with a probability, while paying attention to the other cars (coloured lines) and the lanes (circles).<em class="cap__tech">hybrid encoder–decoder · multimodal attention, vehicle–vehicle and vehicle–map</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Accuracy" data-a=".67" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">How close it got</b>White is what really happened; red is the error. My version brought its best guess 15% closer.<em class="cap__tech">minADE / minFDE improved 15%</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">every car</b><span class="rsum__l">forecast together, not one at a time</span></li><li><b class="rsum__v">several</b><span class="rsum__l">possible futures per car, each with a probability</span></li><li><b class="rsum__v">+15%</b><span class="rsum__l">more accurate (minADE / minFDE)</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".12" data-b=".3"><span class="v v--text">every car</span><small>forecast together, not one at a time</small></li>
+              <li data-a=".42" data-b=".6"><span class="v v--text">several</span><small>possible futures per car, each with a probability</small></li>
+              <li data-a=".8" data-b=".94"><span class="v"><i>+</i><b data-to="15">0</b><i>%</i></span><small>more accurate (minADE / minFDE)</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><a class="act__link" href="https://github.com/Ishushan02/Self-Driving-Motion-Prediction" target="_blank" rel="noopener">Code ↗</a><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-for (let i = 0; i < starCount; i++) {
-    const x = (Math.random() - 0.5) * 100;
-    const y = (Math.random() - 0.5) * 100;
-    const z = (Math.random() - 0.5) * 100;
-    starVertices.push(x, y, z);
-    
-    // Add velocity for movement
-    starVelocities.push(
-        (Math.random() - 0.5) * 0.01,
-        (Math.random() - 0.5) * 0.01,
-        (Math.random() - 0.5) * 0.01
-    );
-}
+  <div class="ring" id="proj-video" data-scene="video" data-rail="05" data-name="Video Generation" data-code="https://github.com/Ishushan02/Video-Generation-Flowing-MNIST" style="--n:5">
+    <div class="ring__stage">
+      <div class="act__bar act__bar--top"><span class="act__who"><b>05</b><strong class="act__name">Video Generation</strong><em>Video prediction · Flowing MNIST</em></span><nav class="ring__rail" aria-label="Jump to"></nav><span class="act__count"></span></div>
+      <div class="ring__view">
+        <div class="ring__cyl">
+          <section class="rface rface--title">
+            <div class="act__card">
+                  <i class="act__clap"></i>
+                  <p class="act__kicker">Project 05 · Keep it moving</p>
+                  <h3 class="act__title act__title--long">Video Generation</h3>
+                  <p class="act__role">Show a model a few frames of moving handwritten digits and ask it to continue the video. Three approaches, each sharper than the last.</p>
+                  <p class="act__hint">Scroll to play <span>↓</span></p>
+                </div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Blurry" data-a=".1" data-b=".41">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">First try: blurry</b>Four real frames on the left, four predicted on the right. The first approach (ConvLSTM) blurs more with every frame it predicts.<em class="cap__tech">ConvLSTM sequence baseline · Flowing MNIST</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Sharper" data-a=".41" data-b=".67">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Sharper edges</b>A vision transformer, trained to care about how the picture looks, brings the edges back.<em class="cap__tech">ViT · linear + up-conv decoders · MSE + VGG perceptual loss</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface" data-label="Steady" data-a=".67" data-b=".97">
+            <canvas aria-hidden="true"></canvas>
+            <div class="rcap"><b class="cap__t">Steady frames</b>A VQ-VAE, which works with a fixed set of image tokens, keeps each frame consistent with the last.<em class="cap__tech">VQ-VAE discrete latents · better temporal consistency</em></div>
+            <div class="face__shade"></div>
+          </section>
+          <section class="rface rface--sum" data-label="Recap">
+            <div class="rsum"><p class="rsum__k">In short</p><ol><li><b class="rsum__v">ConvLSTM</b><span class="rsum__l">first try: gets the motion, but blurs</span></li><li><b class="rsum__v">ViT</b><span class="rsum__l">vision transformer, trained to care how frames look</span></li><li><b class="rsum__v">VQ-VAE</b><span class="rsum__l">works in tokens, keeps frames consistent</span></li></ol></div>
+            <div class="face__shade"></div>
+          </section>
+        </div>
+      </div>
+      <ol class="act__stats">
+              <li data-a=".13" data-b=".4"><span class="v v--text">ConvLSTM</span><small>first try: gets the motion, but blurs</small></li>
+              <li data-a=".42" data-b=".67"><span class="v v--text">ViT</span><small>vision transformer, trained to care how frames look</small></li>
+              <li data-a=".68" data-b=".93"><span class="v v--text">VQ-VAE</span><small>works in tokens, keeps frames consistent</small></li>
+            </ol>
+      <div class="act__bar act__bar--bot"><i class="act__prog"></i><div class="act__beats"></div><a class="act__link" href="https://github.com/Ishushan02/Video-Generation-Flowing-MNIST" target="_blank" rel="noopener">Code ↗</a><button class="act__next" type="button">Next ↓</button></div>
+    </div>
+  </div>
 
-starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-const starMaterial = new THREE.PointsMaterial({ 
-    color: 0x00ff00, 
-    size: 0.1,
-    transparent: true,
-    opacity: 0.8
-});
-const stars = new THREE.Points(starGeometry, starMaterial);
-scene.add(stars);
+  <div class="film__end" data-r>
+    <p class="film__cut">That’s a wrap.</p>
+    <p class="film__endnote">Below: one you can play with yourself.</p>
+  </div>
+</section>
 
-// Add glowing dots on globe
-const dotGeometry = new THREE.SphereGeometry(0.02, 8, 8);
-const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const dotCount = 300;
+<!-- ───────────── FIGURE: FORECAST ───────────── -->
+<section class="sec fig" id="forecast">
+  <div class="sec__head" data-r>
+    <span class="sec__no">Play</span>
+    <h2 data-det="heading">Your turn</h2>
+    <p class="sec__note">Move your mouse around inside the box. The model tries to guess where your cursor goes next, the same idea as Project 04.</p>
+  </div>
+  <div class="fig__wrap" data-r>
+    <div class="fig__stage" data-det="figure">
+      <canvas id="fcCanvas" aria-label="Interactive demo: predicted future paths fan out ahead of your cursor"></canvas>
+      <span class="fig__hint" id="fcHint">Move your cursor in here ↗</span>
+    </div>
+    <aside class="fig__side">
+      <p class="fig__label"><b>Live</b> Guessing where your cursor goes</p>
+      <p class="fig__desc">The green line is the model’s best guess for the next 0.8 seconds; the dashed lines are other possibilities. Guesses that keep turning out right get a bigger bar below. The two numbers are the average and final error, in pixels: lower is better.</p>
+      <dl class="fig__metrics">
+        <div><dt>Moving</dt><dd id="fcAgent">autopilot</dd></div>
+        <div><dt>Average error</dt><dd><span id="fcAde">0.0</span> px</dd></div>
+        <div><dt>Final error</dt><dd><span id="fcFde">0.0</span> px</dd></div>
+      </dl>
+      <ul class="fig__modes" id="fcModes" aria-hidden="true"></ul>
+    </aside>
+  </div>
+</section>
 
-for (let i = 0; i < dotCount; i++) {
-    const dot = new THREE.Mesh(dotGeometry, dotMaterial);
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const radius = 2;
-    
-    dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
-    dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
-    dot.position.z = radius * Math.cos(phi);
-    
-    globe.add(dot);
-}
+<!-- ───────────── REVIEWS ───────────── -->
+<section class="sec words" id="words">
+  <div class="sec__head" data-r>
+    <span class="sec__no">§ 3</span>
+    <h2 data-det="heading">Peer review</h2>
+    <p class="sec__note">From the people who had to work with me. Point at a name to read their review.</p>
+  </div>
 
-// Menu data
-const menuData = {
-    experience: {
-        title: "EXPERIENCE",
-        icon: "E",
-        url: "experience/"
-    },
-    projects: {
-        title: "PROJECTS",
-        icon: "P",
-        url: "projects/"
-    },
-    education: {
-        title: "EDUCATION",
-        icon: "Ed",
-        url: "education/"
-    },
-    publication: {
-        title: "PUBLICATION",
-        icon: "Pb",
-        url: "publication/"
-    }
-};
+  <div class="words__grid" data-r>
+    <div class="words__tabs" role="tablist" aria-label="Recommendations">
+      <button role="tab" aria-selected="true" aria-controls="q-sujay" id="t-sujay" type="button">
+        <img src="img/sujay.jpg" alt="" width="52" height="52" loading="lazy">
+        <span><b>Sujay HG</b><small>CTO · Viga</small></span>
+      </button>
+      <button role="tab" aria-selected="false" aria-controls="q-avinash" id="t-avinash" type="button" tabindex="-1">
+        <img src="img/avinash.jpg" alt="" width="52" height="52" loading="lazy">
+        <span><b>Avinash N</b><small>Senior AI Project Manager · Gnani.ai</small></span>
+      </button>
+      <button role="tab" aria-selected="false" aria-controls="q-ritik" id="t-ritik" type="button" tabindex="-1">
+        <img src="img/rithik.jpg" alt="" width="52" height="52" loading="lazy">
+        <span><b>Ritik Sahu</b><small>Senior Software Engineer · Syncron</small></span>
+      </button>
+    </div>
 
-// Create orbiting symbols
-const orbitingObjects = [];
-const orbitRadius = 3.5;
-const orbitSpeed = 0.3;
-let rotationPaused = false;
-let hoveredObject = null;
+    <div class="words__panels" data-det="quote">
+      <blockquote role="tabpanel" id="q-sujay" aria-labelledby="t-sujay">
+        <p>Have worked with Ishan on a generative AI project. Ishan was the lead AI engineer. He contributed to the project with a lot of passion and enthusiasm. He is curious about his field and he dedicated himself to learning new skills and reading numerous research papers and implementing them in the project. He learnt generative AI tools like ComfyUI and Automatic<span class="lit">1111</span> within a matter of few days and even helped the rest of the team to get to the pace. He is a good team player and led the team really well. The team was on point with their deliveries and deadlines. Hope to work with you again, Ishan :)</p>
+        <footer><a class="arrow-link" href="https://www.linkedin.com/in/hgsujay/" target="_blank" rel="noopener">Sujay on LinkedIn <span>↗</span></a></footer>
+      </blockquote>
+      <blockquote role="tabpanel" id="q-avinash" aria-labelledby="t-avinash" hidden>
+        <p>I am delighted to recommend Ishan Kumar Anand, whom I supervised for over a year as Product Manager at Gnani Innovations. Ishan is a highly organized, self-motivated professional with excellent communication and leadership skills, capable of delivering under pressure and tight deadlines. He demonstrated strong design thinking, critical analysis, and a proactive approach to problem-solving, often going beyond expectations to improve processes and timelines. His ability to deeply understand systems from the ground up, combined with his expertise in designing and implementing NLP algorithms, reflects his strong analytical mindset and up-to-date technical knowledge.</p>
+        <footer><a class="arrow-link" href="https://www.linkedin.com/in/avinash-n-18092b146/" target="_blank" rel="noopener">Avinash on LinkedIn <span>↗</span></a></footer>
+      </blockquote>
+      <blockquote role="tabpanel" id="q-ritik" aria-labelledby="t-ritik" hidden>
+        <p>I’ve had the opportunity to work closely with Ishan on projects involving complex architectures, and one thing that consistently stood out was his approach to problem-solving. He has an admirable attitude toward digging deep into issues rather than settling for surface-level fixes. Ishan is comfortable navigating complex systems and has a strong ability to break down challenging problems into manageable solutions. His persistence, analytical thinking, and ownership make him a reliable teammate when dealing with technically demanding work. I genuinely enjoyed collaborating with him and would highly recommend him for roles that require depth, clarity, and strong problem-solving skills.</p>
+        <footer><a class="arrow-link" href="https://www.linkedin.com/in/ritiksahusa/" target="_blank" rel="noopener">Ritik on LinkedIn <span>↗</span></a></footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
 
-Object.keys(menuData).forEach((key, index) => {
-    const data = menuData[key];
-    const sphereColor = data.color || 0x00ff00;
-    const sphereTextColor = data.textColor || '#00ff00';
+<!-- ───────────── RESEARCH + EDUCATION ───────────── -->
+<section class="sec research" id="research">
+  <div class="sec__head" data-r>
+    <span class="sec__no">§ 4</span>
+    <h2 data-det="heading">Research &amp; education</h2>
+  </div>
 
-    const group = new THREE.Group();
+  <article class="paper" data-r>
+    <div class="paper__main" data-det="paper">
+      <p class="paper__venue">IEEE International Conference on Contemporary Computing and Communications (InC4) · 2023</p>
+      <h3 class="paper__title">Brain Tumor Detection Using Deep Learning Model</h3>
+      <p class="paper__authors">Joel Menachery, <b>Ishan Kumar Anand</b>, Michael Moses Thiruthuvanathan</p>
+      <p class="paper__sum">We compared four image-recognition networks, fine-tuned with transfer learning, for telling MRI scans with a brain tumor apart from scans without one, to find the most accurate and efficient option for early detection.</p>
+      <div class="paper__links">
+        <a class="arrow-link" href="https://ieeexplore.ieee.org/document/10262967" target="_blank" rel="noopener">IEEE Xplore <span>↗</span></a>
+        <a class="arrow-link" href="https://doi.org/10.1109/InC457730.2023.10262967" target="_blank" rel="noopener">DOI <span>↗</span></a>
+        <button class="arrow-link" type="button" id="copyBib">Copy BibTeX</button>
+      </div>
+      <details class="paper__abs">
+        <summary>Read the abstract</summary>
+        <p>Brain tumor is a life-threatening disease that can disrupt normal brain functioning and have a significant impact on a patient's quality of life. Early detection and diagnosis are crucial for effective treatment. In recent years, deep learning techniques for image analysis and detection have played a vital role in the medical field, supplying more accurate and reliable results. Segmentation, the process of distinguishing between normal and abnormal brain cells or tissues, is a critical step in the detection of brain tumors. In this research, we aim to investigate various techniques for brain tumor detection and segmentation using Magnetic Resonance Imaging (MRI) images. The detection process begins by analyzing the symmetric and asymmetric shape of the brain to identify abnormalities. We will then classify the cells as either Tumored or non-Tumored. This research is aimed at finding a more accurate and efficient method for detecting brain tumors. Four Keras models are compared side by side to find out the best deep learning model for providing a suitable outcome. The models are ResNet50, DenseNet201, Inception V3 and MobileNet. These models gave training accuracy of 85.30%, 78%, 78%, and 77.12% respectively.</p>
+      </details>
+    </div>
+    <figure class="paper__chart">
+      <div class="bars" data-det="chart">
+        <div class="bar bar--top"><span>ResNet50</span><i style="--v:85.3"></i><b>85.30</b></div>
+        <div class="bar"><span>DenseNet201</span><i style="--v:78"></i><b>78.00</b></div>
+        <div class="bar"><span>Inception V3</span><i style="--v:78"></i><b>78.00</b></div>
+        <div class="bar"><span>MobileNet</span><i style="--v:77.12"></i><b>77.12</b></div>
+      </div>
+      <figcaption><b>Results</b> Training accuracy (%) of the four networks compared in the paper.</figcaption>
+    </figure>
+  </article>
 
-    // Create small wireframe globe (same style as main globe)
-    const smallGlobeGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const smallGlobeMaterial = new THREE.MeshBasicMaterial({
-        color: sphereColor,
-        wireframe: true,
-        transparent: true,
-        opacity: data.highlight ? 0.65 : 0.35
-    });
-    const smallGlobe = new THREE.Mesh(smallGlobeGeometry, smallGlobeMaterial);
-    group.add(smallGlobe);
+  <div class="edu">
+    <figure class="edu__photo" data-r>
+      <img src="img/ucsd.jpg" alt="Geisel Library at UC San Diego at dusk" loading="lazy" width="1800" height="1203">
+      <figcaption>Geisel Library, UC San Diego</figcaption>
+    </figure>
+    <div class="edu__list">
+      <article class="school" data-r>
+        <p class="school__when">2024 to 2026 · San Diego, California</p>
+        <h3><a href="https://ucsd.edu" target="_blank" rel="noopener">University of California, San Diego</a></h3>
+        <p class="school__deg">MS in Computer Science, Artificial Intelligence <span class="gpa">GPA 3.75 / 4.0</span></p>
+        <p class="school__courses">Deep Learning · Probabilistic Reasoning &amp; Learning · Advanced Machine Learning · Computer Vision · Natural Language Processing · Recommender Systems &amp; Web Mining · Introduction to Robotics · Operating Systems</p>
+      </article>
+      <article class="school" data-r>
+        <p class="school__when">2018 to 2022 · Bangalore, India</p>
+        <h3><a href="https://christuniversity.in/" target="_blank" rel="noopener">Christ University</a></h3>
+        <p class="school__deg">BTech in Computer Science and Engineering, Honours in Artificial Intelligence <span class="gpa">GPA 3.87 / 4.0</span></p>
+        <p class="school__courses">Machine Learning · Artificial Intelligence · Data Structures &amp; Algorithms · Computer Architecture · Operating Systems · Database Management Systems · Computer Networks · Internet of Things · Robotics Process and Automation</p>
+      </article>
+    </div>
+  </div>
+</section>
 
-    // Add dots on small globe
-    const smallDotGeometry = new THREE.SphereGeometry(0.01, 8, 8);
-    const smallDotMaterial = new THREE.MeshBasicMaterial({ color: sphereColor });
-    const smallDotCount = 50;
+<!-- ───────────── SIDE PROJECTS ───────────── -->
+<section class="sec side" id="side">
+  <div class="sec__head" data-r>
+    <span class="sec__no">Appendix</span>
+    <h2 data-det="heading">Off the clock</h2>
+    <p class="sec__note">Things I made because I wanted them to exist.</p>
+  </div>
 
-    for (let i = 0; i < smallDotCount; i++) {
-        const dot = new THREE.Mesh(smallDotGeometry, smallDotMaterial);
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const radius = 0.5;
+  <div class="side__grid">
+    <article class="toy" data-r>
+      <div class="tiles" id="tiles" aria-hidden="true"></div>
+      <div class="toy__text">
+        <h3>Tile Burst</h3>
+        <p>A tile puzzle game I built and shipped to the App Store and Google Play. Run your mouse over the squares above: fill a whole row and it bursts.</p>
+        <div class="toy__links">
+          <a class="arrow-link" href="https://apps.apple.com/us/app/tile-burst/id6759202744" target="_blank" rel="noopener" data-det="link">App Store <span>↗</span></a>
+          <a class="arrow-link" href="https://play.google.com/store/apps/details?id=com.tilebreak.app" target="_blank" rel="noopener" data-det="link">Google Play <span>↗</span></a>
+        </div>
+      </div>
+    </article>
 
-        dot.position.x = radius * Math.sin(phi) * Math.cos(theta);
-        dot.position.y = radius * Math.sin(phi) * Math.sin(theta);
-        dot.position.z = radius * Math.cos(phi);
+    <article class="toy" data-r>
+      <div class="ecg" aria-hidden="true">
+        <svg viewBox="0 0 600 160" preserveAspectRatio="none"><path id="ecgPath" d="M0 80 H600"/></svg>
+        <span class="ecg__bpm"><b id="bpm">72</b> bpm</span>
+      </div>
+      <div class="toy__text">
+        <h3>HeartWise</h3>
+        <p>A real-time 3D heart visualizer. Enter a heart rate and an anatomical heart beats at it, with the ECG trace in sync and the zone labelled resting, moderate or intense.</p>
+        <div class="toy__links">
+          <a class="arrow-link" href="https://ishushan02.github.io/Heart-Rate-Vizualizer/" target="_blank" rel="noopener" data-det="link">Open the visualizer <span>↗</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
 
-        smallGlobe.add(dot);
-    }
+</main>
 
-    // Create text sprite at center
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = 512;
-    canvas.height = 512;
+<!-- ───────────── CONTACT ───────────── -->
+<footer class="contact" id="contact">
+  <p class="contact__kicker" data-r>Say hello</p>
+  <a class="contact__mail" href="mailto:isanand@ucsd.edu" data-r data-det="email">isanand<wbr>@ucsd.edu</a>
+  <div class="contact__row" data-r>
+    <button class="arrow-link" type="button" id="copyMail">Copy address</button>
+    <a class="arrow-link" href="https://github.com/Ishushan02" target="_blank" rel="noopener" data-det="link">GitHub <span>↗</span></a>
+    <a class="arrow-link" href="https://linkedin.com/in/ishushan" target="_blank" rel="noopener" data-det="link">LinkedIn <span>↗</span></a>
+  </div>
+  <div class="contact__foot">
+    <span>© 2026 Ishan Kumar Anand · San Francisco</span>
+    <span>Example MRI slice in Act I: <a href="https://commons.wikimedia.org/wiki/File:Mri_Brain_Flair_Axial_(13).jpg" target="_blank" rel="noopener">511KeV, Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener">CC BY-SA 4.0</a></span>
+    <a href="previous-version/">The old globe site →</a>
+  </div>
+</footer>
 
-    context.fillStyle = sphereTextColor;
-    // context.font = 'bold 60px JetBrains Mono';
-    context.font = 'bold 60px Times New Roman';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    
-    // Split text into lines if needed
-    const words = data.title.split(' ');
-    const lineHeight = 70;
-    const startY = 256 - ((words.length - 1) * lineHeight / 2);
-    
-    words.forEach((word, i) => {
-        context.fillText(word, 256, startY + (i * lineHeight));
-    });
-    
-    const texture = new THREE.CanvasTexture(canvas);
-    const spriteMaterial = new THREE.SpriteMaterial({ 
-        map: texture,
-        transparent: true
-    });
-    const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(1, 1, 1);
-    
-    group.add(sprite);
-    
-    group.userData = {
-        key: key,
-        angle: (index / Object.keys(menuData).length) * Math.PI * 2,
-        data: data,
-        smallGlobe: smallGlobe
-    };
-    
-    scene.add(group);
-    orbitingObjects.push(group);
-});
-
-// Raycaster for mouse interaction
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-// Handle both mouse and touch events
-function updateMousePosition(clientX, clientY) {
-    mouse.x = (clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-    
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(orbitingObjects, true);
-    
-    if (intersects.length > 0) {
-        const object = intersects[0].object.parent;
-        if (object.userData.key) {
-            hoveredObject = object;
-            rotationPaused = true;
-            canvas.style.cursor = 'pointer';
-            
-            // Scale up hovered object
-            object.scale.set(1.3, 1.3, 1.3);
-        }
-    } else {
-        if (hoveredObject) {
-            hoveredObject.scale.set(1, 1, 1);
-        }
-        hoveredObject = null;
-        rotationPaused = false;
-        canvas.style.cursor = 'default';
-    }
-}
-
-canvas.addEventListener('mousemove', (event) => {
-    updateMousePosition(event.clientX, event.clientY);
-});
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-canvas.addEventListener('touchstart', (event) => {
-    if (event.touches.length > 0) {
-        touchStartX = event.touches[0].clientX;
-        touchStartY = event.touches[0].clientY;
-        updateMousePosition(touchStartX, touchStartY);
-    }
-}, { passive: true });
-
-canvas.addEventListener('touchmove', (event) => {
-    if (event.touches.length > 0) {
-        updateMousePosition(event.touches[0].clientX, event.touches[0].clientY);
-    }
-}, { passive: true });
-
-function handleInteraction(clientX, clientY) {
-    mouse.x = (clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-    
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(orbitingObjects, true);
-    
-    if (intersects.length > 0) {
-        const object = intersects[0].object.parent;
-        if (object.userData.key && object.userData.data) {
-            // Zoom into globe effect
-            const targetPos = object.position.clone();
-            const startPos = camera.position.clone();
-            const startTime = Date.now();
-            const duration = 1000;
-            
-            rotationPaused = true;
-            
-            function zoomIn() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeProgress = 1 - Math.pow(1 - progress, 3);
-                
-                camera.position.lerpVectors(startPos, targetPos, easeProgress);
-                camera.lookAt(targetPos);
-                
-                if (progress < 1) {
-                    requestAnimationFrame(zoomIn);
-                } else {
-                    window.location.href = object.userData.data.url;
-                }
-            }
-            
-            zoomIn();
-        }
-    }
-}
-
-canvas.addEventListener('click', (event) => {
-    handleInteraction(event.clientX, event.clientY);
-});
-
-canvas.addEventListener('touchend', (event) => {
-    if (event.changedTouches.length > 0) {
-        const touch = event.changedTouches[0];
-        const touchEndX = touch.clientX;
-        const touchEndY = touch.clientY;
-        
-        // Check if it's a tap (not a swipe)
-        const deltaX = Math.abs(touchEndX - touchStartX);
-        const deltaY = Math.abs(touchEndY - touchStartY);
-        
-        if (deltaX < 10 && deltaY < 10) {
-            handleInteraction(touchEndX, touchEndY);
-        }
-    }
-}, { passive: true });
-
-function showSubmenu(data) {
-    const submenu = document.getElementById('submenu');
-    const title = document.getElementById('submenu-title');
-    const items = document.getElementById('submenu-items');
-    
-    title.textContent = data.title;
-    items.innerHTML = '';
-    
-    data.items.forEach(item => {
-        const link = document.createElement('a');
-        link.href = item.url;
-        link.className = 'submenu-item';
-        link.textContent = item.name;
-        items.appendChild(link);
-    });
-    
-    submenu.classList.add('active');
-}
-
-function closeSubmenu() {
-    document.getElementById('submenu').classList.remove('active');
-}
-
-// Animation
-let time = 0;
-function animate() {
-    requestAnimationFrame(animate);
-    time += 0.01;
-    
-    // Animate stars
-    const positions = stars.geometry.attributes.position.array;
-    for (let i = 0; i < positions.length; i += 3) {
-        positions[i] += starVelocities[i] * 0.3;
-        positions[i + 1] += starVelocities[i + 1] * 0.3;
-        positions[i + 2] += starVelocities[i + 2] * 0.3;
-        
-        // Wrap around
-        if (Math.abs(positions[i]) > 50) positions[i] *= -1;
-        if (Math.abs(positions[i + 1]) > 50) positions[i + 1] *= -1;
-        if (Math.abs(positions[i + 2]) > 50) positions[i + 2] *= -1;
-    }
-    stars.geometry.attributes.position.needsUpdate = true;
-    
-    // Rotate main globe
-    globe.rotation.y += 0.002;
-    globe.rotation.x = Math.sin(time * 0.3) * 0.1;
-    
-    // Orbit menu symbols around globe
-    if (!rotationPaused) {
-        orbitingObjects.forEach((obj) => {
-            obj.userData.angle += orbitSpeed * 0.01;
-
-            const x = Math.cos(obj.userData.angle) * orbitRadius;
-            const z = Math.sin(obj.userData.angle) * orbitRadius;
-            const y = Math.sin(obj.userData.angle * 2) * 0.5;
-
-            obj.position.set(x, y, z);
-            obj.lookAt(camera.position);
-
-            // Rotate small globe
-            if (obj.userData.smallGlobe) {
-                obj.userData.smallGlobe.rotation.y += 0.01;
-            }
-        });
-    } else if (hoveredObject && hoveredObject.userData.key) {
-        // Keep hovered object visible and rotate its small globe
-        hoveredObject.lookAt(camera.position);
-        if (hoveredObject.userData.smallGlobe) {
-            hoveredObject.userData.smallGlobe.rotation.y += 0.01;
-        }
-    }
-    
-    renderer.render(scene, camera);
-}
-
-animate();
-
-// Handle window resize
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-// Close submenu on Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeSubmenu();
-    }
-});
-</script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="js/hero.js?v=1794885505" defer></script>
+<script src="js/canvas-img.js?v=1794885505" defer></script>
+<script src="js/film.js?v=1794885505" defer></script>
+<script src="js/forecast.js?v=1794885505" defer></script>
+<script src="js/site.js?v=1794885505" defer></script>
+<a class="totop" href="#top" aria-label="Back to top"><span class="totop__label">Back to top</span><span class="totop__ring"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="totop__track" cx="24" cy="24" r="22"/><circle class="totop__prog" cx="24" cy="24" r="22"/><path d="M24 31V17M18 23l6-6 6 6"/></svg></span></a>
 </body>
 </html>
