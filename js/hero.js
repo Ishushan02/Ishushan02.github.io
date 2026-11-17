@@ -267,6 +267,24 @@
     kick();
   });
   hero.addEventListener('pointerleave', () => { mouse.on = false; });
+  // phones: a finger dragged across the name scatters the letters too (touchmove keeps firing while the page scrolls)
+  const touchAt = (e) => {
+    const p = e.touches[0]; if (!p) return;
+    const r = hero.getBoundingClientRect();
+    mouse.x = p.clientX - r.left; mouse.y = p.clientY - r.top; mouse.on = true; kick();
+  };
+  hero.addEventListener('touchstart', (e) => { if (!e.target.closest('.console')) touchAt(e); }, { passive: true });
+  hero.addEventListener('touchmove', (e) => { if (!e.target.closest('.console')) touchAt(e); }, { passive: true });
+  hero.addEventListener('touchend', () => { mouse.on = false; }, { passive: true });
+
+  // the prompt: stop the glow once used, select the text on focus so typing replaces it, one-tap suggestions
+  const consoleEl = form;
+  const used = () => consoleEl.classList.add('used');
+  input.addEventListener('focus', () => { used(); setTimeout(() => input.select(), 0); });
+  form.querySelectorAll('.console__try button').forEach((b) => b.addEventListener('click', () => {
+    used(); input.value = b.dataset.p;
+    if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
+  }));
 
   new IntersectionObserver((en) => {
     visible = en[0].isIntersecting;

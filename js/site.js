@@ -210,12 +210,23 @@
       if (cells.slice(row * COLS, row * COLS + COLS).every((c) => c.classList.contains('hot'))) burstRow(row);
     };
     cells.forEach((t, i) => t.addEventListener('pointerenter', () => arm(i)));
-    tiles.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'touch') return;
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      const i = cells.indexOf(el);
-      if (i >= 0) arm(i);
-    });
+    // fingers: map each point to the square under it (gaps included) and fill in the squares between samples
+    let lastPt = null;
+    const cellAt = (x, y) => {
+      const a = cells[0].getBoundingClientRect(), b = cells[cells.length - 1].getBoundingClientRect();
+      const rows = Math.ceil(cells.length / COLS);
+      const col = Math.floor(((x - a.left) / (b.right - a.left)) * COLS), row = Math.floor(((y - a.top) / (b.bottom - a.top)) * rows);
+      return col >= 0 && col < COLS && row >= 0 && row < rows ? row * COLS + col : -1;
+    };
+    const touchTo = (x, y) => {
+      const from = lastPt || { x, y }, steps = Math.max(1, Math.ceil(Math.hypot(x - from.x, y - from.y) / 6));
+      for (let k = 1; k <= steps; k++) { const i = cellAt(from.x + ((x - from.x) * k) / steps, from.y + ((y - from.y) * k) / steps); if (i >= 0) arm(i); }
+      lastPt = { x, y };
+    };
+    tiles.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { lastPt = null; touchTo(e.clientX, e.clientY); } });
+    tiles.addEventListener('pointermove', (e) => { if (e.pointerType === 'touch') touchTo(e.clientX, e.clientY); });
+    tiles.addEventListener('pointerup', () => { lastPt = null; });
+    tiles.addEventListener('pointercancel', () => { lastPt = null; });
     // a few tiles start armed so the board never looks empty
     [3, 4, 5, 13, 14, 22, 27, 28, 36].forEach((i) => cells[i].classList.add('hot'));
   }
@@ -310,5 +321,18 @@
         if (d) { e.preventDefault(); show(tabs[(i + d + tabs.length) % tabs.length], true); }
       });
     });
+  }
+
+  /* ── phone menu ── */
+  {
+    const nav = document.getElementById('nav'), btn = document.getElementById('navMenu');
+    if (nav && btn) {
+      const set = (on) => { nav.classList.toggle('open', on); btn.setAttribute('aria-expanded', on); btn.firstElementChild.textContent = on ? 'Close' : 'Menu'; };
+      btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+      nav.querySelectorAll('.nav__links a').forEach((a) => a.addEventListener('click', () => set(false)));
+      let y0 = scrollY;
+      addEventListener('scroll', () => { if (nav.classList.contains('open') && Math.abs(scrollY - y0) > 40) set(false); if (!nav.classList.contains('open')) y0 = scrollY; }, { passive: true });
+      addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+    }
   }
 })();

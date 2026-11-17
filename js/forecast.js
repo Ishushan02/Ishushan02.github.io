@@ -133,7 +133,7 @@
   }
 
   function ui(user) {
-    elAgent.textContent = user ? 'your cursor' : 'autopilot';
+    elAgent.textContent = user ? (matchMedia('(pointer: coarse)').matches ? 'your finger' : 'your cursor') : 'autopilot';
     elAde.textContent = ade.toFixed(1);
     elFde.textContent = fde.toFixed(1);
     let top = 0;
@@ -231,11 +231,29 @@
     if (fresh) reset();
     if (!userSeen) { userSeen = true; elHint.classList.add('off'); }
   });
-  stageEl.addEventListener('pointerleave', () => { pointer.at = -1e9; reset(); });
+  stageEl.addEventListener('pointerleave', (e) => { if (e.pointerType === 'touch') return; pointer.at = -1e9; reset(); });
+  // phones: the box only captures the finger after "Steer with your finger", so it never traps page scrolling
+  const steer = document.getElementById('fcSteer');
+  const setSteer = (on) => {
+    stageEl.classList.toggle('steering', on);
+    if (steer) { steer.setAttribute('aria-pressed', on); steer.textContent = on ? 'Done steering' : 'Steer with your finger'; }
+    if (!on) { pointer.at = -1e9; reset(); }
+  };
+  if (steer) {
+    steer.addEventListener('pointerdown', (e) => e.stopPropagation());
+    steer.addEventListener('click', (e) => { e.stopPropagation(); setSteer(!stageEl.classList.contains('steering')); });
+  }
+  stageEl.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'touch' || !stageEl.classList.contains('steering')) return;
+    const r = stageEl.getBoundingClientRect();
+    pointer.x = e.clientX - r.left; pointer.y = e.clientY - r.top; pointer.at = performance.now(); reset();
+    if (!userSeen) { userSeen = true; elHint.classList.add('off'); }
+  });
 
   new ResizeObserver(() => { resize(); reset(); }).observe(stageEl);
   new IntersectionObserver((en) => {
     visible = en[0].isIntersecting;
+    if (!visible && stageEl.classList.contains('steering')) setSteer(false);
     if (visible && !raf) { reset(); raf = requestAnimationFrame(frame); }
   }, { rootMargin: '80px' }).observe(stageEl);
 })();

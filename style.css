@@ -79,10 +79,29 @@ ul, ol { padding: 0; list-style: none; }
 .hero__facts span { display: inline-block; width: 92px; font-family: var(--mono); font-size: 11px; color: var(--mute); }
 
 .console { position: relative; display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); border-top: 1px solid var(--line-2); padding: 14px 0 12px; font-family: var(--mono); font-size: 12px; color: var(--mute); }
-.console__prompt { display: flex; align-items: center; gap: 12px; flex: 1 1 280px; min-width: 0; cursor: text; }
+.console__ask { position: relative; flex: 1 1 360px; min-width: 0; padding-top: 4px; }
+.hero__info, .hero__stage, .console { min-width: 0; }
+.console__nudge { display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; margin-bottom: 8px; font-size: 11px; letter-spacing: .04em; color: var(--acc); }
+.console__nudge span { display: inline-block; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-2px) rotate(-12deg); } }
+.console__prompt { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; cursor: text;
+  padding: 4px 4px 4px 14px; border: 1px solid rgba(201, 242, 75, .55); background: rgba(201, 242, 75, .045); border-radius: 3px;
+  animation: askGlow 2.4s ease-in-out infinite; transition: border-color .2s, background .2s; }
+@keyframes askGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(201, 242, 75, 0); } 50% { box-shadow: 0 0 0 4px rgba(201, 242, 75, .12), 0 0 28px rgba(201, 242, 75, .14); } }
+.console.used .console__prompt { animation: none; }
+.console__prompt:focus-within { border-color: var(--acc); background: rgba(201, 242, 75, .07); box-shadow: 0 0 0 3px rgba(201, 242, 75, .15); animation: none; }
+.console__go { flex: none; display: inline-flex; align-items: center; gap: 6px; font: 500 11.5px var(--mono); color: #0c0c0b; background: var(--acc); padding: 8px 12px; border-radius: 2px; white-space: nowrap; transition: filter .2s, transform .15s; }
+.console__go:hover { filter: brightness(1.08); }
+.console__go:active { transform: translateY(1px); }
+.console__try { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 9px; font-size: 11px; }
+.console__try span { color: var(--dim); margin-right: 2px; }
+.console__try button { font: 400 11px var(--mono); color: var(--mute); border: 1px solid var(--line-2); padding: 4px 9px; border-radius: 999px; transition: color .2s, border-color .2s; }
+.console__try button:hover, .console__try button:focus-visible { color: var(--acc); border-color: var(--acc); }
+@media (prefers-reduced-motion: reduce) { .console__prompt, .console__nudge span { animation: none; } }
 .console__tag { color: var(--acc); }
 .console__tag::after { content: " ›"; }
-.console__prompt input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink); caret-color: var(--acc); font: 400 14px var(--mono); padding: 6px 0; }
+.console__prompt input { flex: 1; width: 0; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink); caret-color: var(--acc); font: 400 15px var(--mono); padding: 6px 0; }
+.console__prompt input::placeholder { color: var(--dim); }
 .console__prompt kbd { font: inherit; font-size: 10.5px; color: var(--dim); border: 1px solid var(--line); padding: 2px 6px; border-radius: 3px; opacity: 0; transition: opacity 0.25s; white-space: nowrap; }
 .console__prompt:focus-within kbd { opacity: 1; }
 .console__slider { display: flex; align-items: center; gap: 10px; flex: 0 1 300px; }
@@ -590,13 +609,15 @@ ul, ol { padding: 0; list-style: none; }
   .hero__foot { flex-direction: column; align-items: flex-start; }
 }
 @media (max-width: 820px) {
-  .nav { grid-template-columns: 1fr auto; }
+  .nav { grid-template-columns: 1fr auto; padding-top: 12px; padding-bottom: 12px; background: rgba(12, 12, 11, .9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .nav__mark { font-size: 19px; white-space: nowrap; }
+  .vision-btn__txt { font-size: 10.5px; }
   .nav__links, .nav__clock { display: none; }
   .hero { padding-top: 76px; }
   .hero__info { grid-template-columns: 1fr; gap: 20px; padding: 18px 0 22px; }
   .hero__facts { justify-self: start; }
   .console { flex-wrap: wrap; row-gap: 6px; }
-  .console__prompt { flex-basis: 100%; }
+  .console__ask { flex-basis: 100%; }
   .console__slider { flex: 1 1 200px; }
   .console__hud { display: none; }
   .sec__head { grid-template-columns: 1fr; row-gap: 12px; }
@@ -672,3 +693,43 @@ ul, ol { padding: 0; list-style: none; }
 .totop:hover .totop__label, .totop:focus-visible .totop__label { opacity: 1; transform: none; color: var(--acc); }
 .totop:hover path { transform: translateY(-2px); }
 @media (max-width: 700px) { .totop.show.lift { transform: translateY(-74px); } .totop__ring { width: 46px; height: 46px; } }
+
+/* ── touch vs mouse wording ── */
+.t-only { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .m-only { display: none; }
+  .t-only { display: inline; }
+  .console__prompt input { font-size: 16px; }   /* stops iOS zooming the page on focus */
+}
+.tiles { touch-action: none; }
+
+/* ── forecast: steer with a finger (touch only) ── */
+.fig__steer { display: none; position: absolute; right: 14px; bottom: 12px; z-index: 2; font: 500 11.5px var(--mono); color: #0c0c0b; background: var(--acc); padding: 9px 13px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0,0,0,.45); }
+@media (hover: none) and (pointer: coarse) { .fig__steer { display: inline-flex; } }
+.fig__stage.steering { touch-action: none; outline: 1px solid var(--acc); outline-offset: -1px; }
+.fig__stage.steering .fig__steer { background: rgba(12,12,11,.9); color: var(--acc); border: 1px solid var(--acc); }
+
+/* ── phone menu ── */
+.nav__menu { display: none; align-items: center; gap: 9px; font: 400 11.5px var(--mono); color: var(--ink); border: 1px solid var(--line-2); padding: 6px 10px; border-radius: 999px; }
+.nav__menu i { position: relative; width: 12px; height: 8px; border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transition: border-color .2s; }
+.nav__menu i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -.75px; background: currentColor; transition: transform .25s var(--ease); }
+.nav.open .nav__menu i { border-color: transparent; }
+.nav.open .nav__menu i::before, .nav.open .nav__menu i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -.75px; background: currentColor; }
+.nav.open .nav__menu i::before { transform: rotate(45deg); }
+.nav.open .nav__menu i::after { transform: rotate(-45deg); }
+@media (max-width: 820px) {
+  .nav__menu { display: inline-flex; }
+  .nav__right { gap: 10px; }
+  .nav.open .nav__links { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; padding: 6px var(--gut) 14px;
+    background: rgba(12,12,11,.97); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav.open .nav__links a { padding: 13px 0; font-family: var(--serif); font-size: 26px; color: var(--ink); border-bottom: 1px solid var(--line); }
+  .nav.open .nav__links a:last-child { border-bottom: 0; }
+  .nav.open .nav__links a::after { display: none; }
+}
+
+/* ── bigger tap areas on touch screens (same look, larger hit box) ── */
+@media (pointer: coarse) {
+  .arrow-link, details > summary, .contact a, footer a { padding-top: 10px; padding-bottom: 10px; }
+  .console__try button { padding: 8px 12px; }
+  .console__try { gap: 8px; }
+}
